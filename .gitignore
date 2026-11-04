@@ -1,0 +1,11 @@
+node_modules/
+_build/
+dist/
+runs/
+.env
+.env.*
+*.local.json
+*.log
+.DS_Store
+coverage/
+tmp/

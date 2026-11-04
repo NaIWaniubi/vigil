@@ -1,0 +1,5730 @@
+{
+  "generatedAt": "2026-11-04T09:52:28.218Z",
+  "tool": "vigil self-audit v0.1.0",
+  "total": 160,
+  "admitted": 160,
+  "quarantined": 0,
+  "brokenTaskRate": 0,
+  "results": [
+    {
+      "taskId": "core-none-off-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "3f7ee58487a944372912e73808ca1d63a0867e927cc3d4f57cc8d0c6baa4ef46",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 15,
+        "ticks": 18,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 15,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "4c240365926a0c063bb6921f1808c417894e2d10331608f092719414124e6e1c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 19,
+        "ticks": 22,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 19,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "d549acbb8540350ccd216f04b1af3fe3ff3c7fa97bcd1e1681befd5b8cadc3d0",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "e09feb80d893aa06cd3b581755f705e229142c5b4f3a4cd3281d640d6b2c09a3",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 29,
+        "ticks": 32,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 29,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "96f99e0ee0f7ae6e72cd75a8e8ba41538dfe40bc8aaa45c83188ab1eaf02e986",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "40b24f8325a20da3203ba7f73680bd664216714944044fc0892ec4f70b1f6fa0",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 23,
+        "ticks": 26,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 23,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "2a11c2eb69dc305a853bb6c2498ef1cfb948750b384c23a33a6f6d0999dfe690",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 22,
+        "ticks": 25,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 22,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d6-s1",
+      "config": {
+        "seed": 1,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "647e04f0f653fa32613dcd34d26d50672e36c3ed556a80a7796c27fcee1ffb99",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d6-s1",
+        "seed": 1,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 35,
+        "ticks": 38,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 35,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "842c315ec5c3d2178a02b76a1dcbbd108414834e5c962d786c58dbd5cfadc5f5",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 30,
+        "ticks": 36,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 30,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "3fee3c90a6918d1f7170b270e6417779007e5bdd5006a0fbedb7641773f13608",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 33,
+        "ticks": 39,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 33,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "1214d3da2d2b93d40d22e63fc3bc521e9e62e91dc44bf5183fd61973cc3a3554",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 37,
+        "ticks": 43,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 37,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "55687bc442c46323f62ebb4f18f390cd12e2e5c3f08fb4723e706f9b1915dade",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 39,
+        "ticks": 45,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 39,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "ae4b961980dee05a8e05ef8dbc956f74f587bd2acb395c76e69aca1634280df0",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 36,
+        "ticks": 42,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 36,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "1edc7774ed6b34b4950fe364794de9f9194f75e45fcae78d270bb07d38b3674e",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 40,
+        "ticks": 46,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 40,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "9fb913d9364370787f0825d4d1963265e11081832bf6083fcf50a5fc2fdaca44",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 44,
+        "ticks": 50,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 44,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d12-s1",
+      "config": {
+        "seed": 1,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "f25c5b966ee5a371f4f7ba8ffe4b6d0dbb752f10f654cc730a42513b07dc022c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d12-s1",
+        "seed": 1,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 47,
+        "ticks": 53,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 47,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "3429b02ae3f0ec72c2bf7cf77275a3105f90bf2a501557d6b65fd50c2d720e8b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 45,
+        "ticks": 54,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 45,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "a02f54d8420904c64eeffd90d2887a91b036bbcf3244b5cf273e2cde50cbc5db",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 48,
+        "ticks": 57,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 48,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "54ab0613d20a757f57f86f07dbf5ef019e2bee714d937e34f5c536d5be428908",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 56,
+        "ticks": 65,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 56,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "24da805b15c9ccc973bb425c34bf1045bedf4bc59daa286f3170b6cbe21353e2",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 53,
+        "ticks": 62,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 53,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "7028dca251373ecfd29f33acebb19f5d4d0bc00bb5e823d1444d29817779920f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 54,
+        "ticks": 63,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 54,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "409d990f3b186791192b5b52d1c058a5e4c93b6b4edb130a3e23cc7932b7cc6f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 58,
+        "ticks": 67,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 58,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "79db5b8f17ab557fbd17d2c67d91ceb5cbac4ee568c82c27e3bb4ab0571cc409",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 67,
+        "ticks": 76,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d18-s1",
+      "config": {
+        "seed": 1,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "335c12fac14d01e3658a266afa7ebeabe91214c8ca946158f8a148b98709a8d9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d18-s1",
+        "seed": 1,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 64,
+        "ticks": 73,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 64,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "560e7be4da28044cdeb20b930d803860cea88be2b6a1d27ddfc7c9c98be03134",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 60,
+        "ticks": 72,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 60,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "6991dddf0b2582cf1fe5b9de0c4857bcd3eb7002d565cff023eb3a27c6ba9094",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 63,
+        "ticks": 75,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 63,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "6cbc007299b9135f1807772ad83b70bd3a69b49c1be645abfb9818f3a7939edb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 74,
+        "ticks": 86,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 74,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "06d803cf64d883db1a1de756516d1b2fc6b5b8816a3c35f9dcd177741db85af7",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 67,
+        "ticks": 79,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "edb90bf0b7486c34d8b9e7004930f5e6493760da15661103d714c67197f4fedb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 72,
+        "ticks": 84,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 72,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "35923f5e200e86df999c984eaf479f79ea2e4379eebc97346b2f81531f6a062c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 76,
+        "ticks": 88,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 76,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "0b2feb718df354631cea6ba4a606e38707d61cb835343cc22318c2dc1fcf3003",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 89,
+        "ticks": 101,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 89,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d24-s1",
+      "config": {
+        "seed": 1,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "540a080adc120d3bf09f3149a3e26ecb8fd0c3cc11e29bf7cc2179c322fbaa51",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d24-s1",
+        "seed": 1,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 80,
+        "ticks": 92,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 80,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "6a063b2e38194b4aaa36c196d55b29427d3142c73b62c51866f8ee13636dbb09",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 15,
+        "ticks": 18,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 15,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "5ab1373c998275160b933b507f6b78c26d39dd21e590b3d30f7dcc03b49a1568",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 19,
+        "ticks": 22,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 19,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "1435f9cb891f360bfbbb7512987fb6252719d89930257e193834f31422ef153b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "5426c2318e75e00c450207d66be498ce5824ee753ca9f6dbe580b52d863a33cc",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 29,
+        "ticks": 32,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 29,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "ba80778288163ee4dbfaf590260d052bdf5b4b17606ce38c82a338cf9f7d644a",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "ef2d3c4b3d06ea8f1337b301b4ddb41e98ea042ebf230c385a5b2a6e2c46f0e6",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 23,
+        "ticks": 26,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 23,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "7020e6b66c1b66efe7376f7e42f542e96091989a5b0b8886dcda4fd5dcc4bc57",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 22,
+        "ticks": 25,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 22,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d6-s2",
+      "config": {
+        "seed": 2,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "bba27de57e7135a1d9b30d7c38ec1336a4c6805bccccb8dd58ba262da3d96372",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d6-s2",
+        "seed": 2,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 35,
+        "ticks": 38,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 35,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "d91d84dc8b474d2f23c2c033d67c364b24de06c25755282160db7e4b7271beae",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 30,
+        "ticks": 36,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 30,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "5604e56b97e4577def8aeb3b853125e2fd2c1efe1140e554853f7a2e0148576d",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 33,
+        "ticks": 39,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 33,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "afcfdc03fef82046e9bccaf2de2054296461477a20dfc4c511c93d226352f7c6",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 37,
+        "ticks": 43,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 37,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "09127df2014c088b3a76ab5ea0da922d1e10a24bc2e1d8bcd050774e9b89be53",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 39,
+        "ticks": 45,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 39,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "840fd61699d79e8448717658833301d1a28b796bfe7eaa8bd26fdef28b5f6e41",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 36,
+        "ticks": 42,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 36,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "30e6213cdcb4dd89d22f08f3c2246399aadbb73db71a09e70ecdc2c67387c86e",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 40,
+        "ticks": 46,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 40,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "7a73a5a4aec720d4b995f942db10bb66c63ccd04f8e3ee2c5b70eebdbbad54dd",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 44,
+        "ticks": 50,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 44,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d12-s2",
+      "config": {
+        "seed": 2,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "2af099d30f83022f978992626fe7e02a0f14a68899541bdb4330b3218f4642df",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d12-s2",
+        "seed": 2,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 47,
+        "ticks": 53,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 47,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "337991124da30558704bfa53f157fd5adbe1156c4d0fd3f319ce2d87a66e673b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 45,
+        "ticks": 54,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 45,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "c42f9a5f21c1d7b647922c203b15d4e1ff8ff54111d379937b22ab151d0d1e61",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 48,
+        "ticks": 57,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 48,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "04931c0880b96cc5a7a10fe072f9a2dd695b949fb104b038e16e4531a5a9c54a",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 56,
+        "ticks": 65,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 56,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "64744ee2899bc9e7949b29f2e35867119a0515d147ea3bb1612071178ac6a890",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 53,
+        "ticks": 62,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 53,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "fe38e047a6e215e05cba0b67731f76f729bc094d5584b48f02883249c61519e6",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 54,
+        "ticks": 63,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 54,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "65b7bff02ef656f1af5a25aed764e5509506d0fa2048906ea12b7151439093e5",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 58,
+        "ticks": 67,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 58,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "c21cad22d3310f414e073eb79068e045833f99afc3950c297c6d71946a6be139",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 67,
+        "ticks": 76,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d18-s2",
+      "config": {
+        "seed": 2,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "57315ce12810fd4fab5decb4346e7eccd8fcc9dd8df75a0ab37287f4021bf01c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d18-s2",
+        "seed": 2,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 64,
+        "ticks": 73,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 64,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "065660e669b51a37018304c6346f306890fd3349dc00260571f00ad9c96a8865",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 60,
+        "ticks": 72,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 60,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "4ef3ffc78f8e53df7e668b66e4580cb54428d9f6ae2678adddc601003653bf27",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 63,
+        "ticks": 75,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 63,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "a392c42aab841f8f4f666005682018c7721a4bf941cc53bd38f0379720def213",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 74,
+        "ticks": 86,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 74,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "f8d2e485ff216c7b6db5e243055e472fad70a4e5aceeea785b0c31bb75452fbb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 67,
+        "ticks": 79,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "10b6b270d0d0b0ee1038ed6f1b4807bc2f185f3841c86f56f96e75cd72c20538",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 72,
+        "ticks": 84,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 72,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "33942b2a4463fe9f48abc3e5d86396d0978955de1e9fb2e5e751c2fd59c6521f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 76,
+        "ticks": 88,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 76,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "140a7e8468fbf9dc07507ea69a93b31cdb6d94d795de4b84616a2e53bd86f3f5",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 89,
+        "ticks": 101,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 89,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d24-s2",
+      "config": {
+        "seed": 2,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "f892659aab9dc0653571966d7aca50234bbd4b83d0eb9c8cbb9f454921830163",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d24-s2",
+        "seed": 2,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 80,
+        "ticks": 92,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 80,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "887393e7f716994325fae48bd818346b80d08c35f29fc4f6583354d3bc0a8e24",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 15,
+        "ticks": 18,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 15,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "cc1ddda28880e9cf1850cee23c8fc7dc1e8bbcd688cfb106840c71e37c4ed0fa",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 19,
+        "ticks": 22,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 19,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "f6cb6f72079096b426c0892031370d0d2211a6992bba19577b9c467c3b46adce",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "f72e0840a8d1826897ba0ec11b41b3980c482ab25bbc1959feb0ce59832c9fce",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 29,
+        "ticks": 32,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 29,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "ed50a31e706597ced023bde5bdbac6d829d31de8a372f1d20ef7bbe4d241e77d",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "2b484ac894757df5ac5b1ee2101348f5a25fe291da6f3f6499abb5ab979b29a5",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 23,
+        "ticks": 26,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 23,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "00315c9994c2649958f3ef690f1a95f27560587d427a710313ff39dc39f1d2d9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 22,
+        "ticks": 25,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 22,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d6-s3",
+      "config": {
+        "seed": 3,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "bb3b732678e05307122165e54173e13d20234be29a27a645f876a85b83579e48",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d6-s3",
+        "seed": 3,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 35,
+        "ticks": 38,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 35,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "e47ed779df0d4d42e2dc3dfc449753e035e600e30112438ade7e9e15fb10dbb2",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 30,
+        "ticks": 36,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 30,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "813c1e77b23d6b963cc35596ea67740a05896a759ea79135519a72722e7ad09b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 33,
+        "ticks": 39,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 33,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "67c0f74d24c5b8b2e8aba2a3acf22b12629b6cb9041ed10d596699f8d5b7ab20",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 37,
+        "ticks": 43,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 37,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "ed7050cc90ff9a4c9c4a77e2ed77b701de9180e6d6a4ae1c5ead7d7034160b8b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 39,
+        "ticks": 45,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 39,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "25c5a50b5ff69f3c1180eb0dda42a4697daa93ec9f6e440fa9cc44b348bd4852",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 36,
+        "ticks": 42,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 36,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "758e1bcdfcbc1430e45d1e3df7789f402c15b6484b255f58e03b492344c36bbd",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 40,
+        "ticks": 46,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 40,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "9ad9c8cca6eef1749f327230fce2bcd4bc1e2763e0b93b6182edf005950d2fac",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 44,
+        "ticks": 50,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 44,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d12-s3",
+      "config": {
+        "seed": 3,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "785677ed69bcebbabf488cffc5173658aecf4dfd3731b2b28ad9c6763dafdf83",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d12-s3",
+        "seed": 3,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 47,
+        "ticks": 53,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 47,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "a5d163f6fae8a10b3bbb8b2c6f11442bfa2457930de671026dc298d767c935f1",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 45,
+        "ticks": 54,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 45,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "bb526942c8a1b2554f27a09cd0888889a05aa19abefb9b8b4c726d03f5fd9fa4",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 48,
+        "ticks": 57,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 48,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "d3ee8d42ecd441bda6a86ce32664a715c82cc02bc7f6adbde50bcc1213fae0fe",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 56,
+        "ticks": 65,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 56,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "2f7a6208c654cf2c0264407c638140f331bd78255d92c7671b2d7c9b759ab26a",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 53,
+        "ticks": 62,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 53,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "52e3bc9a46a1c0772ace7421ae3d7830e9d6e9c1f5501228e49aa5833898bbdd",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 54,
+        "ticks": 63,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 54,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "3e8d96776dbd5128867cdda1567f5259a63199ba0b352df12ef4f6a3a4639984",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 58,
+        "ticks": 67,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 58,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "65924e350b0c4ebe441cb97369ae47779b731a085a5ed2e7d5f7f8ed762bbfe7",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 67,
+        "ticks": 76,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d18-s3",
+      "config": {
+        "seed": 3,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "b8e3faf144b339bafa6fbe61300cc4c8276d1e79c7e997fa2e38ecb6b87e0deb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d18-s3",
+        "seed": 3,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 64,
+        "ticks": 73,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 64,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "01d91b4a0a2e4850bfb4a57abe9e92e0dc7680a6b692348382cd9b64a964f01f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 60,
+        "ticks": 72,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 60,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "f203d4a04850ec03a8c5a4a6d1f8e32237595fc17e311d5af536d5c3c3b695b4",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 63,
+        "ticks": 75,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 63,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "f69e6cab57e78ecdec0e2fa5e2791c59f1ed4904680d2193c6fc689e012bf7dc",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 74,
+        "ticks": 86,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 74,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "c16d5c982f6d2f9ba446233cb2ef4c71d15fc92faa6f418dc007b7799d381acc",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 67,
+        "ticks": 79,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "c631c8725b24a03378684bf6ac79b913f1070d707a8c4ba5a47d3b814778963f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 72,
+        "ticks": 84,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 72,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "da0630b27ddc02349dcc2eb02fba27a9b6c83526890d6a8ed5bd6d2938587d3b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 76,
+        "ticks": 88,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 76,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "a008b781d5860977f8477574b5a69d81b1ff07d40440608c7f82930570e396f9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 89,
+        "ticks": 101,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 89,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d24-s3",
+      "config": {
+        "seed": 3,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "3103e40bbe16d02b0d1727643404d949b09248bf6f3944a38c798740838af13b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d24-s3",
+        "seed": 3,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 80,
+        "ticks": 92,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 80,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "8f0d03e6816da0053a7d57c10d9544739c484a5a37acc449288d2620c876383a",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 15,
+        "ticks": 18,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 15,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "4bc01ba3622cc9b35d7aecab2bd40200b1bd7654ef730270f34edfce8773acec",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 19,
+        "ticks": 22,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 19,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "20f22ca47eae683291d610fe4ea66c0b55b8660cb6fec28ea6dbe4f9278086c9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "6e415ef449db23e647b59c8006f0aad1ba069d930d4c73f00e07a10aa508abdf",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 29,
+        "ticks": 32,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 29,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "04c08e9d560918ee12adb8bfba4f18af3a25034d88cc79077ec90749c70ebd57",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "7cab65a329f74359a32dca8719ab2af25f79330384523998e61b3f7621498950",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 23,
+        "ticks": 26,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 23,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "34c08d7cf3685a6bb70116f231179afb277a9ee15441d46d7dcb4fc63872676c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 22,
+        "ticks": 25,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 22,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d6-s4",
+      "config": {
+        "seed": 4,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "5e4cd76e7d2405cea374cdeb5113dce029a51e3ccae1f00ccb93035cded94c55",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d6-s4",
+        "seed": 4,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 35,
+        "ticks": 38,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 35,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "0a6cf32e33be0d5fb6fcab03615f1e4f9b91a1c35ff88c29e702292e01b4d7e7",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 30,
+        "ticks": 36,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 30,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "ba161e6bccba9ca7bb6ee27efeaecc35f6da4e7a9d55fc7cb2e761fc962f9dcf",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 33,
+        "ticks": 39,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 33,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "5118f072302e7c610098190c1526bf957fd26578adc6f14e37ed1145cf4068d6",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 37,
+        "ticks": 43,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 37,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "a3cccf63bcff61631b59bf94c1df1a48b65526503baebc46e82b3e546569e101",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 39,
+        "ticks": 45,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 39,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "6880d80c525fcebe82e29ab32ba25896c502742362234577b9bdc95fa5d84d88",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 36,
+        "ticks": 42,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 36,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "a97351d225e18f8155c55290e1c1c007e621290e2b1e31fc8a0354b02ece4770",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 40,
+        "ticks": 46,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 40,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "0f952557deb0da0d369ab98af8bc11afb93073a3b924438d49019f687c2a215a",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 44,
+        "ticks": 50,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 44,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d12-s4",
+      "config": {
+        "seed": 4,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "d691008eac8ea0387fb028ee9daf710c426195473017066f5ccfcaba4b1515fe",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d12-s4",
+        "seed": 4,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 47,
+        "ticks": 53,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 47,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "75ad6a484d54e1f1629c1fc0f74c202203c8a6c6ec70bb54cf83789fd35970e6",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 45,
+        "ticks": 54,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 45,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "3acb07938beaf53b5ecd999baf30320bed8821db7ff8be4028648e1b17854100",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 48,
+        "ticks": 57,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 48,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "2ed0d9f37ff75232ec768db655d7b7837cb02292f50c1ae89f56b79f7b66455c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 56,
+        "ticks": 65,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 56,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "04674b8c6a605e67e4b6517a67a8a764d6610ed061e23e6da40a16807f4c4b90",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 53,
+        "ticks": 62,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 53,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "04a180314caa4347434dc0835f6d25c2333539d5d4ddc702a5b34171ffb0ed8b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 54,
+        "ticks": 63,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 54,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "50b3026e9e1f4001e7ac9a1b19fe65dd03f8335f9212998661e23b691d8a05d2",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 58,
+        "ticks": 67,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 58,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "bc47fd0a896ba364bf8845402fb5f5efec1e310b71e7707a776fa8ab23157178",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 67,
+        "ticks": 76,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d18-s4",
+      "config": {
+        "seed": 4,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "1003ffb6ddb0051667359bc5e1e6aae6aa6610bc7b0734e97c90803d3f2e2ba2",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d18-s4",
+        "seed": 4,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 64,
+        "ticks": 73,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 64,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "46ae01844f40e5d6876f78d97518be9446b411558ad532b6e5d75a10229903df",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 60,
+        "ticks": 72,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 60,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "ff239a8adfbc126ddcec8c96ce850945226278276fd2b60ae447729d008da959",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 63,
+        "ticks": 75,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 63,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "298437f08f49bc71545885071e5120727b7dcde77b8535af868c34fbc06697eb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 74,
+        "ticks": 86,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 74,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "34991b622e9c9b4169e4d8182b099c9db2e59dfffa0346519151ce5d8e9e0970",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 67,
+        "ticks": 79,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "40445583d4cae2e7de09a2add0a357f7ede6f40b5136729c058ebc8fd1acbfbf",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 72,
+        "ticks": 84,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 72,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "d28d22e636b8eb657ca316c46f7edb189929a000e0faeeb3ae1a5d416203874d",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 76,
+        "ticks": 88,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 76,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "00ecd89b12ede36e17401f4db65ce56faf1058a77ab274d80fe23e541b2e46c3",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 89,
+        "ticks": 101,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 89,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d24-s4",
+      "config": {
+        "seed": 4,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "7283afdc2767729717f18f3e8d54ea5deeaec7fe5580e465dd7dc108f5dc4586",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d24-s4",
+        "seed": 4,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 80,
+        "ticks": 92,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 80,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "1cee3bd562bfae90687cce1627e041206a3a494b86fc85d0c5d3312e9086b38d",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 15,
+        "ticks": 18,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 15,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "cbf44d771f431c8a8224806a322625daa256bce17a98b87a7cbb45f9c062802c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 19,
+        "ticks": 22,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 19,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "3d12fca1dd358374c899a8c4517fc2347adf541db353d94e7e91b3693cbeaca4",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "2ca561711d179bd33f37a3a0c20f632e62bfd1949fc52c2ab5f1e5181b73cc94",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 29,
+        "ticks": 32,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 29,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "9b17f480748cbd57969c0f45794168c6aa769cb69eb8f9e82c647207a824291f",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 18,
+        "ticks": 21,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 18,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "12251c3eaa1e3c64ecaeb56642f11c467eb3fccb27ebe3aba22628d549b4f09c",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 23,
+        "ticks": 26,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 23,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "7ef28e9a105de00f32fd187e485371a50d39ebf1a738f889ca7c87f23fdd3ca8",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 22,
+        "ticks": 25,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 22,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d6-s5",
+      "config": {
+        "seed": 5,
+        "depth": 6,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "e2db46fd047277eb101d13fe44a1fcfca8c3e2ad62a818a64335db67c99e76f9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d6-s5",
+        "seed": 5,
+        "reached": 6,
+        "passed": 6,
+        "totalConstraints": 6,
+        "steps": 35,
+        "ticks": 38,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 35,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "510840d9f662a9446759497cd46843cc1c78c29b6823f6dae3de1187f94354e9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 30,
+        "ticks": 36,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 30,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "e45f40612b4ec24ae95535f14cd2c2ef4892bc1c435f76d820caca06d198cf92",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 33,
+        "ticks": 39,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 33,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "7e7cf1c8c9cca8220b5c1de28155523cd6d953dccb746079cf9d214fad196290",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 37,
+        "ticks": 43,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 37,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "9eb35852fd4334b22e3355136318692678bb3f8ed986f0f2426b373c9953e056",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 39,
+        "ticks": 45,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 39,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "20a24e64db0dbabe1dcaa74b5449ebb97d1a751ac6fa81949bbda728d3052a19",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 36,
+        "ticks": 42,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 36,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "fc03330c9e04aefa743b274fe5c78bec75734d2ca47919a410c8d3592821650b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 40,
+        "ticks": 46,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 40,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "4d35f7faf097e87fa1d9f80f7628bff3b7440ff9c2de8b170e972c6af6952c3e",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 44,
+        "ticks": 50,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 44,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d12-s5",
+      "config": {
+        "seed": 5,
+        "depth": 12,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "47bbb7f99b4bac0db9994ada2fe0034811a818e5f8d0ce283eb6a0f8b757b5a9",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d12-s5",
+        "seed": 5,
+        "reached": 12,
+        "passed": 12,
+        "totalConstraints": 12,
+        "steps": 47,
+        "ticks": 53,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 47,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "5ab1e312116d7ff6cce2abf10bda8e2c473b85708dea309474f4e83c9e359ef2",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 45,
+        "ticks": 54,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 45,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "b5854b6dba4fdb9e75f76d45deb69a897fcd6def6a571ef9dea9ed4a4ebdad6e",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 48,
+        "ticks": 57,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 48,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "f6579c81b7064daea59d3a936da1083aefcd0c97942297323ceb9b225a996968",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 56,
+        "ticks": 65,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 56,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "86f4e2ccc4ebfa0b917033374dd6e2a01a4bcd9b7432bb5a328691b60c8eb7eb",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 53,
+        "ticks": 62,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 53,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "1ac181c94d7243e4ac5ca6341feb5c6ab9f6fd018fe3bf1ae49731b3753f4c86",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 54,
+        "ticks": 63,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 54,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "bc46e02219fab0d317bd2affd08d5dfe691a826dd2ffba796896fa2f408612e4",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 58,
+        "ticks": 67,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 58,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "4f2a80e1f99f790882f504d6153627eef238aec0752ba21dd9c5ee1498df7da8",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 67,
+        "ticks": 76,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d18-s5",
+      "config": {
+        "seed": 5,
+        "depth": 18,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "2e0468eda33a86be0d03a2943e9d902afb7a17f934700c688ca6ed436e8279b1",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d18-s5",
+        "seed": 5,
+        "reached": 18,
+        "passed": 18,
+        "totalConstraints": 18,
+        "steps": 64,
+        "ticks": 73,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 64,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-off-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "off"
+      },
+      "fingerprint": "3339881df2dbbc79ae69513ecf3632d805314e6faf87ffa5a96e58503cdfdf7b",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-off-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 60,
+        "ticks": 72,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 60,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-decay-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "decay"
+      },
+      "fingerprint": "5f3aa62d9927b7ea9fc82b9d14f1fe403d01313ec34301000d7ac8e53cd25aa0",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-decay-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 63,
+        "ticks": 75,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 63,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-deadline-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "deadline"
+      },
+      "fingerprint": "fd8060366e787d2ca147f3ed77f23bc66aeaeb307e6040f743dc59a7b6bf61d7",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-deadline-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 74,
+        "ticks": 86,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 74,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-none-hazard-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "none",
+        "obligation": "hazard"
+      },
+      "fingerprint": "a68315511a46023a29bbc7212c3af49d8f0264a0af85c4b0556a10d7b8f945d0",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-none-hazard-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 67,
+        "ticks": 79,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 67,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-off-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "off"
+      },
+      "fingerprint": "e67f2edd6f452e9252e79f01513caa15d0633205b1f6c67dba9ca813dbd90092",
+      "checks": [
+        "oracle",
+        "lazy",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-off-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 72,
+        "ticks": 84,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 0,
+        "actions": 72,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-decay-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "decay"
+      },
+      "fingerprint": "56f7c035d3a99252952b677a996ce40d3b3f63709e1c68d73a19c4b1c31ca797",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-decay-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 76,
+        "ticks": 88,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 76,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-deadline-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "deadline"
+      },
+      "fingerprint": "2c03ba255b71a3dc4f98b7ac8a7fd7b9e0b9ec717de75f8c64bcb1b563e6db83",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-deadline-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 89,
+        "ticks": 101,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 89,
+        "invalidActions": 0
+      }
+    },
+    {
+      "taskId": "core-coupled-hazard-d24-s5",
+      "config": {
+        "seed": 5,
+        "depth": 24,
+        "conflict": "coupled",
+        "obligation": "hazard"
+      },
+      "fingerprint": "50f1492ee961b8a89af65349b6c7c5d2a5ebe04eb72cf7a7fd2658a21019c5b8",
+      "checks": [
+        "oracle",
+        "lazy",
+        "neglect",
+        "determinism"
+      ],
+      "findings": [],
+      "status": "admitted",
+      "oracleProfile": {
+        "taskId": "core-coupled-hazard-d24-s5",
+        "seed": 5,
+        "reached": 24,
+        "passed": 24,
+        "totalConstraints": 24,
+        "steps": 80,
+        "ticks": 92,
+        "terminal": {
+          "reason": "goal_met"
+        },
+        "compliant": true,
+        "canaryHits": [],
+        "obligationsDead": [],
+        "obligationsTotal": 1,
+        "actions": 80,
+        "invalidActions": 0
+      }
+    }
+  ]
+}
