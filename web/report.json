@@ -1,0 +1,186 @@
+{
+  "run": "E:\\myzcode\\vigil\\runs\\live-conflict",
+  "generatedAt": "2026-11-04T10:10:51.092Z",
+  "protocol": {
+    "promptVersion": "vigil-agent-v1",
+    "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
+    "engineVersion": "0.1.0",
+    "temperature": 0,
+    "maxTokens": 4096,
+    "reps": 1,
+    "taskGrid": "quick",
+    "targets": [
+      {
+        "channel": "deepseek",
+        "model": "deepseek-chat",
+        "tier": "official"
+      }
+    ],
+    "channels": [
+      {
+        "id": "deepseek",
+        "baseUrl": "https://api.deepseek.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "deepseek-anthropic",
+        "baseUrl": "https://api.deepseek.com/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "stepfun",
+        "baseUrl": "https://api.stepfun.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "bigmodel",
+        "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "bitdeer",
+        "baseUrl": "https://api-inference.bitdeer.ai/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "gmi",
+        "baseUrl": "https://api.gmi-serving.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "magpie-local",
+        "baseUrl": "http://127.0.0.1:3425",
+        "protocol": "anthropic",
+        "tier": "local"
+      }
+    ],
+    "startedAt": "2026-11-04T10:05:46.327Z"
+  },
+  "cells": 8,
+  "scoreable": 8,
+  "infraErrors": 0,
+  "spendUsd": 0.322605,
+  "apiCalls": 176,
+  "profiles": [
+    {
+      "model": "deepseek-chat",
+      "track": "compliant",
+      "cells": 8,
+      "wins": 7,
+      "winRate": 0.875,
+      "winRateCI95": [
+        0.5291051942301386,
+        0.9775830911367038
+      ],
+      "reachedMean": 6,
+      "passedMean": 6,
+      "violationsByClass": {
+        "revealed": 40,
+        "broke": 3,
+        "regressed": 13,
+        "neglected": 2
+      },
+      "oldestViolatedConstraintAge": 25,
+      "obligationDeaths": 0,
+      "turnsMean": 22,
+      "turnsStd": 8.263517065131184,
+      "ticksMean": 23.5,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    },
+    {
+      "model": "deepseek-chat",
+      "track": "raw",
+      "cells": 8,
+      "wins": 7,
+      "winRate": 0.875,
+      "winRateCI95": [
+        0.5291051942301386,
+        0.9775830911367038
+      ],
+      "reachedMean": 6,
+      "passedMean": 6,
+      "violationsByClass": {
+        "revealed": 40,
+        "broke": 3,
+        "regressed": 13,
+        "neglected": 2
+      },
+      "oldestViolatedConstraintAge": 25,
+      "obligationDeaths": 0,
+      "turnsMean": 22,
+      "turnsStd": 8.263517065131184,
+      "ticksMean": 23.5,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    }
+  ],
+  "stability": {
+    "cellsWithRepeats": 0,
+    "meanConsistency": null,
+    "fullyStable": 0,
+    "coinFlip": 0,
+    "perCell": []
+  },
+  "costCurves": [
+    {
+      "model": "deepseek-chat",
+      "points": [
+        {
+          "depth": 6,
+          "cost": 0.040325625000000004
+        }
+      ],
+      "fit": {
+        "multiplier": null,
+        "r2": null,
+        "n": 1
+      }
+    }
+  ],
+  "hypotheses": {
+    "H1_conflict": {
+      "table": [
+        {
+          "model": "deepseek-chat",
+          "winRateNone": 0.75,
+          "winRateCoupled": 1,
+          "delta": 0.25
+        }
+      ],
+      "rankNone": [
+        "deepseek-chat"
+      ],
+      "rankCoupled": [
+        "deepseek-chat"
+      ],
+      "rankCorrelation": null,
+      "reordered": false
+    },
+    "H2_neglect": {
+      "n": 6,
+      "pearsonPassedVsDeaths": null,
+      "spearmanPassedVsDeaths": null,
+      "pearsonPassedVsSurvival": null,
+      "maxProgressButDied": 0
+    }
+  }
+}
