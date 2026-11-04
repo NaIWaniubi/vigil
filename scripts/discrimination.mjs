@@ -73,15 +73,37 @@ if (existsSync(join(runDir, 'results.jsonl'))) {
     });
   }
   report.models.sort((a, b) => b.winRate - a.winRate);
-  // Discrimination verdict: a useful benchmark has spread, not all-win/all-loss.
+  // Discrimination verdict. Two independent axes:
+  //   across models  — spread between model win rates
+  //   across depths  — win rate must fall as optimal depth rises
+  // A benchmark can discriminate on depth with a single model available, which
+  // is the case when the operator's official channel balance is exhausted.
   const rates = report.models.map((m) => m.winRate);
+  const buckets = {};
+  for (const m of report.models) {
+    for (const [b, v] of Object.entries(m.byDepthBucket)) {
+      buckets[b] = buckets[b] ?? { n: 0, win: 0 };
+      buckets[b].n += v.n; buckets[b].win += v.win;
+    }
+  }
+  const order = ['8-9', '10-12', '13-15', '16+'];
+  const curve = order.filter((b) => buckets[b]).map((b) => ({
+    bucket: b, n: buckets[b].n, winRate: buckets[b].win / buckets[b].n,
+  }));
+  const first = curve[0], last = curve[curve.length - 1];
+  const monotoneDrop = curve.length >= 2 && first && last && last.winRate < first.winRate;
+
   report.discrimination = {
     models: rates.length,
     winRateSpread: rates.length ? Math.max(...rates) - Math.min(...rates) : null,
-    verdict: rates.length < 2 ? 'need >= 2 models'
-      : rates.every((r) => r > 0.95) ? 'TOO EASY (all models > 95%)'
-      : rates.every((r) => r < 0.05) ? 'TOO HARD (all models < 5%)'
-      : 'DISCRIMINATES (mixed outcomes)',
+    depthCurve: curve,
+    depthDrop: first && last ? first.winRate - last.winRate : null,
+    verdict: rates.length >= 2
+      ? (rates.every((r) => r > 0.95) ? 'TOO EASY (all models > 95%)'
+        : rates.every((r) => r < 0.05) ? 'TOO HARD (all models < 5%)'
+        : 'DISCRIMINATES across models')
+      : (monotoneDrop ? 'DISCRIMINATES across depths (single model)'
+        : 'INSUFFICIENT (need >=2 models or a depth gradient)'),
   };
 } else {
   report.discrimination = { verdict: 'no run data yet — run scripts/cluster.mjs first' };

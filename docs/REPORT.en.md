@@ -1,38 +1,40 @@
-# VIGIL: An Executable Long-Horizon Agent Benchmark
+# VIGIL: A Solver-Calibrated Long-Horizon Agent Benchmark
 
-**Conflicting constraints, background obligations, deterministic failure attribution**
+**Deterministic failure attribution, background obligations, and a self-auditing evaluator**
 
-v0.1.0 · 2026-11-04 · Apache-2.0
+v0.3.0 · 2026-11-05 · Apache-2.0
 
 ---
 
 ## Abstract
 
 SoTALab's [Password Game study](https://sotalab.ai/blog/password-game-long-horizon-agents)
-(2026-07-17) ran 8 models × 3 attempts through a game whose rules accumulate,
-spending $473.26 and 758M tokens. It articulated six commitments about what a
-good evaluation requires — but published no code, data, or environment. Its
-planned SoTA-LH benchmark family has not yet released a first instance.
+ran 8 models × 3 attempts through a game whose rules accumulate, and articulated
+six commitments about what a good evaluation requires — but published no code,
+data, or environment.
 
-VIGIL turns those six commitments into an executable, reproducible, open-source
-environment. Three design choices fill a verified gap in the literature:
+VIGIL implements those commitments as an executable, reproducible, open-source
+benchmark. **The v0.3 change is difficulty calibration.** The earlier synthetic
+family used independent slots; measured, it produced an 80.2% win rate with 11 of
+16 conditions swept clean — a benchmark everything passes measures nothing.
+The primary hardness family is now NP-hard sliding-block puzzles where **every
+task ships a BFS-computed shortest solution and is admitted only if a greedy
+baseline fails it**.
 
-1. **Genuinely conflicting accumulating constraints.** Constraints perturb each
-   other through shared state, yet a joint solution always exists and is proven
-   by a shipped oracle. The closest competitors — MTAC-IFBench
+Three design choices fill a verified gap in the literature:
+
+1. **Solver-calibrated difficulty** — not "we think it's hard", but "optimal is 16
+   moves, greedy loops after 3". The closest competitors — MTAC-IFBench
    ([2609.14992](https://arxiv.org/abs/2609.14992)) and SEQUOR
-   ([2605.06353](https://arxiv.org/abs/2605.06353)) — both exclude contradictory
-   constraints at construction time.
-2. **Verifier-native deterministic attribution.** Every violation is located to
+   ([2605.06353](https://arxiv.org/abs/2605.06353)) — exclude interacting
+   constraints at construction and publish no optimal-solution baseline.
+2. **Verifier-native deterministic attribution** — every violation is located to
    `(action index, constraint id, introduction step, class, witness)` by state
-   differencing — not inferred by an LLM reading a transcript. Post-hoc
-   attribution work (Who&When / TRAIL / AgentRx) achieves at best 14.2% step
-   localisation.
-3. **A self-auditing evaluator.** Every task ships an oracle and must pass four
-   admission checks before it can score anything. Repeat consistency, position
-   bias, prompt fingerprints and per-file SHA-256 manifests are published
-   alongside the scores. HAL's Reliability Dashboard measures *agent*
-   reliability, not *evaluator* trustworthiness.
+   differencing, not inferred. Post-hoc attribution work (Who&When / TRAIL /
+   AgentRx) tops out at 14.2% step localisation.
+3. **A self-auditing evaluator whose verification is itself deterministic** —
+   four admission checks per task, byte-identical replay, and a quarantine verdict
+   on any divergence. 586/586 configurations admitted.
 
 ---
 
@@ -40,18 +42,61 @@ environment. Three design choices fill a verified gap in the literature:
 
 | SoTALab's finding | What VIGIL ships | Location |
 | --- | --- | --- |
-| 10 of 24 runs used prohibited shortcuts; "a benchmark must define legal tools and permission boundaries" | Closed action whitelist, canary-baited internals, separate `raw` / `compliant` tracks | `engine/world.mjs` |
-| "Reached R28 … highest actually passed was R27" | `reached` and `passed` are distinct counters | `engine/world.mjs` |
-| Cost grew ~1.25× per rule; time, tokens and intervention all count | Environment ticks + token ledger + per-constraint cost multiplier fit | `providers/ledger.mjs`, `stats/index.mjs` |
-| 7 of 24 runs died because Paul starved — including the furthest run | Obligations decay on **environment time**, which accrues with action cost | `engine/clock.mjs` |
+| 10 of 24 runs used prohibited shortcuts | Closed action surface per family; Rush Hour does not offer generic mutators; canaries + separate `raw`/`compliant` tracks | `tasks/rush/world.mjs` |
+| "Reached R28 … highest actually passed R27" | `reached` and `passed` are distinct counters | `engine/world.mjs` |
+| Cost grew ~1.25× per rule | Environment ticks + integer micro-USD ledger + cost-growth fit | `providers/ledger.mjs` |
+| 7 of 24 died because Paul starved — including the furthest run | Obligations decay on **environment time**, accruing with action cost | `engine/clock.mjs` |
 | "Sub-scores carry more information than the headline number" | Capability profile, never a bare total | `stats/aggregate.mjs` |
 | "Every failure must be locatable" | Six attribution classes with witnesses | `engine/attribute.mjs` |
 
 ---
 
-## 2. Mechanics
+## 2. Difficulty calibration
 
-### 2.1 World and actions
+### 2.1 Why the family changed
+
+The original `vigil-core` gadget gave each slot its own state; solving slot 1 said
+nothing about slot 2. There was no cross-slot search. Measured on deepseek-chat
+(`runs/core-deepseek`): 96 cells, $12.34, **80.2% win rate**, **11/16 conditions
+all-win**. That is a recipe, not a search problem.
+
+### 2.2 Calibration pipeline
+
+```
+random board
+   ↓
+optimal BFS solve → unsolvable / depth < 8 → discard
+   ↓
+greedy baseline → greedy solves it → discard
+   ↓
+admit with measured optimal depth, solver state count, greedy failure mode
+```
+
+Current dataset (`tasks/rush/dataset.json`, generated once and committed):
+
+| Metric | Value |
+| --- | --- |
+| seeds / admitted | 150 / **130 (87%)** |
+| optimal depth | 8–20, median **9** |
+| greedy defeated | **130/130 (100%)** |
+| depth distribution | 8:49, 9:21, 10:23, 11:12, 12:7, 13–20:18 |
+
+Shallow tasks dominate — a natural consequence of calibration, and the reason
+runs must use **stratified sampling** (`--sample`) rather than the first N seeds.
+
+### 2.3 Baselines
+
+- `solve()`: BFS over slide moves, returns the shortest sequence; `maxStates` caps
+  pathological boards during generation.
+- `greedy()`: pushes the target toward the exit without backtracking or memory;
+  a detected cycle is a failure.
+- Calibration requires greedy to **fail**, otherwise the task discriminates nothing.
+
+---
+
+## 3. Mechanics
+
+### 3.1 World and actions
 
 ```
 World = { state, active constraints, live obligations, tick }
@@ -66,45 +111,42 @@ step(action):
   reveal constraints scheduled for the next step
 ```
 
-Constraints are **data** — a small validated AST — not evaluator code. Tasks are
-therefore serialisable, hashable into a manifest, and inspectable by the agent
-without exposing the evaluator.
+Constraints are **data** — a small validated AST — not evaluator code, so tasks are
+serialisable, hashable into a manifest, and inspectable by the agent without
+exposing the evaluator.
 
-### 2.2 Real conflict, still fair
+### 3.2 The action surface is the permission boundary
 
-The coupled gadget in `vigil-core`:
+In Rush Hour the only legal action is `move(id, delta)`, validated against the
+board. Generic mutators (`set`/`inc`/`push`/`remove`):
 
-- `fill_<slot>(amount)` raises `level` **and** `pressure` together
-- early constraint: `level >= needA`
-- later constraint: valve open **and** `pressure <= needA - 1`
+- are **not listed** in `observe()`;
+- are rejected by `RushWorld.step` even if sent, leaving state unchanged.
 
-A naive fill necessarily violates the later constraint. The only escape is
-`vent_<slot>`, which lowers pressure without touching level. A joint solution
-exists and the oracle proves it. This measures coupled-state search and repair —
-a different capability from remembering N independent rules.
+This is not fastidiousness. In run v7, gemini-3-flash-preview emitted
+`set pos.X.col 4` after four illegal X moves — writing the win condition
+directly. The engine reported `goal_met` while X had never moved; all four of its
+"wins" were exploits. See §5.
 
-The `none` control matches the rule count but reads **disjoint** cells, so the
-only difference between modes is interaction.
-
-### 2.3 Background obligations
+### 3.3 Background obligations
 
 | Kind | Mechanism | Repair |
 | --- | --- | --- |
-| decay | loses `rate` per tick; dies at zero | tend refills |
+| decay | loses `rate` per tick, dies at zero | tend refills |
 | deadline | dies at `dueAt` | tend discharges |
-| hazard | accumulates heat per unshielded tick; ignites at 1 | tend grants a shield and vents heat |
+| hazard | accumulates heat per unshielded tick, ignites at 1 | tend grants a shield and vents heat |
 
-Hazard is deliberately **cumulative**, not a per-tick Bernoulli: a random coin
-means any sparse maintenance policy can die of bad luck, making the task
-unprovable. Cumulative heat plus a shield makes periodic tending a winning
-policy while neglect remains deterministically fatal.
+Hazard is deliberately **cumulative**: a per-tick coin flip lets any sparse
+maintenance policy die of bad luck, which makes the task unprovable. Cumulative
+heat plus a shield makes periodic tending a winning policy while keeping neglect
+deterministically fatal.
 
-### 2.4 Attribution classes
+### 3.4 Attribution classes
 
 | Class | Meaning |
 | --- | --- |
 | `broke` | this action changed a cell the constraint reads |
-| `collateral` | constraint broke without its read-set being touched |
+| `collateral` | broke without its read-set being touched |
 | `revealed` | rule just appeared and the state already fails it |
 | `neglected` | already failing; action ignored its read-set |
 | `regressed` | already failing; action touched it but did not fix it |
@@ -115,86 +157,122 @@ from 30 steps ago did it forget".
 
 ---
 
-## 3. Evaluator self-audit
+## 4. Three families
 
-Motivation: [2609.26826](https://arxiv.org/abs/2609.26826) audited 125 zero-pass
-terminal tasks and found **37.6% could not be certified as genuinely hard**.
+| Family | Role | Size | Verification |
+| --- | --- | --- | --- |
+| `vigil-rush` | hardness core | 130 tasks × 3 obligation kinds | optimal BFS + greedy must fail |
+| `vigil-swe` | regression coupling | 4 multi-file repos × 6 requirements × 3 obligations | whole repo run in a `--permission` child process |
+| `vigil-core` | controlled ablation | 160 configurations | fill/vent pressure gadgets |
 
-Every task must pass four checks before admission: the oracle solves it, doing
-nothing does not, ignoring obligations does not, and replay is byte-identical.
-Failing tasks are **quarantined and reported**, never silently dropped.
-
-Current status: **187/187 admitted** (160 core + 27 swe), 0 quarantined.
-
-The audit caught seven real defect classes during development (see
-`docs/SELF-AUDIT.md`), including a logically contradictory pseudo-conflict, slot
-reuse, an unsolvable stochastic hazard, a reveal schedule outrunning its own
-oracle, winning before the hard part appeared, over-loose obligation budgets,
-and an invisible objective that measured prompt ambiguity rather than capability.
-
-The last was found empirically: same task, same model — 35 steps to `step_budget`
-before the objective was shown, 14 steps to `goal_met` after.
+Each `vigil-swe` repo ships a **proven naive fix**: it satisfies a later
+requirement and breaks an earlier one, and attribution must record
+`broke`/`regressed`.
 
 ---
 
-## 4. Protocol and reproduction
+## 5. Real defects the self-audit caught
 
-Full protocol: `docs/PROTOCOL.md`. Highlights:
+The audit is not decoration. Nine defect classes were caught and fixed; two would
+have destroyed credibility outright.
 
-- Versioned prompt; SHA-256 recorded in each run's `protocol.json`
-- Temperature 0 (kimi-k3 requires 1; pinned and labelled)
+**Reward hacking.** In v7 a model used `set pos.X.col` to fake a win (§3.2). Fix:
+reject generic mutators, hide them from the action surface, add two explicit
+regression tests.
+
+**Nondeterministic verification.** The gate once quarantined
+`swe-todo-d5-off-s1` as `replay diverged`. The cause was not the task: running 586
+audits at once starved the swe child-process checks, which timed out
+nondeterministically so `passed` randomly lost an entry. That is **verification
+flake misreported as task flake**. Fix: bounded concurrency (swe 3-way, rush
+4-way) and a 30 s batch timeout. Result: 586/586 admitted.
+
+The other seven — logically contradictory pseudo-conflict, slot reuse, an
+unsolvable stochastic hazard, a reveal schedule outrunning its own oracle,
+winning before the hard part appeared, over-loose obligation budgets, an invisible
+objective, and an invisible board — are catalogued in `docs/SELF-AUDIT.md`.
+
+**Verification must be deterministic before any number is published.** An
+evaluator that cannot distinguish "the task is broken" from "the verifier is
+tired" will report infrastructure jitter as model capability.
+
+---
+
+## 6. Protocol and reproduction
+
+Full protocol: `docs/PROTOCOL.md`.
+
+- Versioned prompt (`vigil-agent-v2`); SHA-256 recorded in `protocol.json`
+- Temperature 0 (kimi-k3 requires 1; pinned and labelled); reasoning channels get
+  their own `maxTokens`
 - Main track admits `official` direct channels only; relays labelled separately
-- Infrastructure failures (HTTP errors, truncation) are **excluded**, never
-  scored as wrong answers
+- Infrastructure failures (HTTP errors, truncation, insufficient balance) are
+  **excluded**, never scored as wrong answers
 - Integer micro-USD accounting, reserve→settle; unknown prices and budget
   overruns block spending
 
-Three-check reproduction (`scripts/verify.mjs`):
-
-1. **MANIFEST** — per-file SHA-256, no unlisted files
-2. **PROTOCOL** — prompt fingerprint matches a fresh hash
-3. **NUMBERS** — recomputed aggregate equals the published report exactly
-
-Tampering with any byte exits 1. Verified empirically.
+Three-check reproduction (`scripts/verify.mjs`): per-file MANIFEST SHA-256, prompt
+fingerprint, and a recomputed aggregate that must match the published report
+exactly. Tampering with one byte exits 1 — verified.
 
 ---
 
-## 5. Hypotheses and evidence status
+## 7. Evidence status
 
-| Hypothesis | Claim | Status |
-| --- | --- | --- |
-| H1 | Enabling real conflict reverses model rankings | Pipeline verified on one model; multi-model runs in progress |
-| H2 | Obligation failure is uncorrelated with main-line progress | `maxProgressButDied` counter implemented; awaiting sample |
-| H3 | Cost per constraint grows exponentially, model-specific multiplier | `costGrowth` validated against a known 1.25× synthetic series |
-| H4 | What fraction of our own tasks are broken? | 187/187 admitted; 7 defect classes fixed during development |
+**Established:**
 
-**No conclusion is claimed ahead of the data.** All hypothesis tests are
-published as run bundles; every number recomputes with one command.
+- Solvability: 586/586 configurations pass self-audit (oracle / lazy / neglect /
+  determinism).
+- Calibration validity: 130/130 tasks defeat greedy; optimal depths independently
+  recomputed by BFS.
+- Pipeline correctness: `gate.mjs` green; `verify.mjs` passes all three checks;
+  tampering detected.
+- Exploit defence: four generic mutators cannot fake a win (regression-tested).
+
+**Measured, reported as preliminary:**
+
+- Reference run `docs/reference-run` (v8): 55 cells, 13 scoreable, 42 infrastructure
+  errors. gemini-3-flash-preview: 30.8% win rate [13%, 58%] over 13 cells.
+- Depth gradient: depth 8–9 → **4/12 (33%)**, depth 13–16 → **0/1 (0%)**.
+  Direction is right; the deep bin is too small to claim a curve.
+- Baselines for the same dataset: greedy **0%**, oracle **100%**.
+
+**Blocked by infrastructure, honestly reported:**
+
+- Official deepseek exhausted its balance mid-run (HTTP 402).
+- Several relay models time out (>120 s) on the long board prompt; per-channel
+  timeouts and `maxTokens` were raised, but availability still limits sample size.
+- The protocol records these as infrastructure errors, not model weakness, which
+  is exactly why the scoreable count (13) is far below the cell count (55).
+
+**No cross-model ranking is claimed.** Conclusions follow the public bundle, and
+every number recomputes with one command.
 
 ---
 
-## 6. Relation to prior work
+## 8. Relation to prior work
 
 | Work | What it has | What VIGIL adds |
 | --- | --- | --- |
-| MTAC-IFBench | agents + accumulating constraints (avg 91) | real conflict + deterministic step-level attribution |
-| SEQUOR | persist/add/replace modes | environment state, not dialogue; conflicts not filtered out |
-| Who&When / TRAIL / AgentRx | failure attribution | attribution as a native verifier output, not post-hoc LLM inference |
-| HAL Reliability Dashboard | agent reliability metrics | evaluator trustworthiness + task admission audit |
-| τ-bench pass^k | repeat-run stability | combined with conflict ablation, cost curves and permission audit |
+| MTAC-IFBench | agents + accumulating constraints (avg 91) | optimal-solution calibration + deterministic step attribution |
+| SEQUOR | persist/add/replace modes | environment state, not dialogue; conflicts not filtered |
+| Who&When / TRAIL / AgentRx | failure attribution | attribution as a native verifier output, not post-hoc inference |
+| HAL Reliability Dashboard | agent reliability metrics | evaluator trustworthiness + admission audit + exploit defence |
+| τ-bench pass^k | repeat-run stability | combined with calibration, cost curves and permission audit |
 
 ---
 
-## 7. Limitations
+## 9. Limitations
 
-- The synthetic family is a controlled instrument, not a real workload; the
-  repository family currently has three authored modules.
-- No official direct channel for Claude-family models; the main track does not
-  yet cover them.
+- The synthetic family is a controlled instrument; the repo family has four
+  authored repos, smaller than SWE-bench.
+- Cross-model comparison is limited by available channels on this machine;
+  official balance and relay latency both bound sample size.
 - Obligation dynamics are deterministic (hazard is cumulative heat); they do not
-  model real-world stochastic interruption distributions.
+  model real-world interruption distributions.
 - Constraint interaction is currently within a gadget; cross-gadget coupling is
   future work.
+- The deep bins (depth ≥ 13) are under-sampled: 18 of 130 tasks.
 
 ---
 
@@ -202,12 +280,11 @@ published as run bundles; every number recomputes with one command.
 
 ```bibtex
 @software{vigil2026,
-  title  = {VIGIL: An Executable Long-Horizon Agent Benchmark with
-            Conflicting Constraints, Background Obligations, and
-            Deterministic Failure Attribution},
+  title  = {VIGIL: A Solver-Calibrated Long-Horizon Agent Benchmark with
+            Deterministic Failure Attribution and a Self-Auditing Evaluator},
   author = {Chen Yongrun},
   year   = {2026},
-  url    = {https://github.com/NaIWaniubi/vigil},
+  url    = {https://github.com/NaIwaniubi/vigil},
   note   = {Apache-2.0}
 }
 ```

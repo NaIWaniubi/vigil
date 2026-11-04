@@ -52,7 +52,7 @@ async function postJson(url, headers, body, timeoutMs) {
 }
 
 export async function callOpenAI(channel, messages, opts = {}) {
-  const { model, temperature = 0, maxTokens = channel.maxTokens ?? 4096, timeoutMs = DEFAULT_TIMEOUT } = opts;
+  const { model, temperature = 0, maxTokens = channel.maxTokens ?? 4096, timeoutMs = channel.timeoutMs ?? DEFAULT_TIMEOUT } = opts;
   const body = { model, messages, temperature, max_tokens: maxTokens };
   const json = await withRetry(() => postJson(
     `${channel.baseUrl.replace(/\/$/, '')}/chat/completions`,
@@ -75,7 +75,7 @@ export async function callOpenAI(channel, messages, opts = {}) {
 }
 
 export async function callAnthropic(channel, messages, opts = {}) {
-  const { model, temperature = 0, maxTokens = 4096, timeoutMs = DEFAULT_TIMEOUT } = opts;
+  const { model, temperature = 0, maxTokens = channel.maxTokens ?? 4096, timeoutMs = channel.timeoutMs ?? DEFAULT_TIMEOUT } = opts;
   const system = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n');
   const turns = messages.filter((m) => m.role !== 'system')
     .map((m) => ({ role: m.role, content: m.content }));

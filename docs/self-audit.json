@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-04T17:32:15.798Z",
+  "generatedAt": "2026-11-04T18:54:29.583Z",
   "tool": "vigil self-audit v0.1.0",
   "total": 586,
-  "admitted": 585,
-  "quarantined": 1,
-  "brokenTaskRate": 0.0017064846416382253,
+  "admitted": 586,
+  "quarantined": 0,
+  "brokenTaskRate": 0,
   "results": [
     {
       "taskId": "core-none-off-d6-s1",
@@ -6231,19 +6231,8 @@
         "lazy",
         "determinism"
       ],
-      "findings": [
-        {
-          "check": "oracle",
-          "verdict": "fail",
-          "detail": "oracle ended null, passed 5/5"
-        },
-        {
-          "check": "determinism",
-          "verdict": "fail",
-          "detail": "replay diverged"
-        }
-      ],
-      "status": "quarantined",
+      "findings": [],
+      "status": "admitted",
       "oracleProfile": {
         "taskId": "swe-todo-d5-off-s1",
         "seed": 1,
@@ -6252,7 +6241,9 @@
         "totalConstraints": 5,
         "steps": 18,
         "ticks": 25,
-        "terminal": null,
+        "terminal": {
+          "reason": "goal_met"
+        },
         "compliant": true,
         "canaryHits": [],
         "obligationsDead": [],

@@ -29,11 +29,11 @@ a{color:var(--accent)}
 <p class="sub">An executable long-horizon agent benchmark: accumulating conflicting constraints,
 background obligations on an environment clock, deterministic failure attribution.</p>
 <div class="meta">
-<span>Cells <strong>8</strong></span>
-<span>Scoreable <strong>8</strong></span>
-<span>API calls <strong>176</strong></span>
-<span>Spend <strong>$0.3226</strong></span>
-<span>Generated <strong>2026-11-04T10:10:51Z</strong></span>
+<span>Cells <strong>55</strong></span>
+<span>Scoreable <strong>13</strong></span>
+<span>API calls <strong>974</strong></span>
+<span>Spend <strong>$7.8850</strong></span>
+<span>Generated <strong>2026-11-04T18:38:19Z</strong></span>
 </div>
 <div class="note">No headline score. Capability profiles are reported per dimension, with
 raw and compliance-filtered tracks kept separate, because a single total hides the structure
@@ -45,12 +45,12 @@ that matters. Infrastructure failures are excluded rather than counted as wrong 
 <thead><tr><th>Model</th><th>Cells</th><th>Win rate (95% CI)</th><th>Reached</th><th>Passed</th>
 <th>broke</th><th>regressed</th><th>neglected</th><th>obligation deaths</th><th>oldest violated rule age</th><th>turns</th></tr></thead>
 <tbody><tr>
-<td class="model">deepseek-chat</td><td>8</td>
-<td>87.5% <span class="ci">[52.9%, 97.8%]</span></td>
-<td>6.0</td><td>6.0</td>
-<td>3</td><td>13</td>
-<td>2</td><td>0</td>
-<td>25</td><td>22.0</td>
+<td class="model">gemini-3-flash-preview</td><td>13</td>
+<td>30.8% <span class="ci">[12.7%, 57.6%]</span></td>
+<td>1.0</td><td>0.3</td>
+<td>0</td><td>26</td>
+<td>648</td><td>0</td>
+<td>97</td><td>53.8</td>
 </tr></tbody></table>
 
 <h2>Raw track</h2>
@@ -59,23 +59,23 @@ that matters. Infrastructure failures are excluded rather than counted as wrong 
 <thead><tr><th>Model</th><th>Cells</th><th>Win rate (95% CI)</th><th>Reached</th><th>Passed</th>
 <th>broke</th><th>regressed</th><th>neglected</th><th>obligation deaths</th><th>oldest violated rule age</th><th>turns</th></tr></thead>
 <tbody><tr>
-<td class="model">deepseek-chat</td><td>8</td>
-<td>87.5% <span class="ci">[52.9%, 97.8%]</span></td>
-<td>6.0</td><td>6.0</td>
-<td>3</td><td>13</td>
-<td>2</td><td>0</td>
-<td>25</td><td>22.0</td>
+<td class="model">gemini-3-flash-preview</td><td>13</td>
+<td>30.8% <span class="ci">[12.7%, 57.6%]</span></td>
+<td>1.0</td><td>0.3</td>
+<td>0</td><td>26</td>
+<td>648</td><td>0</td>
+<td>97</td><td>53.8</td>
 </tr></tbody></table>
 
 
 <h2>Hypotheses</h2>
 <h3>H1 · Does real conflict change the ranking?</h3>
 <table><thead><tr><th>Model</th><th>Win rate, independent</th><th>Win rate, coupled</th><th>Δ</th></tr></thead>
-<tbody><tr><td class="model">deepseek-chat</td><td>75.0%</td><td>100.0%</td><td>+25.0%</td></tr></tbody></table>
+<tbody><tr><td class="model">qwen3.8-max</td><td>—</td><td>—</td><td>—</td></tr><tr><td class="model">deepseek-v4-flash</td><td>—</td><td>—</td><td>—</td></tr><tr><td class="model">gemini-3-flash-preview</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
 <p>Rank correlation between modes: <strong>—</strong>. Reordered: <strong>no</strong>.</p>
 
 <h3>H2 · Is neglect independent of main-line progress?</h3>
-<p>Cells with obligations: <strong>6</strong>.
+<p>Cells with obligations: <strong>8</strong>.
 Pearson(passed, deaths): <strong>—</strong>.
 Spearman: <strong>—</strong>.</p>
 <p>Cells that reached full progress and <em>still</em> lost an obligation: <strong>0</strong>.
@@ -84,20 +84,20 @@ This is the signature SoTALab observed when the furthest Password Game run died 
 
 <h3>H3 · Cost per additional constraint</h3>
 <table><thead><tr><th>Model</th><th>Cost multiplier per constraint</th><th>R²</th><th>depth points</th></tr></thead>
-<tbody><tr><td class="model">deepseek-chat</td><td>—×</td><td>—</td><td>1</td></tr></tbody></table>
+<tbody><tr><td class="model">gemini-3-flash-preview</td><td>1.1537×</td><td>0.8995</td><td>3</td></tr></tbody></table>
 
 <h2>Evaluator trustworthiness</h2>
 <p>A benchmark that cannot distinguish "hard" from "broken" measures its own bugs.
 These are the checks this run publishes about itself.</p>
 <table><tbody>
-<tr><td>Task self-audit</td><td>160/160 tasks admitted, 0 quarantined (broken-task rate 0.0%)</td></tr>
+<tr><td>Task self-audit</td><td>585/586 tasks admitted, 1 quarantined (broken-task rate 0.2%)</td></tr>
 <tr><td>Cells with repeats</td><td>0</td></tr>
 <tr><td>Mean outcome consistency</td><td>— <span class="ci">(1 = perfectly stable, 0 = coin flip)</span></td></tr>
 <tr><td>Fully stable cells</td><td>0</td></tr>
 <tr><td>Coin-flip cells</td><td>0</td></tr>
-<tr><td>Infrastructure errors excluded</td><td>0 <span class="ci">(never scored as wrong answers)</span></td></tr>
+<tr><td>Infrastructure errors excluded</td><td>42 <span class="ci">(never scored as wrong answers)</span></td></tr>
 <tr><td>Prompt fingerprint</td><td><code>0800da8ce6b38950</code></td></tr>
-<tr><td>Prompt version</td><td>vigil-agent-v1</td></tr>
+<tr><td>Prompt version</td><td>vigil-agent-v2</td></tr>
 </tbody></table>
 <p>Reproduce every number on this page:</p>
 <pre><code>node scripts/verify.mjs &lt;run-dir&gt;

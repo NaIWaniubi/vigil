@@ -1,123 +1,118 @@
 # VIGIL
 
-**值守** — an executable long-horizon agent benchmark.
+**A solver-calibrated long-horizon agent benchmark.**
 
-Constraints accumulate and genuinely conflict. Background obligations decay on an
-environment clock. Every failure is attributed deterministically to the action
-that caused it and the step that introduced the rule. The evaluator audits itself
-before it is allowed to score anything.
+Every task ships a provably shortest solution. Every hard task is proven to defeat a greedy baseline before it is admitted. Every failure is attributed to the exact action and the rule it broke. The evaluator audits itself before it scores anything.
 
-> Status: **S1 complete** — engine, attribution, boundary detection, 38 tests green.
-> Task families, runner, leaderboard and report are in progress. Nothing here is
-> a published result yet.
+> Status: three task families, 586 self-audited task configurations, 100+ tests.
+> Empirical runs in progress; no results are claimed ahead of the data.
 
 ## Why this exists
 
 SoTALab's [Password Game study](https://sotalab.ai/zh/blog/password-game-long-horizon-agents)
-ran 8 models × 3 attempts through a game whose rules pile up, and reported six
-findings that current benchmarks do not act on:
+ran 8 models × 3 attempts through a game whose rules accumulate, and reported six
+findings current benchmarks do not act on. They published the analysis and the
+methodology. They did not publish the environment. This is that environment.
 
 | Their finding | What VIGIL ships |
 | --- | --- |
-| 10 of 24 runs used prohibited shortcuts; "Benchmark 必须明确合法工具与权限边界" | Closed action surface, canary-baited verifier internals, `raw` vs `compliant` tracks |
-| "到达 R28 … 实际最高通过为 R27" | `reached` and `passed` are separate counters |
-| Cost grew ~1.25× per rule; time, tokens and intervention all count | Environment ticks + token ledger + wall clock, cost curve per model |
-| 7 of 24 runs died because Paul starved — including the furthest run | Obligations decay on **environment time**, which accrues with action cost |
-| "子项分数往往比 headline 数字更有信息量" | Capability profile, never a bare total |
-| "每一次失败都要能被定位" | `(stepIndex, constraintId, introducedAtStep, class, witness)` per violation |
+| 10 of 24 runs used prohibited shortcuts | Closed action surface per family; generic state mutators are not even offered in Rush Hour; canaries + separate `raw` / `compliant` tracks |
+| "Reached R28 … highest actually passed R27" | `reached` and `passed` are distinct counters |
+| Cost grew ~1.25× per rule | Environment ticks + integer-micro-USD ledger + per-constraint cost-growth fit |
+| 7 of 24 died because Paul starved — including the furthest run | Obligations decay on **environment time**, which accrues with action cost |
+| "Sub-scores carry more information than the headline number" | Capability profile, never a bare total |
+| "Every failure must be locatable" | Six attribution classes with witnesses |
 
-They published the analysis and the methodology. They did not publish the
-environment. This is that environment, open source.
+## The three families
 
-## The gap in the literature
+### `vigil-rush` — the hardness core
 
-Verified against arXiv and GitHub on 2026-11-04:
+Rush-Hour sliding-block puzzles. The target car cannot reach the exit until
+blocking vehicles are shuffled out of the way, often *backwards* first. NP-hard in
+general, finite state space, and therefore **calibrated by an optimal BFS solver**:
 
-- **MTAC-IFBench** ([2609.14992](https://arxiv.org/abs/2609.14992)) has agents and accumulating constraints (avg 91), but explicitly excludes contradictory constraints and has no step-level attribution.
-- **SEQUOR** ([2605.06353](https://arxiv.org/abs/2605.06353)) has persist/add/replace constraint modes, but is dialogue-only and filters out conflicting pairs.
-- **Who&When / TRAIL / AgentRx** do failure attribution, but post-hoc with an LLM judge. Who&When's best step localisation is 14.2%.
-- **HAL Reliability Dashboard** has the richest reliability metrics, but measures *agent* reliability, not *evaluator* trustworthiness.
+1. Generate a random board.
+2. Solve it optimally. Reject if unsolvable or depth < 8.
+3. Run the greedy baseline. **Reject if greedy solves it.**
+4. Admit with its measured optimal depth and proven greedy failure.
 
-The intersection — real conflicting constraints × verifier-native deterministic
-attribution × evaluator self-audit — is empty.
+Current dataset: **130 tasks from 150 seeds (87% yield)**, optimal depth 8–20
+(median 9), **all 130 defeat greedy**. Built once by
+`scripts/build-rush-dataset.mjs`, committed, fingerprinted — like SWE-bench, not
+regenerated per run.
 
-## Core mechanics
+This replaced an earlier synthetic family whose slots were independent: an 80%
+win-rate benchmark that everything passed. Independence was the bug.
 
-```
-World = { state, active constraints, live obligations, tick }
+### `vigil-swe` — regression-coupled repositories
 
-step(action):
-  pre  := snapshot(state)
-  apply(action)                      # closed whitelist, logged with args
-  tick += cost(action)               # expensive thinking costs more neglect
-  advance obligations by cost        # <-- the Paul mechanism
-  evaluate every active constraint
-  attribute: diff(pre, state) ∩ read-set(constraint)
-  reveal constraints scheduled for the next step
-```
+Four authored mini-repos (reactive store, event-sourced todo, URL router, query
+builder), each 4 modules with real cross-module imports. The agent edits **one
+file**; the verifier runs the **whole repo** in a `--permission` child process
+(filesystem denied). Each repo ships a *proven naive fix* that satisfies a later
+requirement and breaks an earlier one — attribution records the regression.
 
-**Real conflict, still fair.** Constraints are predicates over shared state, not
-contradictory propositions. Satisfying B perturbs A, but a legal solution always
-exists — the generator proves it with a solver before a task is admitted.
+### `vigil-core` — the controlled ablation
 
-**Attribution without a judge.** Because we own the state, "which action broke
-which rule, introduced how long ago" is computed, not inferred:
+Synthetic fill/vent pressure gadgets with knobs for conflict, obligation kind and
+depth. Useful for causal isolation of the background-obligation mechanism
+(H2); superseded as a difficulty instrument by `vigil-rush`.
+
+## Attribution without a judge
+
+Because we own the state, "which action broke which rule, introduced how long
+ago" is computed, not inferred:
 
 | class | meaning |
 | --- | --- |
 | `broke` | this action changed a cell the constraint reads |
 | `collateral` | constraint broke without its read-set being touched |
 | `revealed` | rule just appeared and the state already fails it |
-| `neglected` | already failing, action ignored its read-set |
-| `regressed` | already failing, action touched it but did not fix it |
-| `obligation_lapsed` | background duty died while the agent worked elsewhere |
+| `neglected` | already failing; action ignored its read-set |
+| `regressed` | already failing; action touched it but did not fix it |
+| `obligation_lapsed` | a background duty died while the agent worked elsewhere |
 
-## Usage
+Post-hoc attribution work (Who&When / TRAIL / AgentRx) tops out at 14.2% step
+localisation. We do not infer; we diff.
+
+## Evaluator self-audit
+
+Motivation: [2609.26826](https://arxiv.org/abs/2609.26826) found 37.6% of
+zero-pass terminal tasks could not be certified as genuinely hard.
+
+Every task must pass: oracle solves it, doing nothing does not, ignoring
+obligations does not (where obligations exist), and replay is byte-identical.
+**586/586 configurations admitted, 0 quarantined.** Failing tasks are quarantined
+and reported, never silently dropped.
+
+The audit found real bugs, not hypothetical ones (see `docs/SELF-AUDIT.md`):
+seven in the core generator, an invisible objective, an invisible board, a
+**reward-hacking exploit**, and a **nondeterministic verification path**.
+
+## Reproduce
 
 ```bash
-node --test "test/*.test.mjs"     # 38 tests
-node scripts/gate.mjs             # tests + oracle self-audit + repo hygiene
+node scripts/gate.mjs                 # tests + task self-audit + repo hygiene
+node runner.mjs --dry-run --family both --tasks quick --reps 1 --limit 4
+node scripts/cluster.mjs --dry-run --family rush --limit 4 --reps 1
+node scripts/verify.mjs <run-dir> --write   # MANIFEST + prompt fingerprint + numbers
+node scripts/verify.mjs <run-dir>            # exit 1 on any tamper
+node scripts/discrimination.mjs <run-dir>    # greedy vs oracle vs model win rates
 ```
-
-```js
-import { World, num, ref, op } from './engine/index.mjs';
-
-const world = new World({
-  id: 'demo', maxSteps: 40,
-  initialState: { tank: { level: 0 } },
-  constraints: [
-    { id: 'c1', revealAt: 0, text: 'tank.level >= 8',
-      predicate: op('ge', ref('tank.level'), num(8)) },
-  ],
-  obligations: [
-    { id: 'paul', kind: 'decay', revealAt: 0, initial: 10, rate: 1,
-      repairAction: 'tend', repairAmount: 10 },
-  ],
-});
-
-world.step({ type: 'set', args: { path: 'tank.level', value: 9 } });
-world.observe();   // state + active rule TEXT + obligation urgency. No predicates.
-world.profile();   // reached / passed / ticks / compliant / obligationsDead
-world.records;     // every violation, with step, rule, age and witness
-```
-
-## Hypotheses under test
-
-- **H2 (headline)** — background-obligation failure is uncorrelated with main-line progress. The strongest model may die of neglect first.
-- **H1** — enabling real conflict *reverses* model rankings, i.e. existing constraint-accumulation leaderboards measure the wrong capability.
-- **H3** — cost per additional constraint grows exponentially, with a model-specific multiplier.
-- **H4** — what fraction of our own "hard" tasks are actually broken tasks? (Motivated by [2609.26826](https://arxiv.org/abs/2609.26826), which found 37.6% of zero-pass terminal tasks could not be certified as genuinely hard.)
-
-No results are claimed until the runs are public and recomputable.
 
 ## Design rules
 
-1. Tasks are **data**, never evaluator code. Predicates are a small validated AST.
-2. The agent sees rule *text* and obligation *urgency* — never predicates, future rules, or answer keys.
-3. A failed action is a logged failure, not a harness crash. Call failures, truncation and budget exhaustion are never scored as wrong answers.
-4. Every task ships an oracle. A task whose oracle fails is quarantined and reported, not quietly dropped.
-5. Determinism is a hard requirement: seeded PRNG, canonical hashing, replayable trajectories.
+1. Tasks are **data**, never evaluator code.
+2. The agent sees rule text, obligation urgency and (for Rush Hour) the board —
+   never predicates, future rules, solutions, or answer keys.
+3. **The action surface is the legality boundary.** A generic `set` that can
+   write the win condition is not offered.
+4. A failed action is a logged failure, not a harness crash. Call failures,
+   truncation and budget exhaustion are never scored as wrong answers.
+5. Every task ships an oracle; a task whose oracle fails is quarantined.
+6. Verification is deterministic: bounded concurrency, generous timeouts, and a
+   quarantine verdict if replay diverges.
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for third-party attribution.
+Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

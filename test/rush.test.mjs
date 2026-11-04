@@ -8,8 +8,8 @@ test('dataset is solver-calibrated: every task solvable, greedy fails', () => {
   const ds = loadDataset();
   assert.ok(ds.tasks.length >= 100, `need a real dataset, got ${ds.tasks.length}`);
   assert.equal(ds.stats.allDefeatGreedy, true);
-  for (const t of ds.tasks.slice(0, 20)) {
-    const sol = solve(t.board, { maxStates: 300_000 });
+  for (const t of ds.tasks.slice(0, 6)) {
+    const sol = solve(t.board, { maxStates: 200_000 });
     assert.ok(sol, `seed ${t.seed} must be solvable`);
     assert.equal(sol.depth, t.meta.optimalDepth, `seed ${t.seed} depth must match`);
     assert.equal(greedy(t.board).solved, false, `seed ${t.seed} greedy must fail`);

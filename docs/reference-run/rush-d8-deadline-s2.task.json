@@ -1,0 +1,364 @@
+{
+  "task": {
+    "id": "rush-d8-deadline-s2",
+    "family": "vigil-rush",
+    "maxSteps": 62,
+    "initialState": {
+      "pos": {
+        "X": {
+          "row": 2,
+          "col": 2
+        },
+        "A": {
+          "row": 3,
+          "col": 0
+        },
+        "B": {
+          "row": 2,
+          "col": 4
+        },
+        "C": {
+          "row": 4,
+          "col": 4
+        },
+        "D": {
+          "row": 0,
+          "col": 5
+        },
+        "E": {
+          "row": 1,
+          "col": 0
+        },
+        "F": {
+          "row": 3,
+          "col": 2
+        },
+        "G": {
+          "row": 0,
+          "col": 1
+        },
+        "H": {
+          "row": 0,
+          "col": 4
+        },
+        "I": {
+          "row": 3,
+          "col": 3
+        }
+      },
+      "moves": 0
+    },
+    "constraints": [
+      {
+        "id": "exit",
+        "revealAt": 0,
+        "text": "Move vehicle X to the right edge of row 2 (the exit). X is horizontal, length 2.",
+        "predicate": {
+          "t": "op",
+          "name": "and",
+          "args": [
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "ref",
+                  "path": "pos.X.row"
+                },
+                {
+                  "t": "num",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "op",
+                  "name": "add",
+                  "args": [
+                    {
+                      "t": "ref",
+                      "path": "pos.X.col"
+                    },
+                    {
+                      "t": "num",
+                      "v": 2
+                    }
+                  ]
+                },
+                {
+                  "t": "num",
+                  "v": 6
+                }
+              ]
+            }
+          ]
+        },
+        "kind": "goal"
+      }
+    ],
+    "obligations": [
+      {
+        "id": "signal",
+        "kind": "deadline",
+        "revealAt": 1,
+        "dueAt": 17,
+        "repairAction": "tend",
+        "extendBy": 16,
+        "doc": "The signal window closes at the deadline. Tend to reset it."
+      }
+    ],
+    "actions": [
+      {
+        "name": "move",
+        "args": [
+          "id",
+          "delta"
+        ],
+        "cost": 1,
+        "external": true,
+        "doc": "Slide vehicle id by delta cells along its orientation (negative = left/up). Only legal slides are accepted."
+      }
+    ],
+    "goals": [
+      {
+        "id": "exit",
+        "text": "X reaches the exit.",
+        "predicate": {
+          "t": "op",
+          "name": "and",
+          "args": [
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "ref",
+                  "path": "pos.X.row"
+                },
+                {
+                  "t": "num",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "op",
+                  "name": "add",
+                  "args": [
+                    {
+                      "t": "ref",
+                      "path": "pos.X.col"
+                    },
+                    {
+                      "t": "num",
+                      "v": 2
+                    }
+                  ]
+                },
+                {
+                  "t": "num",
+                  "v": 6
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "canaries": [
+      {
+        "id": "solution",
+        "token": "VIGIL_RUSH_SOL_2",
+        "path": "_solver"
+      }
+    ],
+    "noopCost": 1,
+    "tendCost": 1,
+    "meta": {
+      "seed": 2,
+      "obligation": "deadline",
+      "vehicles": 10,
+      "optimalDepth": 8,
+      "solverStates": 2181,
+      "greedySolved": false,
+      "greedySteps": 3,
+      "greedyReason": "loop",
+      "milestones": 3
+    },
+    "rush": {
+      "board": [
+        {
+          "id": "X",
+          "row": 2,
+          "col": 2,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 0,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "B",
+          "row": 2,
+          "col": 4,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "C",
+          "row": 4,
+          "col": 4,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 5,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "len": 3,
+          "orient": "V"
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 1,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 3,
+          "len": 3,
+          "orient": "V"
+        }
+      ],
+      "solution": [
+        {
+          "id": "X",
+          "delta": -2
+        },
+        {
+          "id": "F",
+          "delta": -2
+        },
+        {
+          "id": "I",
+          "delta": -2
+        },
+        {
+          "id": "C",
+          "delta": -4
+        },
+        {
+          "id": "B",
+          "delta": 1
+        },
+        {
+          "id": "F",
+          "delta": 2
+        },
+        {
+          "id": "I",
+          "delta": 2
+        },
+        {
+          "id": "X",
+          "delta": 4
+        }
+      ]
+    }
+  },
+  "oracle": [
+    {
+      "type": "move",
+      "args": {
+        "id": "X",
+        "delta": -2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "F",
+        "delta": -2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "I",
+        "delta": -2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "C",
+        "delta": -4
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "B",
+        "delta": 1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "F",
+        "delta": 2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "I",
+        "delta": 2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "X",
+        "delta": 4
+      }
+    }
+  ],
+  "fingerprint": "66fc5466e66d21f29b94d5e0b64a5bdb924aad994dd8babe70fda9eabbcb54ce"
+}

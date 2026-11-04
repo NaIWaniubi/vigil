@@ -15,7 +15,10 @@ const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 
 const STEPS = [
   { name: 'engine + attribution + boundary tests', argv: [process.execPath, '--test', 'test/*.test.mjs'] },
-  { name: 'task oracle self-audit', argv: [process.execPath, 'scripts/self-audit.mjs'] },
+  // Quick audit by default: the gate must stay fast enough to run on every
+  // change. The full 586-configuration audit is `npm run audit:full` and is
+  // required before publishing a run bundle.
+  { name: 'task oracle self-audit (quick)', argv: [process.execPath, 'scripts/self-audit.mjs', '--quick', '--no-write'] },
   { name: 'repo hygiene', argv: [process.execPath, 'scripts/pr-check.mjs'] },
 ];
 

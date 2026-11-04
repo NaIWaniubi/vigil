@@ -13,6 +13,8 @@
     "test": "node --test \"test/*.test.mjs\"",
     "gate": "node scripts/gate.mjs",
     "audit": "node scripts/self-audit.mjs",
+    "audit:full": "node scripts/self-audit.mjs",
+    "audit:quick": "node scripts/self-audit.mjs --quick",
     "run": "node runner.mjs"
   },
   "dependencies": {},

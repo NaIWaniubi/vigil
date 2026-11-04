@@ -26,7 +26,7 @@ function parseArgs(argv) {
   const a = {
     reps: 3, out: null, resume: false, dryRun: false, budgetUsd: 50,
     tasks: 'grid', models: [], family: 'rush', concurrency: 6, paceMs: 300,
-    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null,
+    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null, sample: null,
   };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
@@ -43,6 +43,7 @@ function parseArgs(argv) {
     else if (k === '--limit') a.limit = Number(argv[++i]);
     else if (k === '--min-depth') a.minDepth = Number(argv[++i]);
     else if (k === '--max-depth') a.maxDepth = Number(argv[++i]);
+    else if (k === '--sample') a.sample = Number(argv[++i]);
     else if (k === '--seed-offset') a.seedOffset = Number(argv[++i]);
     else if (k === '--cap') { const [id, n] = argv[++i].split('='); a.channelCaps[id] = Number(n); }
     else if (k === '--help' || k === '-h') a.help = true;
@@ -71,6 +72,7 @@ Options
   --limit <n>              only first n task configs
   --min-depth <n>          rush: only tasks with optimal depth >= n
   --max-depth <n>          rush: only tasks with optimal depth <= n
+  --sample <n>             stratified sample of n tasks across depths
 `;
 
 function buildWork(args) {
@@ -79,6 +81,14 @@ function buildWork(args) {
     let cfgs = rushConfigs({ obligations: ['off', 'decay', 'deadline'] });
     if (args.minDepth !== null) cfgs = cfgs.filter((c) => c.depth >= args.minDepth);
     if (args.maxDepth !== null) cfgs = cfgs.filter((c) => c.depth <= args.maxDepth);
+    // Stratified sample: stride through the depth-sorted list so every depth
+    // bucket is represented instead of the first N seeds (which cluster at the
+    // shallow end). Sampling is what makes a full curve affordable.
+    if (args.sample) {
+      cfgs = [...cfgs].sort((a, b) => a.depth - b.depth);
+      const stride = Math.max(1, Math.floor(cfgs.length / args.sample));
+      cfgs = cfgs.filter((_, i) => i % stride === 0).slice(0, args.sample);
+    }
     if (args.limit) cfgs = cfgs.slice(0, args.limit);
     for (const cfg of cfgs) work.push({ family: 'rush', cfg });
   }

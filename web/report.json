@@ -1,19 +1,32 @@
 {
-  "run": "E:\\myzcode\\vigil\\runs\\live-conflict",
-  "generatedAt": "2026-11-04T10:10:51.092Z",
+  "run": "E:\\myzcode\\vigil\\docs\\reference-run",
+  "generatedAt": "2026-11-04T18:38:19.913Z",
   "protocol": {
-    "promptVersion": "vigil-agent-v1",
+    "promptVersion": "vigil-agent-v2",
     "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
-    "engineVersion": "0.1.0",
+    "engineVersion": "0.2.0",
+    "runner": "cluster",
+    "concurrency": 6,
+    "paceMs": 500,
     "temperature": 0,
     "maxTokens": 4096,
-    "reps": 1,
-    "taskGrid": "quick",
+    "reps": 3,
+    "family": "rush",
     "targets": [
       {
-        "channel": "deepseek",
-        "model": "deepseek-chat",
-        "tier": "official"
+        "channel": "agent2api-local",
+        "model": "gemini-3-flash-preview",
+        "tier": "relay"
+      },
+      {
+        "channel": "opencsg-local",
+        "model": "qwen3.8-max",
+        "tier": "relay"
+      },
+      {
+        "channel": "opencsg-local",
+        "model": "deepseek-v4-flash",
+        "tier": "relay"
       }
     ],
     "channels": [
@@ -31,6 +44,12 @@
       },
       {
         "id": "sensenova",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova-kimi",
         "baseUrl": "https://token.sensenova.cn/v1",
         "protocol": "openai",
         "tier": "official"
@@ -70,67 +89,81 @@
         "baseUrl": "http://127.0.0.1:3425",
         "protocol": "anthropic",
         "tier": "local"
+      },
+      {
+        "id": "agent2api-local",
+        "baseUrl": "http://127.0.0.1:3065/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "opencsg-local",
+        "baseUrl": "http://127.0.0.1:7871/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "orcaterm-local",
+        "baseUrl": "http://127.0.0.1:8010/v1",
+        "protocol": "openai",
+        "tier": "relay"
       }
     ],
-    "startedAt": "2026-11-04T10:05:46.327Z"
+    "startedAt": "2026-11-04T17:10:14.962Z"
   },
-  "cells": 8,
-  "scoreable": 8,
-  "infraErrors": 0,
-  "spendUsd": 0.322605,
-  "apiCalls": 176,
+  "cells": 55,
+  "scoreable": 13,
+  "infraErrors": 42,
+  "spendUsd": 7.885043,
+  "apiCalls": 974,
   "profiles": [
     {
-      "model": "deepseek-chat",
+      "model": "gemini-3-flash-preview",
       "track": "compliant",
-      "cells": 8,
-      "wins": 7,
-      "winRate": 0.875,
+      "cells": 13,
+      "wins": 4,
+      "winRate": 0.3076923076923077,
       "winRateCI95": [
-        0.5291051942301386,
-        0.9775830911367038
+        0.12680497161618087,
+        0.5763111218666236
       ],
-      "reachedMean": 6,
-      "passedMean": 6,
+      "reachedMean": 1,
+      "passedMean": 0.3076923076923077,
       "violationsByClass": {
-        "revealed": 40,
-        "broke": 3,
-        "regressed": 13,
-        "neglected": 2
+        "neglected": 648,
+        "regressed": 26
       },
-      "oldestViolatedConstraintAge": 25,
+      "oldestViolatedConstraintAge": 97,
       "obligationDeaths": 0,
-      "turnsMean": 22,
-      "turnsStd": 8.263517065131184,
-      "ticksMean": 23.5,
+      "turnsMean": 53.76923076923077,
+      "turnsStd": 24.85006319963072,
+      "ticksMean": 53.76923076923077,
       "nonCompliant": 0,
-      "excludedInfraErrors": 0
+      "excludedInfraErrors": 3
     },
     {
-      "model": "deepseek-chat",
+      "model": "gemini-3-flash-preview",
       "track": "raw",
-      "cells": 8,
-      "wins": 7,
-      "winRate": 0.875,
+      "cells": 13,
+      "wins": 4,
+      "winRate": 0.3076923076923077,
       "winRateCI95": [
-        0.5291051942301386,
-        0.9775830911367038
+        0.12680497161618087,
+        0.5763111218666236
       ],
-      "reachedMean": 6,
-      "passedMean": 6,
+      "reachedMean": 1,
+      "passedMean": 0.3076923076923077,
       "violationsByClass": {
-        "revealed": 40,
-        "broke": 3,
-        "regressed": 13,
-        "neglected": 2
+        "neglected": 648,
+        "regressed": 26
       },
-      "oldestViolatedConstraintAge": 25,
+      "oldestViolatedConstraintAge": 97,
       "obligationDeaths": 0,
-      "turnsMean": 22,
-      "turnsStd": 8.263517065131184,
-      "ticksMean": 23.5,
+      "turnsMean": 53.76923076923077,
+      "turnsStd": 24.85006319963072,
+      "ticksMean": 53.76923076923077,
       "nonCompliant": 0,
-      "excludedInfraErrors": 0
+      "excludedInfraErrors": 3
     }
   ],
   "stability": {
@@ -142,17 +175,26 @@
   },
   "costCurves": [
     {
-      "model": "deepseek-chat",
+      "model": "gemini-3-flash-preview",
       "points": [
         {
-          "depth": 6,
-          "cost": 0.040325625000000004
+          "depth": 8,
+          "cost": 0.265198
+        },
+        {
+          "depth": 9,
+          "cost": 0.48907249999999997
+        },
+        {
+          "depth": 17,
+          "cost": 1.164797
         }
       ],
       "fit": {
-        "multiplier": null,
-        "r2": null,
-        "n": 1
+        "multiplier": 1.1536886583590151,
+        "slope": 0.14296433823538077,
+        "r2": 0.899483801561853,
+        "n": 3
       }
     }
   ],
@@ -160,23 +202,31 @@
     "H1_conflict": {
       "table": [
         {
-          "model": "deepseek-chat",
-          "winRateNone": 0.75,
-          "winRateCoupled": 1,
-          "delta": 0.25
+          "model": "qwen3.8-max",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
+        },
+        {
+          "model": "deepseek-v4-flash",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
+        },
+        {
+          "model": "gemini-3-flash-preview",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
         }
       ],
-      "rankNone": [
-        "deepseek-chat"
-      ],
-      "rankCoupled": [
-        "deepseek-chat"
-      ],
+      "rankNone": [],
+      "rankCoupled": [],
       "rankCorrelation": null,
       "reordered": false
     },
     "H2_neglect": {
-      "n": 6,
+      "n": 8,
       "pearsonPassedVsDeaths": null,
       "spearmanPassedVsDeaths": null,
       "pearsonPassedVsSurvival": null,

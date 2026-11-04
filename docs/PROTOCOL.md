@@ -23,6 +23,9 @@
 | `obligation` | `off` / `decay` / `deadline` / `hazard` | H2：疏忽是否独立于主线推进 |
 | `depth` | 6 / 12 / 18 / 24 | H3：每增加一条约束的成本倍率 |
 
+`vigil-rush` 用 `--min-depth` / `--max-depth` 做深度分层，得到
+「胜率随最优深度衰减」的曲线——这是校准型 benchmark 该公开的东西。
+
 - `none`：每个 gadget 两条约束读**不相交**的状态格，满足其一不会扰动其二。
 - `coupled`：`fill_<slot>` 同时抬升 `level` 与 `pressure`；早期约束要求 `level >= needA`，
   后期约束要求 `pressure <= needA - 1` 且阀门开启。 naive 填充必然违反后期约束；
@@ -34,6 +37,24 @@
 三个自编模块（ini-parser / semver-compare / slugify），每个 5 条需求随时间揭示。
 需求判定**通过真实运行候选代码**完成：候选源码从 `data:` URL 加载，无法读文件系统、
 无法看到 verifier。CI watchdog 是背景义务，不跑 CI 就会过期。
+
+### vigil-rush（校准族，难度核心）
+
+Rush-Hour 滑块谜题。目标车 X 要滑到出口，必须先把挡路的车挪开——往往先往后挪。
+NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
+
+1. 随机生成棋盘；
+2. 最优求解；不可解或 depth < 8 则丢弃；
+3. 跑 greedy 基线；**greedy 能解则丢弃**；
+4. 只保留「有最优解 + greedy 必败」的题，并记录最优深度。
+
+当前数据集：150 seed 产出 **130 题（87% 录取率）**，最优深度 8–20（中位 9），
+**130/130 全部击败 greedy**。由 `scripts/build-rush-dataset.mjs` 一次性生成、
+提交入库、带指纹——像 SWE-bench，不在每次跑数时重新生成。
+
+**合法动作就是权限边界**：`move(id, delta)` 经过棋盘校验；`set/inc/push/remove`
+这些通用状态修改器**不出现在动作面里**，也无法在 `RushWorld` 中生效。
+（`v7` 实测发现模型会 `set pos.X.col` 直接改胜利条件，已修复并加回归测试。）
 
 ### 任务准入（自审）
 
