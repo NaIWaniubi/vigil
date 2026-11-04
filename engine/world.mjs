@@ -148,6 +148,7 @@ export class World {
 
   /** What the agent is allowed to see. No predicates, no future rules, no keys. */
   observe() {
+    const goals = this.task.goals ?? (this.task.goal ? [this.task.goal] : []);
     return {
       tick: this.tick,
       step: this.stepIndex,
@@ -157,6 +158,10 @@ export class World {
       actions: this.actionSurface(),
       progress: { reached: this.reached, passed: this.passed, active: this.active.length },
       stepsLeft: this.task.maxSteps - this.stepIndex,
+      // The objective is stated as TEXT. Without it the agent can satisfy every
+      // constraint and still never ship, which measures prompt ambiguity rather
+      // than long-horizon capability.
+      goal: goals.map((g) => g.text).filter(Boolean).join(' ') || null,
     };
   }
 
