@@ -199,6 +199,12 @@ export class World {
       const custom = original && this.customActions.get(original.type);
       return custom?.cost ?? this.tickCost.base;
     }
+    if (action.type === '__rush_sync') {
+      const original = action.args?.action;
+      const custom = original && this.customActions.get(original.type);
+      return custom?.cost ?? this.tickCost.base;
+    }
+    if (action.type === '__illegal_move') return this.tickCost.base;
     const custom = this.customActions.get(action.type);
     if (custom) return custom.cost ?? this.tickCost.base;
     const n = action.args ? Object.keys(action.args).length : 0;
@@ -257,6 +263,17 @@ export class World {
           }
         }
         return { ok: true, originalAction: original };
+      }
+      case '__rush_sync': {
+        // Internal: RushWorld validated the slide and supplies the new position
+        // map. Same handoff discipline as __swe_sync.
+        const original = a.action;
+        if (a.state) this.state = clone(a.state);
+        return { ok: true, originalAction: original };
+      }
+      case '__illegal_move': {
+        // A rush move that is not legal: rejected, logged, no state change.
+        return { ok: false, error: `illegal move: ${a.id} by ${a.delta}` };
       }
       default: {
         const custom = this.customActions.get(action.type);
