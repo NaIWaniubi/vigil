@@ -32,7 +32,7 @@ export const CHANNELS = [
     models: ['deepseek/deepseek-chat', 'moonshotai/kimi-k3'], keyEnv: 'OPENROUTER_API_KEY' },
   // Local gateways are convenient for development but are NOT official channels.
   { id: 'magpie-local', baseUrl: 'http://127.0.0.1:3425', protocol: 'anthropic', tier: 'local',
-    models: ['auto'], keyEnv: 'MAGPIE_API_KEY' },
+    models: ['auto/qwen3.8-flash', 'auto/glm-5.1', 'auto/minimax-m3'], keyEnv: 'MAGPIE_API_KEY' },
   // Local multi-model gateways used for the exploratory leaderboard. Tagged
   // `relay` so they never enter the official main track, but they expose distinct
   // model families (Gemini / Qwen / GLM) for discrimination analysis.

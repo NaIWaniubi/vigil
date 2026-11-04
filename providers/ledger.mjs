@@ -38,6 +38,10 @@ export const PRICES = {
   'gpt-5.6-luna': { in: 2.0, out: 8.0 },
   'minimax-code/MiniMax-M3.1-Flash': { in: 0.3, out: 1.2 },
   'glm-5.3-flash': { in: 0.1, out: 0.4 },
+  'auto/qwen3.8-flash': { in: 0.2, out: 0.8 },
+  'auto/glm-5.1': { in: 0.6, out: 2.2 },
+  'auto/minimax-m3': { in: 0.3, out: 1.2 },
+  'auto/qwen3.8-max': { in: 1.2, out: 4.8 },
 };
 
 export class UnknownPriceError extends Error {

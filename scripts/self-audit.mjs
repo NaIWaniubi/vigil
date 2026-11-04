@@ -178,12 +178,32 @@ async function auditRush(cfg) {
   };
 }
 
+// Verification must be deterministic, and the swe family runs each check in a
+// child process (≈1s spawn on Windows). Launching all configs at once starves
+// them of CPU so checks time out nondeterministically — that is verification
+// flake, not task flake. Run with a bounded pool so an 8-way spike cannot make
+// a healthy task look broken.
+async function withConcurrency(items, limit, fn) {
+  const out = new Array(items.length);
+  let cursor = 0;
+  const worker = async () => {
+    while (cursor < items.length) {
+      const i = cursor++;
+      out[i] = await fn(items[i], i);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return out;
+}
+
+const SWE_CONCURRENCY = 3;
+
 let rushResults = [];
 try {
   const { rushConfigs } = await import('../tasks/rush/load.mjs');
   const allRush = rushConfigs({ obligations: ['off', 'decay', 'deadline'] });
   const sample = args.has('--quick') ? allRush.filter((c) => c.obligation === 'off').slice(0, 8) : allRush;
-  rushResults = await Promise.all(sample.map(auditRush));
+  rushResults = await withConcurrency(sample, 4, auditRush);
 } catch (e) {
   if (!String(e.message).includes('dataset.json missing')) throw e;
   console.error('note: rush dataset not built; skipping rush audit (run scripts/build-rush-dataset.mjs)');
@@ -191,7 +211,7 @@ try {
 
 const results = [
   ...coreConfigs.map(auditOne),
-  ...(await Promise.all(sweConfigs.map(auditSwe))),
+  ...(await withConcurrency(sweConfigs, SWE_CONCURRENCY, auditSwe)),
   ...rushResults,
 ];
 const admitted = results.filter((r) => r.status === 'admitted');

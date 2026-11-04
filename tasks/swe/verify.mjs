@@ -22,7 +22,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SCENARIOS } from './repos.mjs';
 
-const DEFAULT_TIMEOUT_MS = 15000;
+const DEFAULT_TIMEOUT_MS = 30000;
 const RUNNER_PATH = fileURLToPath(new URL('./check-worker.mjs', import.meta.url));
 
 /**

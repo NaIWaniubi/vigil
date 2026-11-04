@@ -26,7 +26,7 @@ function parseArgs(argv) {
   const a = {
     reps: 3, out: null, resume: false, dryRun: false, budgetUsd: 50,
     tasks: 'grid', models: [], family: 'rush', concurrency: 6, paceMs: 300,
-    limit: null, seedOffset: 0, channelCaps: {},
+    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null,
   };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
@@ -41,6 +41,8 @@ function parseArgs(argv) {
     else if (k === '--concurrency') a.concurrency = Number(argv[++i]);
     else if (k === '--pace-ms') a.paceMs = Number(argv[++i]);
     else if (k === '--limit') a.limit = Number(argv[++i]);
+    else if (k === '--min-depth') a.minDepth = Number(argv[++i]);
+    else if (k === '--max-depth') a.maxDepth = Number(argv[++i]);
     else if (k === '--seed-offset') a.seedOffset = Number(argv[++i]);
     else if (k === '--cap') { const [id, n] = argv[++i].split('='); a.channelCaps[id] = Number(n); }
     else if (k === '--help' || k === '-h') a.help = true;
@@ -67,12 +69,17 @@ Options
   --resume                 skip cells already in results.jsonl
   --dry-run                reference policy, no API spend
   --limit <n>              only first n task configs
+  --min-depth <n>          rush: only tasks with optimal depth >= n
+  --max-depth <n>          rush: only tasks with optimal depth <= n
 `;
 
 function buildWork(args) {
   const work = [];
   if (args.family === 'rush' || args.family === 'both') {
-    const cfgs = rushConfigs({ obligations: ['off', 'decay', 'deadline'], limit: args.limit });
+    let cfgs = rushConfigs({ obligations: ['off', 'decay', 'deadline'] });
+    if (args.minDepth !== null) cfgs = cfgs.filter((c) => c.depth >= args.minDepth);
+    if (args.maxDepth !== null) cfgs = cfgs.filter((c) => c.depth <= args.maxDepth);
+    if (args.limit) cfgs = cfgs.slice(0, args.limit);
     for (const cfg of cfgs) work.push({ family: 'rush', cfg });
   }
   if (args.family === 'core' || args.family === 'both') {
