@@ -2,7 +2,7 @@
 // component: its sha256 goes into protocol.toml, and verify.py rebuilds it
 // byte-for-byte. Change a word and the fingerprint changes — that is the point.
 
-export const PROMPT_VERSION = 'vigil-agent-v1';
+export const PROMPT_VERSION = 'vigil-agent-v2';
 
 export const SYSTEM_PROMPT = `You are operating a controlled environment through a fixed set of actions.
 
@@ -29,6 +29,22 @@ export function renderObservation(obs) {
   lines.push('```json');
   lines.push(JSON.stringify(obs.state, null, 2));
   lines.push('```');
+  if (obs.board) {
+    lines.push('');
+    lines.push(`## Board (${obs.board.size}x${obs.board.size}, exit is the right edge of row ${obs.board.exitRow})`);
+    lines.push('Each cell shows the vehicle id occupying it, or . for empty. X is the target.');
+    lines.push('```');
+    for (const row of obs.board.grid) lines.push(row);
+    lines.push('```');
+    lines.push('Vehicles (id: orientation, length, position):');
+    for (const v of obs.board.vehicles) {
+      lines.push(`- ${v.id}: ${v.orient === 'H' ? 'horizontal' : 'vertical'}, len ${v.len}, row ${v.row} col ${v.col}`);
+    }
+    lines.push('Legal slides right now (id: allowed deltas; negative = left/up):');
+    for (const [id, deltas] of Object.entries(obs.board.legalMoves)) {
+      lines.push(`- ${id}: [${deltas.join(', ') || 'none'}]`);
+    }
+  }
   lines.push('');
   lines.push(`## Active constraints (${obs.constraints.length}) — all remain in force`);
   for (const c of obs.constraints) {

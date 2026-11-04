@@ -4,7 +4,7 @@
 // on legal moves, so attribution stays truthful.
 
 import { World } from '../../engine/index.mjs';
-import { movesFor, applyMove, isGoal, SIZE, EXIT_ROW } from './rush.mjs';
+import { movesFor, applyMove, isGoal, SIZE, EXIT_ROW, occupancy } from './rush.mjs';
 
 export class RushWorld extends World {
   constructor(task, opts = {}) {
@@ -17,6 +17,34 @@ export class RushWorld extends World {
     return new RushWorld(task, opts);
   }
 
+  /**
+   * The agent must see the BOARD, not just coordinates: vehicle shapes,
+   * orientations, and an ASCII grid. Without this it cannot reason about which
+   * slides are legal and flails (measured: 94/94 illegal moves). The oracle and
+   * solution are never exposed — only the current visible configuration.
+   */
+  observe() {
+    const base = super.observe();
+    const grid = occupancy(this.board);
+    const rows = [];
+    for (let r = 0; r < SIZE; r++) {
+      let line = '';
+      for (let c = 0; c < SIZE; c++) line += grid[r][c] ?? '.';
+      rows.push(line + (r === EXIT_ROW ? '  <- exit row' : ''));
+    }
+    const vehicles = this.board.map((v) => ({
+      id: v.id, orient: v.orient, len: v.len, row: v.row, col: v.col,
+    }));
+    const legal = {};
+    for (const v of this.board) {
+      legal[v.id] = movesFor(this.board, v.id).map((m) => m.delta);
+    }
+    return {
+      ...base,
+      board: { size: SIZE, exitRow: EXIT_ROW, grid: rows, vehicles, legalMoves: legal },
+    };
+  }
+
   step(action) {
     if (this.done) throw new Error('world already terminated');
     if (action?.type !== 'move') return super.step(action);
@@ -26,9 +54,6 @@ export class RushWorld extends World {
     const match = legal.find((m) => m.id === id && m.delta === Number(delta));
     if (!match) {
       this.illegalMoves++;
-      // Log as an invalid action through the base engine's reject path by
-      // handing it an unknown action type; it records ok:false without changing
-      // state, and the clock still advances (a wasted turn costs neglect).
       return super.step({ type: '__illegal_move', args: { id, delta } });
     }
 
