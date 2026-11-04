@@ -77,12 +77,21 @@ function loadDone(path) {
 }
 
 /** One full trajectory against a live model. */
-async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0 }) {
+export async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0 }) {
   const isSwe = task.family === 'vigil-swe';
-  const world = isSwe
-    ? await (await import('./tasks/swe/world.mjs')).SweWorld.create(task, { seed })
-    : new World(task, { seed });
-  const step = isSwe ? (a) => world.stepAsync(a) : (a) => world.step(a);
+  const isRush = task.family === 'vigil-rush';
+  let world;
+  let step;
+  if (isSwe) {
+    world = await (await import('./tasks/swe/world.mjs')).SweWorld.create(task, { seed });
+    step = (a) => world.stepAsync(a);
+  } else if (isRush) {
+    world = (await import('./tasks/rush/world.mjs')).RushWorld.create(task, { seed });
+    step = (a) => world.step(a);
+  } else {
+    world = new World(task, { seed });
+    step = (a) => world.step(a);
+  }
   const messages = [{ role: 'system', content: SYSTEM_PROMPT }];
   const turns = [];
   const cap = maxTurns ?? task.maxSteps;
@@ -140,8 +149,21 @@ async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 
   };
 }
 
-/** Dry-run uses the greedy reference policy so the pipeline is testable offline. */
-async function runDryCell({ task, seed }) {
+/** Dry-run uses a reference policy so the pipeline is testable offline. */
+export async function runDryCell({ task, seed }) {
+  if (task.family === 'vigil-rush') {
+    // Rush greedy is the rush solver's baseline, not the core policy.
+    const { greedy } = await import('./tasks/rush/rush.mjs');
+    const { RushWorld } = await import('./tasks/rush/world.mjs');
+    const world = RushWorld.create(task, { seed });
+    const g = greedy(task.rush.board, { maxSteps: task.maxSteps });
+    for (const m of g.moves) { if (world.done) break; world.step({ type: 'move', args: { id: m.id, delta: m.delta } }); }
+    return {
+      status: 'completed', error: null, profile: world.profile(),
+      terminal: world.profile().terminal, records: world.records,
+      actionLog: world.actionLog, turns: [], promptVersion: PROMPT_VERSION, dryRun: true,
+    };
+  }
   const { greedy } = await import('./tasks/index.mjs');
   const world = greedy(task, { seed });
   return {
@@ -149,6 +171,13 @@ async function runDryCell({ task, seed }) {
     terminal: world.profile().terminal, records: world.records,
     actionLog: world.actionLog, turns: [], promptVersion: PROMPT_VERSION, dryRun: true,
   };
+}
+
+export { parseArgs, cellKey, loadDone };
+
+const IS_MAIN = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (IS_MAIN) {
+  main().catch((e) => { console.error(`RUNNER: FAIL — ${e.message}`); process.exit(1); });
 }
 
 async function main() {
@@ -270,5 +299,3 @@ async function main() {
   console.log(`\nRUN: ${finished} cells, ${skipped} skipped, ${errors} errors`);
   console.log(`spend: $${summary.ledger.spentUsd.toFixed(4)} across ${summary.ledger.calls} calls`);
 }
-
-main().catch((e) => { console.error(`RUNNER: FAIL — ${e.message}`); process.exit(1); });

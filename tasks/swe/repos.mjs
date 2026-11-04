@@ -207,16 +207,12 @@ export function makeCart() {
         check: { entry: 'src/emitter.mjs', call: 'createEmitter', scenario: 'emit-self-unsub', expect: { a: 1, b: 1 } },
       },
     ],
-    // Regression coupling (naive single-file fix):
-    // req-noop-set wants "no emit when nothing changed". The naive fix bails
-    // out of setState BEFORE merging the patch whenever every patch key already
-    // equals the current value. But it compares with === on the *patch* values,
-    // and `add()` always passes a fresh array — so that part still works. The
-    // real trap is the reverse: to "fix" the memo requirement cheaply an agent
-    // may freeze state identity, so here the proven naive fix targets req-memo:
-    // making computed() cache forever (never re-run fn) satisfies req-memo but
-    // breaks req-total, because the façade's total selector stops seeing new
-    // items. The fixture below is exactly that single-file change.
+    // Regression coupling (naive single-file fix), verified by the fixture test:
+    // req-memo (revealed 3rd) asks computed() to memoize. The naive fix caches
+    // the FIRST computation forever, which satisfies req-memo — but breaks the
+    // EARLIER req-total (revealed 1st): the façade's total selector stops
+    // seeing new items after the first add. One file changed, later requirement
+    // passes, earlier one regresses. The oracle invalidates on state identity.
     naiveFix: {
       file: 'src/selectors.mjs',
       satisfies: 'req-memo',
@@ -690,6 +686,12 @@ export function createApp() {
         check: { entry: 'src/index.mjs', call: 'createApp', scenario: 'mw-shortcircuit', expect: { status: 401, body: 'denied', handlerRan: false } },
       },
     ],
+    // Regression coupling (naive single-file fix), verified by the fixture test:
+    // req-query-array (revealed 4th) asks repeated keys to collect into arrays.
+    // The naive fix ALWAYS collects into arrays and drops URL-decoding, which
+    // satisfies req-query-array but breaks the EARLIER req-query-decode
+    // (revealed 3rd): values stay raw and single keys become arrays. The oracle
+    // decodes first and only collects on repetition.
     naiveFix: {
       file: 'src/query.mjs',
       satisfies: 'req-query-array',
@@ -938,6 +940,11 @@ export function createRepo(rows) {
         check: { entry: 'src/index.mjs', call: 'createRepo', scenario: 'desc-limit', expect: [30, 21] },
       },
     ],
+    // Regression coupling (naive single-file fix), verified by the fixture test:
+    // req-gte (revealed 5th) asks the builder to support >=. The naive fix
+    // routes BOTH gt and gte through >=, which satisfies req-gte but breaks the
+    // EARLIER req-where-chain (revealed 2nd): strict gt now includes the
+    // boundary row. The oracle keeps gt strict and adds a separate gte branch.
     naiveFix: {
       file: 'src/builder.mjs',
       satisfies: 'req-gte',

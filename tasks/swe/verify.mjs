@@ -112,8 +112,12 @@ function packCheck(check, id) {
 }
 
 /**
- * Run a batch of checks against one repo snapshot in a permission-restricted
- * child process. Returns [{ id, ok, actual, error }]. Never throws.
+ * Run a batch of checks against one repo snapshot in a FRESH permission-
+ * restricted child process. One process per batch is deliberate: a candidate
+ * cannot poison state across checks, and a hung candidate is killed with its
+ * process. Process start dominates latency (~1s on Windows); callers that
+ * need throughput should run batches concurrently.
+ * Returns [{ id, ok, actual, error }]. Never throws.
  */
 function runBatch(files, checks, timeoutMs) {
   return new Promise((resolve) => {
