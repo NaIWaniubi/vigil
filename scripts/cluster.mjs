@@ -166,7 +166,9 @@ async function main() {
   let finished = 0;
   let errors = 0;
   let stopped = false;
-  process.on('SIGINT', () => { stopped = true; console.error('\nSIGINT: stopping launches, finishing in-flight…'); });
+  let stopReason = null;
+  const stop = (reason) => { if (!stopped) { stopped = true; stopReason = reason; console.error(`\nSTOP: ${reason}`); } };
+  process.on('SIGINT', () => stop('SIGINT'));
 
   const launch = async (cell) => {
     const { item, task, fingerprint, channel, model, rep } = cell;
@@ -179,8 +181,8 @@ async function main() {
         try {
           ledger.reserve({ id: `probe:${task.id}:${model}:${rep}`, model, maxInputTokens: 1000, maxOutputTokens: 100 });
           ledger.release(`probe:${task.id}:${model}:${rep}`, 'probe');
-        } catch {
-          stopped = true;
+        } catch (e) {
+          stop(`budget exhausted: ${e.message}`);
           return;
         }
       }
@@ -191,6 +193,9 @@ async function main() {
           ? await runDryCell({ task, seed })
           : await runCell({ task, seed, channel, model, ledger, paceMs: args.paceMs });
       } catch (e) {
+        // An unpriced model is a configuration gap, not a reason to halt the
+        // whole cluster. Record the cell as an error and keep going; the budget
+        // gate only stops the run on genuine exhaustion.
         result = { status: 'error', error: { message: e.message }, profile: null, records: [], turns: [] };
       }
       const row = {
@@ -210,24 +215,30 @@ async function main() {
     }
   };
 
-  // Worker loop: pull cells until exhausted or stopped.
+  // Worker loop: pull cells until exhausted or stopped. A worker must never die
+  // silently on an unexpected throw — that would strand the pool and stall the
+  // whole run. Catch, log, and continue.
   let cursor = 0;
-  const worker = async () => {
+  const worker = async (wid) => {
     while (!stopped && cursor < cells.length) {
       const cell = cells[cursor++];
-      await launch(cell);
+      try {
+        await launch(cell);
+      } catch (e) {
+        console.error(`worker ${wid} cell ${cell.task.id}/${cell.model} threw: ${e.message}`);
+      }
     }
   };
-  await Promise.all(Array.from({ length: args.concurrency }, worker));
+  await Promise.all(Array.from({ length: args.concurrency }, (_, i) => worker(i)));
 
   const summary = {
     finishedAt: new Date().toISOString(),
-    cells: finished, errors, stopped,
+    cells: finished, errors, stopped, stopReason,
     ledger: ledger.totals(),
     protocolSha256: protocol.promptSha256,
   };
   writeFileSync(join(out, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
-  console.log(`\nCLUSTER: ${finished} cells, ${errors} errors${stopped ? ' (stopped early)' : ''}`);
+  console.log(`\nCLUSTER: ${finished} cells, ${errors} errors${stopped ? ` (stopped: ${stopReason})` : ''}`);
   console.log(`spend: $${summary.ledger.spentUsd.toFixed(4)} across ${summary.ledger.calls} calls`);
 }
 

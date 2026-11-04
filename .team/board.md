@@ -64,6 +64,8 @@ SLICE U-swe: multi-file regression-coupled vigil-swe family
       + runner all use moduleIndex; verified unchanged).
 
   verification:
+    node --test "test/*.test.mjs"   (whole repo suite, no cross-family regressions)
+      → "ℹ tests 98 / ℹ pass 98 / ℹ fail 0 / ℹ skipped 0"  EXIT=0
     node scripts/self-audit.mjs --quick --no-write
       → "self-audit: 44 tasks, 44 admitted, 0 quarantined"
         "SELF-AUDIT: PASS — every admitted task has a working oracle, is non-trivial, and replays exactly"  EXIT=0

@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-11-04T14:00:31.633Z",
+  "dataset": {
+    "name": "vigil-rush",
+    "version": "1.0.0",
+    "tasks": 130,
+    "seedsTried": 150,
+    "tasksKept": 130,
+    "yieldRate": 0.8666666666666667,
+    "depthMin": 8,
+    "depthMedian": 9,
+    "depthMax": 20,
+    "allDefeatGreedy": true
+  },
+  "greedy": {
+    "note": "calibration requires greedy failure on every kept task",
+    "allDefeatGreedy": true
+  },
+  "oracle": {
+    "note": "every kept task has a BFS-proven shortest solution",
+    "winRate": 1
+  },
+  "models": [],
+  "discrimination": {
+    "models": 0,
+    "winRateSpread": null,
+    "verdict": "need >= 2 models"
+  }
+}

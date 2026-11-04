@@ -69,6 +69,7 @@ function auditOne(cfg) {
   return {
     taskId: task.id,
     config: cfg,
+    family: 'vigil-core',
     fingerprint: createHash('sha256').update(taskFingerprint(task)).digest('hex'),
     checks: ['oracle', 'lazy', ...(task.obligations?.length ? ['neglect'] : []), 'determinism'],
     findings,
@@ -136,9 +137,62 @@ for (let moduleIndex = 0; moduleIndex < MODULES.length; moduleIndex++) {
   }
 }
 
+// Rush family: the solver-calibrated dataset. Audit a sample (or all) of the
+// stored boards across obligation variants. The oracle is the BFS shortest
+// solution; greedy must fail (calibration guaranteed it, the audit re-proves it).
+async function auditRush(cfg) {
+  const { generateRushFromConfig } = await import('../tasks/rush/load.mjs');
+  const { RushWorld } = await import('../tasks/rush/world.mjs');
+  const { greedy } = await import('../tasks/rush/rush.mjs');
+  const { task, oracle } = generateRushFromConfig(cfg);
+  const findings = [];
+  const replay = (actions) => {
+    const w = RushWorld.create(task, { seed: cfg.seed });
+    for (const a of actions) { if (w.done) break; w.step(a); }
+    return w;
+  };
+  const solved = replay(oracle);
+  if (solved.profile().terminal?.reason !== 'goal_met') {
+    findings.push({ check: 'oracle', verdict: 'fail', detail: `oracle ended ${JSON.stringify(solved.profile().terminal)}` });
+  }
+  const g = greedy(task.rush.board, { maxSteps: task.maxSteps });
+  if (g.solved) {
+    findings.push({ check: 'discrimination', verdict: 'fail', detail: 'greedy solves a calibrated-hard task' });
+  }
+  const lazy = replay(Array.from({ length: task.maxSteps }, () => ({ type: 'noop' })));
+  if (lazy.profile().terminal?.reason === 'goal_met') {
+    findings.push({ check: 'lazy', verdict: 'fail', detail: 'doing nothing solves the task' });
+  }
+  const again = replay(oracle);
+  const h = (w) => createHash('sha256').update(JSON.stringify({ r: w.records, p: w.profile() })).digest('hex');
+  if (h(solved) !== h(again)) {
+    findings.push({ check: 'determinism', verdict: 'fail', detail: 'replay diverged' });
+  }
+  return {
+    taskId: task.id, config: { seed: cfg.seed, obligation: cfg.obligation, depth: cfg.depth }, family: 'vigil-rush',
+    fingerprint: createHash('sha256').update(taskFingerprint(task)).digest('hex'),
+    checks: ['oracle', 'discrimination', 'lazy', 'determinism'],
+    findings, status: findings.length ? 'quarantined' : 'admitted',
+    oracleProfile: solved.profile(),
+    optimalDepth: cfg.depth,
+  };
+}
+
+let rushResults = [];
+try {
+  const { rushConfigs } = await import('../tasks/rush/load.mjs');
+  const allRush = rushConfigs({ obligations: ['off', 'decay', 'deadline'] });
+  const sample = args.has('--quick') ? allRush.filter((c) => c.obligation === 'off').slice(0, 8) : allRush;
+  rushResults = await Promise.all(sample.map(auditRush));
+} catch (e) {
+  if (!String(e.message).includes('dataset.json missing')) throw e;
+  console.error('note: rush dataset not built; skipping rush audit (run scripts/build-rush-dataset.mjs)');
+}
+
 const results = [
   ...coreConfigs.map(auditOne),
   ...(await Promise.all(sweConfigs.map(auditSwe))),
+  ...rushResults,
 ];
 const admitted = results.filter((r) => r.status === 'admitted');
 const quarantined = results.filter((r) => r.status === 'quarantined');

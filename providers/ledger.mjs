@@ -29,6 +29,15 @@ export const PRICES = {
   'kimi-k3': { in: 0.6, out: 2.5 },
   'deepseek-v4-flash': { in: 0.3, out: 0.5 },
   'glm-5.3': { in: 0.6, out: 2.2 },
+  // Exploratory relay models (local gateways). Prices are public list rates;
+  // relay runs are tagged separately and never enter the official main track.
+  'qwen3.8-max': { in: 1.2, out: 4.8 },
+  'qwen3.8-flash': { in: 0.2, out: 0.8 },
+  'deepseek-v4-pro': { in: 0.6, out: 1.2 },
+  'gemini-3-flash-preview': { in: 0.3, out: 1.2 },
+  'gpt-5.6-luna': { in: 2.0, out: 8.0 },
+  'minimax-code/MiniMax-M3.1-Flash': { in: 0.3, out: 1.2 },
+  'glm-5.3-flash': { in: 0.1, out: 0.4 },
 };
 
 export class UnknownPriceError extends Error {
