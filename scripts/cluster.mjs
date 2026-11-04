@@ -158,6 +158,36 @@ async function main() {
     }
   }
 
+  // Interleave cells round-robin across tasks so a stuck/hard task does not
+  // monopolise all workers while easier tasks wait. Without this, the first
+  // task's reps x models fill every worker and the run appears frozen on one
+  // puzzle. Sort by (rep, model-index, task-index) to spread tasks across time.
+  const modelOrder = new Map(targets.map((t, i) => [t.model, i]));
+  cells.sort((a, b) => {
+    const ai = work.indexOf(a.item), bi = work.indexOf(b.item);
+    return (a.rep - b.rep)
+      || (modelOrder.get(a.model) - modelOrder.get(b.model))
+      || (ai - bi);
+  });
+  // Now reorder so consecutive cells are different tasks: bucket by task and
+  // round-robin pull. Keeps resume keying intact (order-independent).
+  const byTask = new Map();
+  for (const c of cells) {
+    if (!byTask.has(c.task.id)) byTask.set(c.task.id, []);
+    byTask.get(c.task.id).push(c);
+  }
+  const queues = [...byTask.values()];
+  const interleaved = [];
+  let added = true;
+  while (added) {
+    added = false;
+    for (const q of queues) {
+      if (q.length) { interleaved.push(q.shift()); added = true; }
+    }
+  }
+  cells.length = 0;
+  cells.push(...interleaved);
+
   const total = cells.length;
   console.log(`vigil cluster · ${work.length} tasks x ${targets.length} models x ${args.reps} reps`);
   console.log(`cells to run: ${total} (skipped ${done.size}) · concurrency ${args.concurrency} · pace ${args.paceMs}ms`);
