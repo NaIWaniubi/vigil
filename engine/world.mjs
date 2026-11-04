@@ -68,6 +68,9 @@ export function validateTask(task) {
     if (typeof a.name !== 'string' || BUILTIN_ACTIONS.has(a.name)) {
       throw new WorldError(`${task.id}: bad or reserved custom action name ${a.name}`);
     }
+    // A family may declare an action handled externally (vigil-swe runs real
+    // code for `edit`/`run_ci`). Such actions carry no AST effects.
+    if (a.external === true) continue;
     if (!Array.isArray(a.effects)) throw new WorldError(`${a.name}: needs effects array`);
     for (const e of a.effects) {
       if (typeof e.path !== 'string') throw new WorldError(`${a.name}: effect needs path`);
@@ -190,6 +193,12 @@ export class World {
   #costOf(action) {
     if (action.type === 'noop') return this.task.noopCost ?? this.tickCost.base;
     if (action.type === 'tend') return this.task.tendCost ?? this.tickCost.base;
+    if (action.type === '__swe_sync') {
+      // Charge the cost of the real swe action it stands in for.
+      const original = action.args?.action;
+      const custom = original && this.customActions.get(original.type);
+      return custom?.cost ?? this.tickCost.base;
+    }
     const custom = this.customActions.get(action.type);
     if (custom) return custom.cost ?? this.tickCost.base;
     const n = action.args ? Object.keys(action.args).length : 0;
@@ -234,6 +243,20 @@ export class World {
         }
         const tended = repair(live, spec);
         return { ok: tended, error: tended ? undefined : 'obligation already dead' };
+      }
+      case '__swe_sync': {
+        // Internal: SweWorld supplies the already-computed post-edit state.
+        // Assigning it here (rather than before super.step) keeps the base
+        // engine's before/after diff meaningful, so attribution still works.
+        const original = a.action;
+        if (a.state) this.state = clone(a.state);
+        for (const [id, spec] of this.obSpecs) {
+          if (spec.repairAction === original?.type) {
+            const live = this.live.get(id);
+            if (live) repair(live, spec);
+          }
+        }
+        return { ok: true, originalAction: original };
       }
       default: {
         const custom = this.customActions.get(action.type);
@@ -291,6 +314,13 @@ export class World {
     if (action.type === 'tend' && action.args?.obligationId) tendedIds.add(action.args.obligationId);
     const custom = this.customActions.get(action.type);
     if (custom?.tendsObligation) tendedIds.add(custom.tendsObligation);
+    // A swe action stands in for the real edit/CI run; honour its repair target.
+    const sweOriginal = action.type === '__swe_sync' ? action.args?.action : null;
+    if (sweOriginal) {
+      for (const [id, spec] of this.obSpecs) {
+        if (spec.repairAction === sweOriginal.type) tendedIds.add(id);
+      }
+    }
 
     for (const [id, live] of this.live) {
       if (live.dead) continue;
