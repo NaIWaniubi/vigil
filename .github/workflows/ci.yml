@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Quality gate (tests + task self-audit + repo hygiene)
+        run: node scripts/gate.mjs
+      - name: Dry-run pipeline (no API spend)
+        run: node runner.mjs --dry-run --family both --tasks quick --reps 1 --limit 4 --out runs/ci-dry
+      - name: Harbor export
+        run: node scripts/harbor-export.mjs dist/harbor --quick
+
+  pages:
+    runs-on: ubuntu-latest
+    needs: gate
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build leaderboard from the committed reference run
+        run: |
+          if [ -d docs/reference-run ]; then
+            node scripts/verify.mjs docs/reference-run
+            node scripts/build-site.mjs docs/reference-run
+          else
+            echo "no reference run committed; publishing placeholder"
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deploy
+        uses: actions/deploy-pages@v4
