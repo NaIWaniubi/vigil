@@ -37,7 +37,12 @@ const report = {
 
 if (existsSync(join(runDir, 'results.jsonl'))) {
   const rows = readFileSync(join(runDir, 'results.jsonl'), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  // Scoreable = the run produced a trajectory. Infrastructure errors (network
+  // timeout, truncation) are excluded from win-rate but counted separately so a
+  // flaky gateway is never mistaken for model weakness.
   const rush = rows.filter((r) => r.family === 'vigil-rush' && (r.status === 'completed' || r.status === 'turn_cap'));
+  const rushAll = rows.filter((r) => r.family === 'vigil-rush');
+  report.infraErrors = rushAll.length - rush.length;
   const byModel = new Map();
   for (const r of rush) {
     if (!byModel.has(r.model)) byModel.set(r.model, []);
