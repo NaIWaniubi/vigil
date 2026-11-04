@@ -158,25 +158,34 @@ async function main() {
     }
   }
 
-  // Interleave cells round-robin across tasks so a stuck/hard task does not
-  // monopolise all workers while easier tasks wait. Without this, the first
-  // task's reps x models fill every worker and the run appears frozen on one
-  // puzzle. Sort by (rep, model-index, task-index) to spread tasks across time.
+  // Interleave cells so consecutive cells differ in BOTH task and model. Bucket
+  // by (task, model); each bucket holds that pair's reps. Sort buckets by model
+  // index then task index, and round-robin pull one cell per bucket per pass —
+  // so the first 390 cells are model-0 across all tasks, but pulling one per
+  // bucket means model-1 and model-2 buckets are reached within the first pass
+  // rather than after thousands of model-0 cells.
   const modelOrder = new Map(targets.map((t, i) => [t.model, i]));
-  cells.sort((a, b) => {
-    const ai = work.indexOf(a.item), bi = work.indexOf(b.item);
-    return (a.rep - b.rep)
-      || (modelOrder.get(a.model) - modelOrder.get(b.model))
-      || (ai - bi);
-  });
-  // Now reorder so consecutive cells are different tasks: bucket by task and
-  // round-robin pull. Keeps resume keying intact (order-independent).
-  const byTask = new Map();
+  const taskIndexOf = new Map();
   for (const c of cells) {
-    if (!byTask.has(c.task.id)) byTask.set(c.task.id, []);
-    byTask.get(c.task.id).push(c);
+    if (!taskIndexOf.has(c.task.id)) taskIndexOf.set(c.task.id, taskIndexOf.size);
   }
-  const queues = [...byTask.values()];
+  const byTaskModel = new Map();
+  for (const c of cells) {
+    const key = `${c.task.id}|${c.model}`;
+    if (!byTaskModel.has(key)) byTaskModel.set(key, []);
+    byTaskModel.get(key).push(c);
+  }
+  const queues = [...byTaskModel.entries()]
+    .sort((a, b) => {
+      const [ta, ma] = a[0].split('|');
+      const [tb, mb] = b[0].split('|');
+      // Task-major, model-minor: adjacent buckets share a task but differ in
+      // model, so the first cells off the queue cycle through ALL models on
+      // task 1, then all models on task 2, etc. Every model starts immediately.
+      return (taskIndexOf.get(ta) - taskIndexOf.get(tb))
+        || (modelOrder.get(ma) - modelOrder.get(mb));
+    })
+    .map(([, q]) => q);
   const interleaved = [];
   let added = true;
   while (added) {

@@ -39,15 +39,29 @@ export class RushWorld extends World {
     for (const v of this.board) {
       legal[v.id] = movesFor(this.board, v.id).map((m) => m.delta);
     }
+    // The action surface is ONLY move (+ noop/tend). Hiding the generic
+    // set/inc/push/remove actions removes the temptation and the attack vector:
+    // the agent cannot fake a win by writing pos.X.col directly.
+    const actions = base.actions.filter((a) => a.name === 'move' || a.name === 'noop' || a.name === 'tend');
     return {
       ...base,
+      actions,
       board: { size: SIZE, exitRow: EXIT_ROW, grid: rows, vehicles, legalMoves: legal },
     };
   }
 
   step(action) {
     if (this.done) throw new Error('world already terminated');
-    if (action?.type !== 'move') return super.step(action);
+    // The ONLY way to change the board is a validated `move`. The base engine's
+    // generic set/inc/push/remove actions must NOT touch state here: a model
+    // could otherwise `set pos.X.col 4` and fake a win without sliding X (caught
+    // in v7: gemini did exactly this after 4 illegal X moves). Reject any
+    // state-mutating generic action as illegal; only noop/tend pass through.
+    if (action?.type !== 'move') {
+      if (action?.type === 'noop' || action?.type === 'tend') return super.step(action);
+      this.illegalMoves++;
+      return super.step({ type: '__illegal_move', args: { reason: `action not allowed in rush: ${action?.type}` } });
+    }
 
     const { id, delta } = action.args ?? {};
     const legal = movesFor(this.board, id);
