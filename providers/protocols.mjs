@@ -52,7 +52,7 @@ async function postJson(url, headers, body, timeoutMs) {
 }
 
 export async function callOpenAI(channel, messages, opts = {}) {
-  const { model, temperature = 0, maxTokens = 4096, timeoutMs = DEFAULT_TIMEOUT } = opts;
+  const { model, temperature = 0, maxTokens = channel.maxTokens ?? 4096, timeoutMs = DEFAULT_TIMEOUT } = opts;
   const body = { model, messages, temperature, max_tokens: maxTokens };
   const json = await withRetry(() => postJson(
     `${channel.baseUrl.replace(/\/$/, '')}/chat/completions`,

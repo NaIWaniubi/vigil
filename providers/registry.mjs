@@ -39,7 +39,7 @@ export const CHANNELS = [
   { id: 'agent2api-local', baseUrl: 'http://127.0.0.1:3065/v1', protocol: 'openai', tier: 'relay',
     models: ['gemini-3-flash-preview', 'gpt-5.6-luna', 'minimax-code/MiniMax-M3.1-Flash'], keyEnv: 'AGENT2API_API_KEY' },
   { id: 'opencsg-local', baseUrl: 'http://127.0.0.1:7871/v1', protocol: 'openai', tier: 'relay',
-    models: ['qwen3.8-max', 'deepseek-v4-pro', 'glm-5.3-flash'], keyEnv: 'OPENCSG_API_KEY' },
+    models: ['qwen3.8-max', 'deepseek-v4-pro', 'glm-5.3-flash'], keyEnv: 'OPENCSG_API_KEY', maxTokens: 16384 },
   { id: 'orcaterm-local', baseUrl: 'http://127.0.0.1:8010/v1', protocol: 'openai', tier: 'relay',
     models: ['glm-5.3', 'kimi-k3', 'deepseek-v4-pro'], keyEnv: 'ORCATERM_API_KEY' },
 ];

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T13:58:09.732Z",
+  "generatedAt": "2026-11-04T15:19:01.137Z",
   "tool": "vigil self-audit v0.1.0",
   "total": 52,
   "admitted": 52,
@@ -14,6 +14,7 @@
         "conflict": "none",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "3f7ee58487a944372912e73808ca1d63a0867e927cc3d4f57cc8d0c6baa4ef46",
       "checks": [
         "oracle",
@@ -49,6 +50,7 @@
         "conflict": "none",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "4c240365926a0c063bb6921f1808c417894e2d10331608f092719414124e6e1c",
       "checks": [
         "oracle",
@@ -85,6 +87,7 @@
         "conflict": "none",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "d549acbb8540350ccd216f04b1af3fe3ff3c7fa97bcd1e1681befd5b8cadc3d0",
       "checks": [
         "oracle",
@@ -121,6 +124,7 @@
         "conflict": "none",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "e09feb80d893aa06cd3b581755f705e229142c5b4f3a4cd3281d640d6b2c09a3",
       "checks": [
         "oracle",
@@ -157,6 +161,7 @@
         "conflict": "coupled",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "96f99e0ee0f7ae6e72cd75a8e8ba41538dfe40bc8aaa45c83188ab1eaf02e986",
       "checks": [
         "oracle",
@@ -192,6 +197,7 @@
         "conflict": "coupled",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "40b24f8325a20da3203ba7f73680bd664216714944044fc0892ec4f70b1f6fa0",
       "checks": [
         "oracle",
@@ -228,6 +234,7 @@
         "conflict": "coupled",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "2a11c2eb69dc305a853bb6c2498ef1cfb948750b384c23a33a6f6d0999dfe690",
       "checks": [
         "oracle",
@@ -264,6 +271,7 @@
         "conflict": "coupled",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "647e04f0f653fa32613dcd34d26d50672e36c3ed556a80a7796c27fcee1ffb99",
       "checks": [
         "oracle",
@@ -300,6 +308,7 @@
         "conflict": "none",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "842c315ec5c3d2178a02b76a1dcbbd108414834e5c962d786c58dbd5cfadc5f5",
       "checks": [
         "oracle",
@@ -335,6 +344,7 @@
         "conflict": "none",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "3fee3c90a6918d1f7170b270e6417779007e5bdd5006a0fbedb7641773f13608",
       "checks": [
         "oracle",
@@ -371,6 +381,7 @@
         "conflict": "none",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "1214d3da2d2b93d40d22e63fc3bc521e9e62e91dc44bf5183fd61973cc3a3554",
       "checks": [
         "oracle",
@@ -407,6 +418,7 @@
         "conflict": "none",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "55687bc442c46323f62ebb4f18f390cd12e2e5c3f08fb4723e706f9b1915dade",
       "checks": [
         "oracle",
@@ -443,6 +455,7 @@
         "conflict": "coupled",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "ae4b961980dee05a8e05ef8dbc956f74f587bd2acb395c76e69aca1634280df0",
       "checks": [
         "oracle",
@@ -478,6 +491,7 @@
         "conflict": "coupled",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "1edc7774ed6b34b4950fe364794de9f9194f75e45fcae78d270bb07d38b3674e",
       "checks": [
         "oracle",
@@ -514,6 +528,7 @@
         "conflict": "coupled",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "9fb913d9364370787f0825d4d1963265e11081832bf6083fcf50a5fc2fdaca44",
       "checks": [
         "oracle",
@@ -550,6 +565,7 @@
         "conflict": "coupled",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "f25c5b966ee5a371f4f7ba8ffe4b6d0dbb752f10f654cc730a42513b07dc022c",
       "checks": [
         "oracle",
@@ -586,6 +602,7 @@
         "conflict": "none",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "6a063b2e38194b4aaa36c196d55b29427d3142c73b62c51866f8ee13636dbb09",
       "checks": [
         "oracle",
@@ -621,6 +638,7 @@
         "conflict": "none",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "5ab1373c998275160b933b507f6b78c26d39dd21e590b3d30f7dcc03b49a1568",
       "checks": [
         "oracle",
@@ -657,6 +675,7 @@
         "conflict": "none",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "1435f9cb891f360bfbbb7512987fb6252719d89930257e193834f31422ef153b",
       "checks": [
         "oracle",
@@ -693,6 +712,7 @@
         "conflict": "none",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "5426c2318e75e00c450207d66be498ce5824ee753ca9f6dbe580b52d863a33cc",
       "checks": [
         "oracle",
@@ -729,6 +749,7 @@
         "conflict": "coupled",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "ba80778288163ee4dbfaf590260d052bdf5b4b17606ce38c82a338cf9f7d644a",
       "checks": [
         "oracle",
@@ -764,6 +785,7 @@
         "conflict": "coupled",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "ef2d3c4b3d06ea8f1337b301b4ddb41e98ea042ebf230c385a5b2a6e2c46f0e6",
       "checks": [
         "oracle",
@@ -800,6 +822,7 @@
         "conflict": "coupled",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "7020e6b66c1b66efe7376f7e42f542e96091989a5b0b8886dcda4fd5dcc4bc57",
       "checks": [
         "oracle",
@@ -836,6 +859,7 @@
         "conflict": "coupled",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "bba27de57e7135a1d9b30d7c38ec1336a4c6805bccccb8dd58ba262da3d96372",
       "checks": [
         "oracle",
@@ -872,6 +896,7 @@
         "conflict": "none",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "d91d84dc8b474d2f23c2c033d67c364b24de06c25755282160db7e4b7271beae",
       "checks": [
         "oracle",
@@ -907,6 +932,7 @@
         "conflict": "none",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "5604e56b97e4577def8aeb3b853125e2fd2c1efe1140e554853f7a2e0148576d",
       "checks": [
         "oracle",
@@ -943,6 +969,7 @@
         "conflict": "none",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "afcfdc03fef82046e9bccaf2de2054296461477a20dfc4c511c93d226352f7c6",
       "checks": [
         "oracle",
@@ -979,6 +1006,7 @@
         "conflict": "none",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "09127df2014c088b3a76ab5ea0da922d1e10a24bc2e1d8bcd050774e9b89be53",
       "checks": [
         "oracle",
@@ -1015,6 +1043,7 @@
         "conflict": "coupled",
         "obligation": "off"
       },
+      "family": "vigil-core",
       "fingerprint": "840fd61699d79e8448717658833301d1a28b796bfe7eaa8bd26fdef28b5f6e41",
       "checks": [
         "oracle",
@@ -1050,6 +1079,7 @@
         "conflict": "coupled",
         "obligation": "decay"
       },
+      "family": "vigil-core",
       "fingerprint": "30e6213cdcb4dd89d22f08f3c2246399aadbb73db71a09e70ecdc2c67387c86e",
       "checks": [
         "oracle",
@@ -1086,6 +1116,7 @@
         "conflict": "coupled",
         "obligation": "deadline"
       },
+      "family": "vigil-core",
       "fingerprint": "7a73a5a4aec720d4b995f942db10bb66c63ccd04f8e3ee2c5b70eebdbbad54dd",
       "checks": [
         "oracle",
@@ -1122,6 +1153,7 @@
         "conflict": "coupled",
         "obligation": "hazard"
       },
+      "family": "vigil-core",
       "fingerprint": "2af099d30f83022f978992626fe7e02a0f14a68899541bdb4330b3218f4642df",
       "checks": [
         "oracle",

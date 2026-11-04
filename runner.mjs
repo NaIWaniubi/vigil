@@ -107,7 +107,7 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
     try {
       ledger.reserve({ id: callId, model, maxInputTokens: 32_000, maxOutputTokens: 4096 });
       reply = await call(channel, messages, {
-        model, temperature: channel.temperature ?? 0, maxTokens: 4096,
+        model, temperature: channel.temperature ?? 0, maxTokens: channel.maxTokens ?? 4096,
       });
       ledger.settle({ id: callId, model, ...reply.usage });
     } catch (e) {
