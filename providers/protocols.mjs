@@ -5,6 +5,32 @@
 // model-level refusal — a refusal is data, not an error.
 
 const DEFAULT_TIMEOUT = 120_000;
+const MAX_RETRIES = 4;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Retry transient failures only. 429 (rate limit) and 5xx are infrastructure,
+ * not capability: retrying with backoff keeps them out of the capability
+ * profile. 402 (quota exhausted) and 4xx are terminal — no amount of waiting
+ * fixes an unpaid bill.
+ */
+async function withRetry(fn, label) {
+  let lastErr;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastErr = e;
+      const status = e.status ?? 0;
+      const transient = status === 429 || status >= 500;
+      if (!transient || attempt === MAX_RETRIES) throw e;
+      const backoff = Math.min(30_000, 2000 * 2 ** attempt);
+      await sleep(backoff);
+    }
+  }
+  throw lastErr;
+}
 
 async function postJson(url, headers, body, timeoutMs) {
   const res = await fetch(url, {
@@ -28,11 +54,11 @@ async function postJson(url, headers, body, timeoutMs) {
 export async function callOpenAI(channel, messages, opts = {}) {
   const { model, temperature = 0, maxTokens = 4096, timeoutMs = DEFAULT_TIMEOUT } = opts;
   const body = { model, messages, temperature, max_tokens: maxTokens };
-  const json = await postJson(
+  const json = await withRetry(() => postJson(
     `${channel.baseUrl.replace(/\/$/, '')}/chat/completions`,
     { authorization: `Bearer ${channel.key}` },
     body, timeoutMs,
-  );
+  ), `${channel.id}:${model}`);
   const choice = json.choices?.[0];
   return {
     text: choice?.message?.content ?? '',
@@ -55,11 +81,11 @@ export async function callAnthropic(channel, messages, opts = {}) {
     .map((m) => ({ role: m.role, content: m.content }));
   const body = { model, messages: turns, max_tokens: maxTokens, temperature };
   if (system) body.system = system;
-  const json = await postJson(
+  const json = await withRetry(() => postJson(
     `${channel.baseUrl.replace(/\/$/, '')}/v1/messages`,
     { 'x-api-key': channel.key, 'anthropic-version': '2023-06-01' },
     body, timeoutMs,
-  );
+  ), `${channel.id}:${model}`);
   const text = (json.content ?? []).filter((b) => b.type === 'text').map((b) => b.text).join('');
   return {
     text,

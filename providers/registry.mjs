@@ -7,7 +7,7 @@
 
 export const TIERS = ['official', 'relay', 'local'];
 
-/** @typedef {{id:string,baseUrl:string,protocol:'openai'|'anthropic',tier:string,models:string[],keyEnv:string}} Channel */
+/** @typedef {{id:string,baseUrl:string,protocol:'openai'|'anthropic',tier:string,models:string[],keyEnv:string,temperature?:number}} Channel */
 
 /** @type {Channel[]} */
 export const CHANNELS = [
@@ -16,7 +16,10 @@ export const CHANNELS = [
   { id: 'deepseek-anthropic', baseUrl: 'https://api.deepseek.com/anthropic', protocol: 'anthropic', tier: 'official',
     models: ['deepseek-chat', 'deepseek-reasoner'], keyEnv: 'DEEPSEEK_API_KEY' },
   { id: 'sensenova', baseUrl: 'https://token.sensenova.cn/v1', protocol: 'openai', tier: 'official',
-    models: ['deepseek-v4-flash', 'glm-5.3', 'kimi-k3'], keyEnv: 'SENSENOVA_API_KEY' },
+    models: ['deepseek-v4-flash', 'glm-5.3'], keyEnv: 'SENSENOVA_API_KEY' },
+  // kimi-k3 rejects temperature != 1; pin it so the protocol stays comparable.
+  { id: 'sensenova-kimi', baseUrl: 'https://token.sensenova.cn/v1', protocol: 'openai', tier: 'official',
+    models: ['kimi-k3'], keyEnv: 'SENSENOVA_API_KEY', temperature: 1 },
   { id: 'stepfun', baseUrl: 'https://api.stepfun.com/v1', protocol: 'openai', tier: 'official',
     models: ['step-3.7-flash', 'step-5-preview'], keyEnv: 'STEPFUN_API_KEY' },
   { id: 'bigmodel', baseUrl: 'https://open.bigmodel.cn/api/anthropic', protocol: 'anthropic', tier: 'official',

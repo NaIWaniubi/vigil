@@ -28,6 +28,7 @@ export const PRICES = {
   'deepseek/deepseek-chat': { in: 0.28, out: 0.42 },
   'kimi-k3': { in: 0.6, out: 2.5 },
   'deepseek-v4-flash': { in: 0.3, out: 0.5 },
+  'glm-5.3': { in: 0.6, out: 2.2 },
 };
 
 export class UnknownPriceError extends Error {

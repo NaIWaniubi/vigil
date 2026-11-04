@@ -20,7 +20,7 @@ import { SYSTEM_PROMPT, PROMPT_VERSION, renderObservation, parseAction } from '.
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)));
 
 function parseArgs(argv) {
-  const a = { reps: 3, out: null, resume: false, dryRun: false, maxTurns: null, budgetUsd: 50, tasks: 'grid', models: [], seedOffset: 0, limit: null };
+  const a = { reps: 3, out: null, resume: false, dryRun: false, maxTurns: null, budgetUsd: 50, tasks: 'grid', models: [], seedOffset: 0, limit: null, paceMs: 0, family: 'core' };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--reps') a.reps = Number(argv[++i]);
@@ -33,6 +33,8 @@ function parseArgs(argv) {
     else if (k === '--models') a.models = argv[++i].split(',');
     else if (k === '--seed-offset') a.seedOffset = Number(argv[++i]);
     else if (k === '--limit') a.limit = Number(argv[++i]);
+    else if (k === '--pace-ms') a.paceMs = Number(argv[++i]);
+    else if (k === '--family') a.family = argv[++i];
     else if (k === '--help' || k === '-h') a.help = true;
     else throw new Error(`unknown arg: ${k}`);
   }
@@ -55,6 +57,8 @@ Options
   --budget-usd <n>          hard spend cap (default 50)
   --max-turns <n>           override per-task turn cap
   --limit <n>               only the first n task configs (smoke tests)
+  --pace-ms <n>             wait n ms between API calls (rate-limit courtesy)
+  --family core|swe|both    task family (default core)
 `;
 
 function cellKey(taskId, model, rep) { return `${taskId}|${model}|${rep}`; }
@@ -73,8 +77,12 @@ function loadDone(path) {
 }
 
 /** One full trajectory against a live model. */
-async function runCell({ task, seed, channel, model, ledger, maxTurns }) {
-  const world = new World(task, { seed });
+async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0 }) {
+  const isSwe = task.family === 'vigil-swe';
+  const world = isSwe
+    ? await (await import('./tasks/swe/world.mjs')).SweWorld.create(task, { seed })
+    : new World(task, { seed });
+  const step = isSwe ? (a) => world.stepAsync(a) : (a) => world.step(a);
   const messages = [{ role: 'system', content: SYSTEM_PROMPT }];
   const turns = [];
   const cap = maxTurns ?? task.maxSteps;
@@ -89,7 +97,9 @@ async function runCell({ task, seed, channel, model, ledger, maxTurns }) {
     let reply;
     try {
       ledger.reserve({ id: callId, model, maxInputTokens: 32_000, maxOutputTokens: 4096 });
-      reply = await call(channel, messages, { model, temperature: 0, maxTokens: 4096 });
+      reply = await call(channel, messages, {
+        model, temperature: channel.temperature ?? 0, maxTokens: 4096,
+      });
       ledger.settle({ id: callId, model, ...reply.usage });
     } catch (e) {
       ledger.release(callId, e.message);
@@ -97,22 +107,20 @@ async function runCell({ task, seed, channel, model, ledger, maxTurns }) {
       error = { message: e.message, status: e.status ?? null, atTurn: turns.length };
       break;
     }
+    if (paceMs > 0) await new Promise((r) => setTimeout(r, paceMs));
     messages.push({ role: 'assistant', content: reply.text });
     const parsed = parseAction(reply.text);
     if (!parsed.ok) {
       turns.push({ turn: turns.length, ok: false, error: parsed.error, finish: reply.finish, usage: reply.usage });
-      // An unparseable reply is an invalid action, not a harness error. Feed the
-      // error back so the model can recover; the world logs it as invalid.
       messages.push({ role: 'user', content: `Your reply was not a valid action: ${parsed.error}. Respond with exactly one JSON object.` });
       continue;
     }
     if (reply.finish === 'length') {
-      // Truncation is infrastructure, not capability. Record and stop the cell.
       turns.push({ turn: turns.length, ok: false, error: 'truncated', finish: reply.finish, usage: reply.usage });
       status = 'truncated';
       break;
     }
-    const result = world.step(parsed.action);
+    const result = await step(parsed.action);
     turns.push({
       turn: turns.length, ok: result.ok, action: parsed.action, why: parsed.why,
       error: result.error ?? null, tick: world.tick, finish: reply.finish, usage: reply.usage,
@@ -128,6 +136,7 @@ async function runCell({ task, seed, channel, model, ledger, maxTurns }) {
     actionLog: world.actionLog,
     turns,
     promptVersion: PROMPT_VERSION,
+    ...(isSwe ? { sweChecks: world.sweChecks } : {}),
   };
 }
 
@@ -156,6 +165,18 @@ async function main() {
     ? grid({ seeds: [1, 2], depths: [6, 12] })
     : grid({ seeds: [1, 2, 3, 4, 5], depths: [6, 12, 18, 24] });
   const configs = args.limit ? allConfigs.slice(0, args.limit) : allConfigs;
+
+  // The swe family is generated separately and appended when requested.
+  const sweConfigs = [];
+  if (args.family === 'swe' || args.family === 'both') {
+    const { MODULES } = await import('./tasks/swe/generate.mjs');
+    for (let moduleIndex = 0; moduleIndex < MODULES.length; moduleIndex++) {
+      for (const obligation of ['off', 'deadline', 'decay']) {
+        for (const seed of [1, 2, 3]) sweConfigs.push({ moduleIndex, depth: 5, obligation, seed });
+      }
+    }
+  }
+  const useCore = args.family !== 'swe';
 
   let targets;
   if (args.dryRun) {
@@ -189,16 +210,25 @@ async function main() {
   };
   writeFileSync(join(out, 'protocol.json'), `${JSON.stringify(protocol, null, 2)}\n`);
 
-  const totalCells = configs.length * targets.length * args.reps;
-  console.log(`vigil run · ${configs.length} tasks x ${targets.length} models x ${args.reps} reps = ${totalCells} cells`);
+  // Build a unified work list so core and swe cells share the same loop,
+  // resume keying and ledger.
+  const work = [];
+  if (useCore) for (const cfg of configs) work.push({ family: 'core', cfg });
+  for (const cfg of sweConfigs) work.push({ family: 'swe', cfg });
+
+  const totalCells = work.length * targets.length * args.reps;
+  console.log(`vigil run · ${work.length} tasks x ${targets.length} models x ${args.reps} reps = ${totalCells} cells`);
   console.log(`out=${out}${args.dryRun ? ' (DRY RUN, no API spend)' : ''}`);
   if (done.size) console.log(`resume: ${done.size} cells already recorded`);
 
   let finished = 0;
   let skipped = 0;
   let errors = 0;
-  for (const cfg of configs) {
-    const { task, oracle } = generate(cfg);
+  for (const item of work) {
+    const { family, cfg } = item;
+    const { task, oracle } = family === 'swe'
+      ? (await import('./tasks/swe/generate.mjs')).generateSwe(cfg)
+      : generate(cfg);
     const fingerprint = createHash('sha256').update(taskFingerprint(task)).digest('hex');
     writeFileSync(join(out, `${task.id}.task.json`), JSON.stringify({ task, oracle, fingerprint }, null, 2));
     for (const { channel, model } of targets) {
@@ -210,19 +240,19 @@ async function main() {
         try {
           result = args.dryRun
             ? await runDryCell({ task, seed })
-            : await runCell({ task, seed, channel, model, ledger, maxTurns: args.maxTurns });
+            : await runCell({ task, seed, channel, model, ledger, maxTurns: args.maxTurns, paceMs: args.paceMs });
         } catch (e) {
           result = { status: 'error', error: { message: e.message }, profile: null, records: [], turns: [] };
         }
         const row = {
-          taskId: task.id, config: cfg, model, channel: channel?.id ?? 'dry',
+          taskId: task.id, config: cfg, family, model, channel: channel?.id ?? 'dry',
           tier: channel?.tier ?? 'reference', rep, seed, fingerprint,
           ...result, at: new Date().toISOString(),
         };
         appendFileSync(resultsPath, `${JSON.stringify(row)}\n`);
         finished++;
         if (result.status === 'error') errors++;
-        if (finished % 25 === 0 || finished === totalCells - skipped) {
+        if (finished % 10 === 0 || finished === totalCells - skipped) {
           const t = ledger.totals();
           console.log(`  ${finished}/${totalCells - skipped} cells · ${errors} errors · $${t.spentUsd.toFixed(4)} · ${t.calls} calls`);
         }
