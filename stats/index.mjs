@@ -16,6 +16,7 @@ export function wilson(k, n, z = 1.96) {
 }
 
 /** Cohen's kappa for two equal-length label sequences. */
+// JUDGE METHODOLOGY ONLY: no run pipeline calls this. See stats/judge.mjs.
 export function kappa(a, b) {
   if (a.length !== b.length) throw new Error('kappa needs equal-length sequences');
   const n = a.length;
@@ -137,13 +138,27 @@ export function spearman(xs, ys) {
  * Position bias for paired judgements: how often the first-presented item wins.
  * 0.5 is unbiased. Reported because no agent benchmark publishes it.
  */
+// JUDGE METHODOLOGY ONLY: no run pipeline calls this. See stats/judge.mjs.
 export function positionBias(firstWins, decided) {
   if (!decided) return { rate: null, n: 0 };
   return { rate: firstWins / decided, n: decided, deviation: Math.abs(firstWins / decided - 0.5) };
 }
 
 /** Verbosity bias: among decided pairs, how often the longer answer won. */
+// JUDGE METHODOLOGY ONLY: no run pipeline calls this. See stats/judge.mjs.
 export function verbosityBias(longerWins, decided) {
   if (!decided) return { rate: null, n: 0 };
   return { rate: longerWins / decided, n: decided };
 }
+
+// Inference primitives live in ./inference.mjs (bootstrap, power/MDE, Holm).
+// Re-exported so `stats/index.mjs` remains the single public entry point.
+export {
+  bootstrapCI,
+  bootstrapDiffCI,
+  powerTwoProportions,
+  minNForEffect,
+  holmBonferroni,
+  twoProportionPValue,
+  normalCdf,
+} from './inference.mjs';

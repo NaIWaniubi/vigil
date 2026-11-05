@@ -225,3 +225,59 @@ export function minNForEffect({ p1, p2, alpha = 0.05, power = 0.8, maxN = 1e7 } 
   }
   return hi;
 }
+
+/**
+ * Holm-Bonferroni step-down adjustment. Returns adjusted p-values in the input
+ * order. Valid under arbitrary dependence between the tests, which matters
+ * because pairwise model comparisons share cells.
+ *
+ * @param {number[]} pvalues raw two-sided p-values
+ * @returns {number[]} adjusted p-values (>= raw, <= 1, monotone in rank order)
+ */
+export function holmBonferroni(pvalues) {
+  if (!Array.isArray(pvalues)) throw new Error('holmBonferroni needs an array of p-values');
+  const m = pvalues.length;
+  if (m === 0) return [];
+  for (const p of pvalues) {
+    if (!Number.isFinite(p) || p < 0 || p > 1) {
+      throw new Error(`invalid p-value: ${p}`);
+    }
+  }
+  const order = pvalues
+    .map((p, i) => ({ p, i }))
+    .sort((x, y) => x.p - y.p || x.i - y.i);
+  const adjusted = new Array(m);
+  let running = 0;
+  for (let k = 0; k < m; k++) {
+    const { p, i } = order[k];
+    running = Math.max(running, Math.min(1, (m - k) * p));
+    adjusted[i] = running;
+  }
+  return adjusted;
+}
+
+/**
+ * Two-sided p-value for the difference of two proportions (pooled z-test).
+ * Used to feed Holm correction in the run report; the bootstrap CI gives the
+ * interval, this gives the test statistic.
+ *
+ * @param {{winsA: number, nA: number, winsB: number, nB: number}} args
+ * @returns {number} p-value in [0,1]
+ */
+export function twoProportionPValue({ winsA, nA, winsB, nB } = {}) {
+  for (const [name, v, limit] of [['winsA', winsA, nA], ['winsB', winsB, nB]]) {
+    if (!Number.isInteger(v) || v < 0 || v > limit) {
+      throw new Error(`${name} must be an integer in [0,n], got ${v}`);
+    }
+  }
+  if (!Number.isInteger(nA) || nA < 1 || !Number.isInteger(nB) || nB < 1) {
+    throw new Error('nA and nB must be positive integers');
+  }
+  const pA = winsA / nA;
+  const pB = winsB / nB;
+  const pooled = (winsA + winsB) / (nA + nB);
+  const se = Math.sqrt(pooled * (1 - pooled) * (1 / nA + 1 / nB));
+  if (se === 0) return 1;
+  const z = (pA - pB) / se;
+  return Math.min(1, Math.max(0, 2 * (1 - normalCdf(Math.abs(z)))));
+}

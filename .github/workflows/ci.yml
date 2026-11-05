@@ -4,6 +4,11 @@ on:
   push:
     branches: [master, main]
   pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
 
 jobs:
   gate:
@@ -13,18 +18,56 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Quality gate (tests + task self-audit + repo hygiene)
+      - name: Quality gate (tests + quick task self-audit + repo hygiene)
         run: node scripts/gate.mjs
       - name: Dry-run pipeline (no API spend)
         run: node runner.mjs --dry-run --family both --tasks quick --reps 1 --limit 4 --out runs/ci-dry
-      - name: Harbor export
+
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Offline reproduction proof (reference run + calibration + discrimination)
+        run: node scripts/reproduce.mjs
+
+  harbor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Export tasks in the Harbor convention (quick)
         run: node scripts/harbor-export.mjs dist/harbor --quick
+      - name: Verify every exported manifest hash
+        run: node scripts/harbor-export.mjs dist/harbor --verify
+
+  full-audit:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Full self-audit (all 586 configurations)
+        run: node scripts/self-audit.mjs
+      - name: Upload self-audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: self-audit
+          path: docs/self-audit.json
+          if-no-files-found: error
 
   pages:
     runs-on: ubuntu-latest
     needs: gate
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:

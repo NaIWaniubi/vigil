@@ -375,7 +375,8 @@ test('harbor export covers core, swe and rush with self-verifying manifests', as
   const independent = verifyManifestsOnDisk(out);
   assert.deepEqual(independent.problems, []);
   assert.equal(independent.taskDirs, index.tasks.length);
-  assert.ok(independent.members > index.tasks.length * 3, 'each manifest must cover more than 3 members? (sanity)');
+  assert.equal(independent.members, index.tasks.length * 3,
+    'every task directory must have exactly three manifested members');
 
   const exported = verifyExport(out);
   assert.equal(exported.ok, true, exported.problems.join('\n'));

@@ -224,3 +224,155 @@ test('minNForEffect round-trips through powerTwoProportions', () => {
   assert.throws(() => powerTwoProportions({ p1: 1.2, p2: 0.5, n: 10 }), /p1/);
   assert.throws(() => powerTwoProportions({ p1: 0.5, p2: 0.5, n: 0 }), /n/);
 });
+
+// ---------------------------------------------------------------------------
+// Slice S3: multiple comparisons
+// ---------------------------------------------------------------------------
+import { holmBonferroni } from '../stats/inference.mjs';
+
+test('holmBonferroni matches a hand-checked example', () => {
+  // sorted: 0.01 -> 3x = 0.03; 0.03 -> 2x = 0.06; 0.04 -> max(0.06, 1x) = 0.06
+  const adj = holmBonferroni([0.01, 0.04, 0.03]);
+  assert.ok(Math.abs(adj[0] - 0.03) < 1e-12, `got ${adj}`);
+  assert.ok(Math.abs(adj[1] - 0.06) < 1e-12, `got ${adj}`);
+  assert.ok(Math.abs(adj[2] - 0.06) < 1e-12, `got ${adj}`);
+  assert.deepEqual(holmBonferroni([]), []);
+  assert.deepEqual(holmBonferroni([0.02]), [0.02]);
+});
+
+test('holmBonferroni is never below the raw p-value and stays in [0,1]', () => {
+  const raw = [0.9, 0.001, 0.2, 0.049, 0.5];
+  const adj = holmBonferroni(raw);
+  for (let i = 0; i < raw.length; i++) {
+    assert.ok(adj[i] >= raw[i] - 1e-12, `adjusted ${adj[i]} < raw ${raw[i]}`);
+    assert.ok(adj[i] <= 1);
+  }
+  const allShared = holmBonferroni([0.02, 0.02, 0.02]);
+  assert.deepEqual(allShared, [0.06, 0.06, 0.06]);
+  assert.throws(() => holmBonferroni([0.5, 1.2]), /p-value/);
+});
+
+// ---------------------------------------------------------------------------
+// Slice S4: stats-report CLI
+// ---------------------------------------------------------------------------
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { twoProportionPValue } from '../stats/inference.mjs';
+
+const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
+
+test('twoProportionPValue matches a hand-computed pooled z-test', () => {
+  // 9/10 vs 3/10 -> pooled 0.6, se=sqrt(0.6*0.4*0.2)=0.2191, z=2.7386 -> p~0.0062
+  const p = twoProportionPValue({ winsA: 9, nA: 10, winsB: 3, nB: 10 });
+  assert.ok(Math.abs(p - 0.00617) < 0.0005, `got ${p}`);
+  assert.ok(Math.abs(twoProportionPValue({ winsA: 5, nA: 10, winsB: 5, nB: 10 }) - 1) < 1e-6);
+  assert.throws(() => twoProportionPValue({ winsA: 11, nA: 10, winsB: 0, nB: 10 }), /winsA/);
+});
+
+test('stats-report CLI writes JSON+markdown with Wilson, bootstrap, Holm and verdict', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'vigil-stats-report-'));
+  try {
+    const rows = [];
+    for (let i = 0; i < 4; i++) {
+      rows.push({
+        taskId: `t${i}`, model: 'alpha', status: 'completed',
+        terminal: { reason: i < 3 ? 'goal_met' : 'step_budget' },
+      });
+    }
+    for (let i = 0; i < 4; i++) {
+      rows.push({
+        taskId: `t${i}`, model: 'beta', status: 'completed',
+        terminal: { reason: i < 1 ? 'goal_met' : 'step_budget' },
+      });
+    }
+    rows.push({ taskId: 't9', model: 'beta', status: 'error', terminal: null });
+    writeFileSync(join(dir, 'results.jsonl'), `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);
+    writeFileSync(join(dir, 'report.json'), JSON.stringify({
+      protocol: { promptVersion: 'test-v1', engineVersion: '0.0.0', temperature: 0, reps: 1, family: 'rush' },
+      profiles: [
+        { model: 'alpha', track: 'raw', cells: 4, wins: 3, winRate: 0.75 },
+        { model: 'beta', track: 'raw', cells: 4, wins: 1, winRate: 0.25 },
+      ],
+    }));
+
+    const cli = join(REPO_ROOT, 'scripts', 'stats-report.mjs');
+    const run = spawnSync(process.execPath, [cli, dir], { encoding: 'utf8' });
+    assert.equal(run.status, 0, `CLI failed:\n${run.stderr}`);
+    assert.match(run.stdout, /verdict: underpowered/);
+
+    const jsonPath = join(dir, 'stats-report.json');
+    const mdPath = join(dir, 'stats-report.md');
+    assert.ok(existsSync(jsonPath) && existsSync(mdPath), 'both report files must be written');
+    const report = JSON.parse(readFileSync(jsonPath, 'utf8'));
+    assert.equal(report.verdict, 'underpowered');
+    assert.equal(report.models.length, 2);
+    assert.equal(report.pairwise.length, 1);
+    for (const m of report.models) {
+      assert.equal(m.wilsonCI95.length, 2);
+      assert.equal(m.bootstrapCI95.length, 2);
+      assert.ok(m.bootstrapCI95[0] <= m.bootstrapCI95[1]);
+    }
+    assert.ok(report.pairwise[0].holmAdjusted >= report.pairwise[0].pValue);
+    assert.equal(report.pairwise[0].significant, false);
+    assert.equal(report.dataQuality.infraErrors, 1);
+    assert.equal(report.power.requiredNPerGroup, 42);
+    assert.ok(report.power.achievedN < report.power.requiredNPerGroup);
+    const md = readFileSync(mdPath, 'utf8');
+    assert.match(md, /underpowered/);
+    assert.match(md, /Pairwise/);
+
+    // Seed derivation is fixed: a second run must reproduce every interval.
+    const again = spawnSync(process.execPath, [cli, dir], { encoding: 'utf8' });
+    assert.equal(again.status, 0, again.stderr);
+    const report2 = JSON.parse(readFileSync(jsonPath, 'utf8'));
+    assert.deepEqual(report2.models, report.models);
+    assert.deepEqual(report2.pairwise, report.pairwise);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('stats-report CLI refuses a directory without results.jsonl', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'vigil-stats-empty-'));
+  try {
+    const cli = join(REPO_ROOT, 'scripts', 'stats-report.mjs');
+    const run = spawnSync(process.execPath, [cli, dir], { encoding: 'utf8' });
+    assert.equal(run.status, 2);
+    assert.match(run.stderr, /results\.jsonl/);
+    const usage = spawnSync(process.execPath, [cli], { encoding: 'utf8' });
+    assert.equal(usage.status, 2);
+    assert.match(usage.stderr, /usage/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Slice S5: judge methodology namespace
+// ---------------------------------------------------------------------------
+import { judgeMethodology } from '../stats/judge.mjs';
+
+test('judge metrics are namespaced as methodology, not scoring', () => {
+  assert.deepEqual(
+    Object.keys(judgeMethodology).sort(),
+    ['kappa', 'positionBias', 'verbosityBias'],
+    'only the blind-judge utilities belong in this namespace',
+  );
+  assert.equal(judgeMethodology.kappa(['a', 'b'], ['a', 'b']), 1);
+  assert.equal(judgeMethodology.positionBias(7, 10).rate, 0.7);
+  assert.equal(judgeMethodology.verbosityBias(8, 10).rate, 0.8);
+  assert.ok(Object.isFrozen(judgeMethodology));
+});
+
+test('stats/index.mjs remains the single public entry point for inference', async () => {
+  const entry = await import('../stats/index.mjs');
+  for (const name of [
+    'wilson', 'bootstrapCI', 'bootstrapDiffCI', 'powerTwoProportions',
+    'minNForEffect', 'holmBonferroni', 'twoProportionPValue',
+  ]) {
+    assert.equal(typeof entry[name], 'function', `${name} must be exported from stats/index.mjs`);
+  }
+});

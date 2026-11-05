@@ -15,6 +15,9 @@
     "audit": "node scripts/self-audit.mjs",
     "audit:full": "node scripts/self-audit.mjs",
     "audit:quick": "node scripts/self-audit.mjs --quick",
+    "reproduce": "node scripts/reproduce.mjs",
+    "export:harbor": "node scripts/harbor-export.mjs dist/harbor",
+    "stats": "node scripts/stats-report.mjs",
     "run": "node runner.mjs"
   },
   "dependencies": {},

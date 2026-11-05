@@ -1,0 +1,7 @@
+# Optional convenience wrapper: `docker compose run --rm reproduce`.
+# Same artifact as `docker build -t vigil . && docker run --rm vigil`.
+services:
+  reproduce:
+    build: .
+    image: vigil-bench:0.1.0
+    command: ["node", "scripts/reproduce.mjs"]

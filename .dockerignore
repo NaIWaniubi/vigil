@@ -1,0 +1,12 @@
+# Build context exclusions. The image is built from committed source only:
+# no history, no dependencies, no local run output, no generated export/website.
+.git
+node_modules
+runs
+dist
+tmp
+coverage
+_build
+.env
+.env.*
+*.log
