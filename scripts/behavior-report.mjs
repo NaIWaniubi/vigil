@@ -11,9 +11,11 @@
 //   waste          (noops + illegal) / turns      -- paid for, produced nothing
 //   efficiency     legalMoves / optimalDepth      -- 1.0 = optimal, >1 = wandering
 //
-// The last two are the thrashing signature. On the reference run, winners spend
-// 4% of turns on waste and reach 1.1-2.1x optimal; losers spend 31% and never
-// arrive. A pass/fail table cannot show that; this can.
+// The last two are the thrashing signature. Measured on the committed reference
+// bundle: winners waste 9% of turns at 1.77x optimal; losers waste 41% at 2.63x
+// and never arrive. These are means -- one committed loss (rush-d9-deadline-s3)
+// is a 66-turn budget exhaustion with ZERO waste, so "losses thrash" is a
+// tendency, not a law. A pass/fail table cannot show any of this; this can.
 //
 // IMPORTANT honesty note: `neglected` attribution is NOT used here. With a single
 // terminal constraint, every move that does not touch the goal's read-set is

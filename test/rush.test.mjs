@@ -4,7 +4,7 @@ import { rushConfigs, generateRushFromConfig, loadDataset } from '../tasks/rush/
 import { RushWorld } from '../tasks/rush/world.mjs';
 import { solve, greedy, isGoal, applyMove } from '../tasks/rush/rush.mjs';
 
-test('dataset is solver-calibrated: every task solvable, greedy fails', () => {
+test('dataset is solver-calibrated: 6-task sample solvable, greedy fails', () => {
   const ds = loadDataset();
   assert.ok(ds.tasks.length >= 100, `need a real dataset, got ${ds.tasks.length}`);
   assert.equal(ds.stats.allDefeatGreedy, true);
@@ -16,7 +16,7 @@ test('dataset is solver-calibrated: every task solvable, greedy fails', () => {
   }
 });
 
-test('oracle reaches goal_met for every obligation variant', () => {
+test('oracle reaches goal_met for 12 sampled obligation configs', () => {
   const cfgs = rushConfigs({ obligations: ['off', 'decay', 'deadline'], limit: 12 });
   for (const cfg of cfgs) {
     const { task, oracle } = generateRushFromConfig(cfg);

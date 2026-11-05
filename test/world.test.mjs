@@ -80,7 +80,7 @@ test('untouched failing constraint is neglected, touched-but-unfixed is regresse
   assert.ok(regressed.length >= 1);
 });
 
-test('oracle action sequence solves the conflict with zero violations after reveal', () => {
+test('a naive fill/vent sequence still breaks c1 - the conflict is real', () => {
   const w = new World(conflictTask());
   w.step({ type: 'set', args: { path: 'tank.level', value: 9 } });
   w.step({ type: 'set', args: { path: 'pipe.open', value: true } });

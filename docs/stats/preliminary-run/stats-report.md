@@ -1,6 +1,6 @@
 # Statistical report — E:\myzcode\vigil\docs\preliminary-run
 
-Generated: 2026-11-05T18:54:57.958Z
+Generated: 2026-11-05T19:41:17.226Z
 
 **verdict: underpowered**
 
