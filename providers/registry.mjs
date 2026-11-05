@@ -32,12 +32,16 @@ export const CHANNELS = [
     models: ['deepseek/deepseek-chat', 'moonshotai/kimi-k3'], keyEnv: 'OPENROUTER_API_KEY' },
   // Local gateways are convenient for development but are NOT official channels.
   { id: 'magpie-local', baseUrl: 'http://127.0.0.1:3425', protocol: 'anthropic', tier: 'local',
-    models: ['auto/qwen3.8-flash', 'auto/glm-5.1', 'auto/minimax-m3'], keyEnv: 'MAGPIE_API_KEY', timeoutMs: 300000 },
+    models: ['auto/qwen3.8-flash', 'auto/glm-5.1', 'auto/minimax-m3',
+             'agent2api/auto', 'agent2api/deepseek-v4-flash', 'agent2api/MiniMax-M3.1-Flash'],
+    keyEnv: 'MAGPIE_API_KEY', timeoutMs: 300000 },
   // Local multi-model gateways used for the exploratory leaderboard. Tagged
   // `relay` so they never enter the official main track, but they expose distinct
   // model families (Gemini / Qwen / GLM) for discrimination analysis.
   { id: 'agent2api-local', baseUrl: 'http://127.0.0.1:3065/v1', protocol: 'openai', tier: 'relay',
-    models: ['gemini-3-flash-preview', 'gpt-5.6-luna', 'minimax-code/MiniMax-M3.1-Flash'], keyEnv: 'AGENT2API_API_KEY' },
+    models: ['glm-5.3-flash', 'gpt-6-luna', 'gemini-3-flash-preview',
+             'minimax-code/MiniMax-M3.1-Flash', 'deepseek-v4.1-flash'],
+    keyEnv: 'AGENT2API_API_KEY', timeoutMs: 240000 },
   { id: 'opencsg-local', baseUrl: 'http://127.0.0.1:7871/v1', protocol: 'openai', tier: 'relay',
     models: ['qwen3.8-max', 'deepseek-v4-pro', 'glm-5.3-flash'], keyEnv: 'OPENCSG_API_KEY', maxTokens: 16384, timeoutMs: 240000 },
   { id: 'orcaterm-local', baseUrl: 'http://127.0.0.1:8010/v1', protocol: 'openai', tier: 'relay',

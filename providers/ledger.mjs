@@ -42,6 +42,11 @@ export const PRICES = {
   'auto/glm-5.1': { in: 0.6, out: 2.2 },
   'auto/minimax-m3': { in: 0.3, out: 1.2 },
   'auto/qwen3.8-max': { in: 1.2, out: 4.8 },
+  'agent2api/auto': { in: 0.3, out: 0.5 },
+  'agent2api/deepseek-v4-flash': { in: 0.3, out: 0.5 },
+  'agent2api/MiniMax-M3.1-Flash': { in: 0.3, out: 1.2 },
+  'gpt-6-luna': { in: 2.0, out: 8.0 },
+  'tierflow_pro': { in: 0.3, out: 0.5 },
 };
 
 export class UnknownPriceError extends Error {

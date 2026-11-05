@@ -26,7 +26,7 @@ function parseArgs(argv) {
   const a = {
     reps: 3, out: null, resume: false, dryRun: false, budgetUsd: 50,
     tasks: 'grid', models: [], family: 'rush', concurrency: 6, paceMs: 300,
-    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null, sample: null,
+    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null, sample: null, historyWindow: 0,
   };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
@@ -44,6 +44,7 @@ function parseArgs(argv) {
     else if (k === '--min-depth') a.minDepth = Number(argv[++i]);
     else if (k === '--max-depth') a.maxDepth = Number(argv[++i]);
     else if (k === '--sample') a.sample = Number(argv[++i]);
+    else if (k === '--history-window') a.historyWindow = Number(argv[++i]);
     else if (k === '--seed-offset') a.seedOffset = Number(argv[++i]);
     else if (k === '--cap') { const [id, n] = argv[++i].split('='); a.channelCaps[id] = Number(n); }
     else if (k === '--help' || k === '-h') a.help = true;
@@ -73,6 +74,7 @@ Options
   --min-depth <n>          rush: only tasks with optimal depth >= n
   --max-depth <n>          rush: only tasks with optimal depth <= n
   --sample <n>             stratified sample of n tasks across depths
+  --history-window <n>     keep last n turns only (lossless here; ~5-10x cheaper)
 `;
 
 function buildWork(args) {
@@ -151,6 +153,7 @@ async function main() {
     runner: 'cluster',
     concurrency: args.concurrency,
     paceMs: args.paceMs,
+    historyWindow: args.historyWindow,
     temperature: 0,
     maxTokens: 4096,
     reps: args.reps,
@@ -247,7 +250,7 @@ async function main() {
       try {
         result = args.dryRun
           ? await runDryCell({ task, seed })
-          : await runCell({ task, seed, channel, model, ledger, paceMs: args.paceMs });
+          : await runCell({ task, seed, channel, model, ledger, paceMs: args.paceMs, historyWindow: args.historyWindow });
       } catch (e) {
         // An unpriced model is a configuration gap, not a reason to halt the
         // whole cluster. Record the cell as an error and keep going; the budget

@@ -20,7 +20,7 @@ import { SYSTEM_PROMPT, PROMPT_VERSION, renderObservation, parseAction } from '.
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)));
 
 function parseArgs(argv) {
-  const a = { reps: 3, out: null, resume: false, dryRun: false, maxTurns: null, budgetUsd: 50, tasks: 'grid', models: [], seedOffset: 0, limit: null, paceMs: 0, family: 'core' };
+  const a = { reps: 3, out: null, resume: false, dryRun: false, maxTurns: null, budgetUsd: 50, tasks: 'grid', models: [], seedOffset: 0, limit: null, paceMs: 0, family: 'core', historyWindow: 0 };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === '--reps') a.reps = Number(argv[++i]);
@@ -35,6 +35,7 @@ function parseArgs(argv) {
     else if (k === '--limit') a.limit = Number(argv[++i]);
     else if (k === '--pace-ms') a.paceMs = Number(argv[++i]);
     else if (k === '--family') a.family = argv[++i];
+    else if (k === '--history-window') a.historyWindow = Number(argv[++i]);
     else if (k === '--help' || k === '-h') a.help = true;
     else throw new Error(`unknown arg: ${k}`);
   }
@@ -59,6 +60,8 @@ Options
   --limit <n>               only the first n task configs (smoke tests)
   --pace-ms <n>             wait n ms between API calls (rate-limit courtesy)
   --family core|swe|both    task family (default core)
+  --history-window <n>      keep only the last n turns (lossless for fully
+                            observable worlds; cuts input cost ~5-10x)
 `;
 
 function cellKey(taskId, model, rep) { return `${taskId}|${model}|${rep}`; }
@@ -77,7 +80,7 @@ function loadDone(path) {
 }
 
 /** One full trajectory against a live model. */
-export async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0 }) {
+export async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0, historyWindow = 0 }) {
   const isSwe = task.family === 'vigil-swe';
   const isRush = task.family === 'vigil-rush';
   let world;
@@ -101,6 +104,17 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
   while (!world.done && turns.length < cap) {
     const obs = world.observe();
     const userText = renderObservation(obs);
+    // The observation is SELF-CONTAINED: board, state, constraints, obligations,
+    // legal moves and objective are all re-rendered every turn. Old transcript
+    // turns therefore add cost (input dominates: 26.7k in vs 84 out per call)
+    // without adding information. With --history-window N we keep the system
+    // prompt plus the last N turns, which is lossless for a fully-observable
+    // world and cuts input cost by ~5-10x.
+    if (historyWindow > 0 && messages.length > 1 + historyWindow * 2) {
+      const pruned = [messages[0], ...messages.slice(-(historyWindow * 2))];
+      messages.length = 0;
+      messages.push(...pruned);
+    }
     messages.push({ role: 'user', content: userText });
     const callId = `${task.id}:${model}:${seed}:t${turns.length}`;
     let reply;
@@ -269,7 +283,7 @@ async function main() {
         try {
           result = args.dryRun
             ? await runDryCell({ task, seed })
-            : await runCell({ task, seed, channel, model, ledger, maxTurns: args.maxTurns, paceMs: args.paceMs });
+            : await runCell({ task, seed, channel, model, ledger, maxTurns: args.maxTurns, paceMs: args.paceMs, historyWindow: args.historyWindow });
         } catch (e) {
           result = { status: 'error', error: { message: e.message }, profile: null, records: [], turns: [] };
         }
