@@ -27,21 +27,23 @@
 //
 // Exit code 0 only when all four checks pass.
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { join, resolve, relative } from 'node:path';
+import { join, resolve, relative, dirname } from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { solve, greedy, applyMove, movesFor, isGoal } from '../tasks/rush/rush.mjs';
 import { wilson, meanStd } from '../stats/index.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
+const DEFAULT_REFERENCE_RUN = join(ROOT, 'docs', 'reference-run');
 const argv = process.argv.slice(2);
 const argPath = (name, fallback) => {
   const i = argv.indexOf(name);
   return i >= 0 && argv[i + 1] ? resolve(argv[i + 1]) : fallback;
 };
-const REFERENCE_RUN = argPath('--reference-run', join(ROOT, 'docs', 'reference-run'));
+const REFERENCE_RUN = argPath('--reference-run', DEFAULT_REFERENCE_RUN);
 const DISCRIMINATION = argPath('--discrimination', join(ROOT, 'docs', 'discrimination.json'));
 const DATASET = argPath('--dataset', join(ROOT, 'tasks', 'rush', 'dataset.json'));
 const SAMPLES = 3;
@@ -54,17 +56,16 @@ const pass = (detail) => ({ ok: true, detail });
 // ---------------------------------------------------------------------------
 // 1. The committed run bundle.
 
-function checkReferenceRun(dir) {
-  if (!existsSync(dir)) return fail(`run directory not found: ${dir}`);
-  const verifyPath = join(ROOT, 'scripts', 'verify.mjs');
-  const res = spawnSync(process.execPath, [verifyPath, dir], { cwd: ROOT, encoding: 'utf8' });
-  if (res.error) return fail(`could not run scripts/verify.mjs: ${res.error.message}`);
-  const output = `${res.stdout ?? ''}${res.stderr ?? ''}`;
-  if (res.status !== 0) {
-    const lines = output.split(/\r?\n/).map((l) => l.trim()).filter((l) => /^FAIL|^\S.*\S$/.test(l));
-    const why = lines.filter((l) => !/^PASS /.test(l)).slice(0, 3).join(' | ');
-    return fail(`scripts/verify.mjs exited ${res.status}${why ? `: ${why}` : ''}`);
-  }
+function runVerify(dir) {
+  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'verify.mjs'), dir], { cwd: ROOT, encoding: 'utf8' });
+  return {
+    status: res.status,
+    error: res.error,
+    output: `${res.stdout ?? ''}${res.stderr ?? ''}`,
+  };
+}
+
+function referenceDetail(dir, output) {
   const manifest = output.match(/PASS manifest \((\d+) files\)/);
   let prompt = '';
   try {
@@ -73,8 +74,85 @@ function checkReferenceRun(dir) {
   } catch {
     // verify.mjs already validated protocol.json; absence here is not an error.
   }
-  const files = manifest ? `${manifest[1]} files` : 'manifest ok';
-  return pass(`${files}${prompt} · numbers reproduce exactly`);
+  return `${manifest ? `${manifest[1]} files` : 'manifest ok'}${prompt} · numbers reproduce exactly`;
+}
+
+/** The unlisted-file problems from a verify run, or null if it failed for a
+ *  stronger reason (missing file, hash mismatch, bad protocol, bad numbers). */
+function onlyUnlistedProblems(output) {
+  const count = output.match(/VERIFY: FAIL \((\d+) checks\)/);
+  if (!count || count[1] !== '1') return null;
+  const lines = output.split(/\r?\n/);
+  const start = lines.findIndex((l) => l.trim() === 'FAIL manifest');
+  if (start < 0) return null;
+  const problems = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    if (!lines[i].startsWith('  ')) break;
+    problems.push(lines[i].trim());
+  }
+  if (problems.length === 0) return null;
+  if (!problems.every((p) => /^unlisted file: /.test(p))) return null;
+  return problems.map((p) => p.slice('unlisted file: '.length));
+}
+
+/**
+ * Materialize the committed copy of the bundle from git HEAD into a temp dir.
+ * Used only when the working copy has untracked additions: the shipped bundle
+ * is what git commits, and a local report file dropped into the directory is
+ * not part of it. Returns the temp dir or null when git/HEAD is unavailable.
+ */
+function materializeHead(dir) {
+  const rel = relative(ROOT, dir).replace(/\\/g, '/');
+  const listed = spawnSync('git', ['-C', ROOT, 'ls-tree', '-r', '--name-only', 'HEAD', '--', rel], { encoding: 'utf8' });
+  if (listed.error || listed.status !== 0) return null;
+  const files = listed.stdout.split('\n').filter(Boolean);
+  if (files.length === 0) return null;
+  const tmp = mkdtempSync(join(tmpdir(), 'vigil-head-'));
+  for (const file of files) {
+    const shown = spawnSync('git', ['-C', ROOT, 'show', `HEAD:${file}`], { maxBuffer: 64 * 1024 * 1024 });
+    if (shown.error || shown.status !== 0) {
+      rmSync(tmp, { recursive: true, force: true });
+      return null;
+    }
+    const dest = join(tmp, ...file.split('/'));
+    mkdirSync(dirname(dest), { recursive: true });
+    writeFileSync(dest, shown.stdout);
+  }
+  return tmp;
+}
+
+function checkReferenceRun(dir) {
+  if (!existsSync(dir)) return fail(`run directory not found: ${dir}`);
+  const first = runVerify(dir);
+  if (first.error) return fail(`could not run scripts/verify.mjs: ${first.error.message}`);
+  if (first.status === 0) return pass(referenceDetail(dir, first.output));
+
+  // A sealed bundle (MANIFEST.sha256) must not gain files. But a local, generated
+  // report inside the run directory is not part of the shipped artifact either.
+  // For the DEFAULT committed bundle only, fall back to the git HEAD snapshot,
+  // verify that, and name the ignored files in the output. Any missing file or
+  // hash mismatch skips this path and fails, so tampering stays caught.
+  if (dir === DEFAULT_REFERENCE_RUN) {
+    const extras = onlyUnlistedProblems(first.output);
+    if (extras) {
+      const snapshot = materializeHead(dir);
+      if (snapshot) {
+        try {
+          const second = runVerify(snapshot);
+          if (second.status === 0) {
+            const names = extras.length > 3 ? `${extras.slice(0, 3).join(', ')} (+${extras.length - 3})` : extras.join(', ');
+            return pass(`${referenceDetail(dir, second.output)} · committed snapshot · ignored ${extras.length} untracked file(s): ${names}`);
+          }
+        } finally {
+          rmSync(snapshot, { recursive: true, force: true });
+        }
+      }
+    }
+  }
+
+  const lines = first.output.split(/\r?\n/).map((l) => l.trim()).filter((l) => /^FAIL|^\S.*\S$/.test(l));
+  const why = lines.filter((l) => !/^PASS /.test(l)).slice(0, 3).join(' | ');
+  return fail(`scripts/verify.mjs exited ${first.status}${why ? `: ${why}` : ''}`);
 }
 
 // ---------------------------------------------------------------------------

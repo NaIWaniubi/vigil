@@ -258,7 +258,7 @@ test('holmBonferroni is never below the raw p-value and stays in [0,1]', () => {
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { twoProportionPValue } from '../stats/inference.mjs';
 
@@ -303,8 +303,11 @@ test('stats-report CLI writes JSON+markdown with Wilson, bootstrap, Holm and ver
     assert.equal(run.status, 0, `CLI failed:\n${run.stderr}`);
     assert.match(run.stdout, /verdict: underpowered/);
 
-    const jsonPath = join(dir, 'stats-report.json');
-    const mdPath = join(dir, 'stats-report.md');
+    // Derived reports are written OUTSIDE the run bundle (docs/stats/<slug>-stats.*)
+    // so a bundle's MANIFEST stays valid. Mirror the CLI's slug rule here.
+    const slug = basename(dir).replace(/[^a-zA-Z0-9._-]/g, '_');
+    const jsonPath = join(REPO_ROOT, 'docs', 'stats', `${slug}-stats.json`);
+    const mdPath = join(REPO_ROOT, 'docs', 'stats', `${slug}-stats.md`);
     assert.ok(existsSync(jsonPath) && existsSync(mdPath), 'both report files must be written');
     const report = JSON.parse(readFileSync(jsonPath, 'utf8'));
     assert.equal(report.verdict, 'underpowered');

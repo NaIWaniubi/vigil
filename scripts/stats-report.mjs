@@ -2,14 +2,14 @@
 // Statistical report for a VIGIL run directory.
 //
 // The leaderboard question is "which model is better". The prerequisite
-// question is "could this run tell?". This script answers both, and writes the
-// answer next to the run:
+// question is "could this run tell?". This script answers both and writes a
+// JSON + markdown pair named stats-report.json / stats-report.md.
 //
-//   docs/stats/<run>-stats.json   machine-readable, including the verdict
-//   docs/stats/<run>-stats.md     the same numbers with an adequacy statement
-//
-// Output deliberately lands OUTSIDE the run directory: bundles carry a
-// MANIFEST over their own files, and dropping sidecars inside would break it.
+// Output location:
+//   - inside <run-dir> by default;
+//   - <out-dir>/stats-report.* when --out-dir is given;
+//   - docs/stats/<run-basename>/ when the run is a sealed bundle carrying
+//     MANIFEST.sha256, because its verifier rejects any unlisted file.
 //
 // Inputs: <run-dir>/results.jsonl and, when present, <run-dir>/report.json.
 // Win rate = goal_met among scoreable cells (completed | turn_cap). Infra
@@ -30,7 +30,7 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 
-const USAGE = 'usage: node scripts/stats-report.mjs <run-dir> [--iterations N] [--alpha A]';
+const USAGE = 'usage: node scripts/stats-report.mjs <run-dir> [--iterations N] [--alpha A] [--out-dir DIR]';
 const EFFECT = Object.freeze({ p1: 0.3, p2: 0.6 });
 const TARGET_POWER = 0.8;
 
@@ -41,6 +41,7 @@ function die(message) {
 
 function parseArgs(argv) {
   let runDir = null;
+  let outDir = null;
   let iterations = 10000;
   let alpha = 0.05;
   for (let i = 0; i < argv.length; i++) {
@@ -53,6 +54,9 @@ function parseArgs(argv) {
     } else if (arg === '--alpha') {
       alpha = Number(argv[++i]);
       if (!(alpha > 0 && alpha < 1)) die(`--alpha must be in (0,1)\n${USAGE}`);
+    } else if (arg === '--out-dir') {
+      outDir = argv[++i];
+      if (!outDir) die(`--out-dir needs a path\n${USAGE}`);
     } else if (arg === '--help' || arg === '-h') {
       console.log(USAGE);
       process.exit(0);
@@ -65,7 +69,7 @@ function parseArgs(argv) {
     }
   }
   if (!runDir) die(USAGE);
-  return { runDir: resolve(runDir), iterations, alpha };
+  return { runDir: resolve(runDir), outDir: outDir ? resolve(outDir) : null, iterations, alpha };
 }
 
 function readRows(path) {
@@ -99,13 +103,20 @@ const pct = (x) => `${(x * 100).toFixed(1)}%`;
 const ciText = (arr) => `[${pct(arr[0])}, ${pct(arr[1])}]`;
 const fmtP = (p) => (p < 0.001 ? p.toExponential(2) : p.toFixed(4));
 
-const { runDir, iterations, alpha } = parseArgs(process.argv.slice(2));
+const { runDir, outDir: explicitOutDir, iterations, alpha } = parseArgs(process.argv.slice(2));
 const resultsPath = join(runDir, 'results.jsonl');
 if (!existsSync(resultsPath)) {
   die(`no results.jsonl in ${runDir}\n${USAGE}`);
 }
 const rows = readRows(resultsPath);
 if (rows.length === 0) die(`results.jsonl has no parseable rows: ${resultsPath}`);
+
+// A sealed bundle's MANIFEST covers every file in the directory, so derived
+// sidecars must not land inside it. Redirect to a per-run directory next to
+// the bundle unless the caller chose an output directory explicitly.
+const slug = basename(runDir).replace(/[^a-zA-Z0-9._-]/g, '_');
+const hasManifest = existsSync(join(runDir, 'MANIFEST.sha256'));
+const outDir = explicitOutDir ?? (hasManifest ? join(ROOT, 'docs', 'stats', slug) : runDir);
 
 const byModel = new Map();
 for (const r of rows) {
@@ -264,9 +275,10 @@ if (pairwise.length > 0 && pairwise.every((p) => !p.significant)) {
 for (const mm of publishedMismatches) {
   notes.push(`report.json disagrees with recomputed counts for ${mm.model}: published ${mm.published.wins}/${mm.published.cells}, recomputed ${mm.recomputed.wins}/${mm.recomputed.cells}.`);
 }
-const hasManifest = existsSync(join(runDir, 'MANIFEST.sha256'));
-if (hasManifest) {
-  notes.push('This run has a MANIFEST.sha256. Derived reports are written to docs/stats/ (outside the bundle) so the manifest stays valid.');
+if (hasManifest && !explicitOutDir) {
+  notes.push(`This run is a sealed bundle (MANIFEST.sha256); stats-report.json/md were written outside it to ${outDir} so scripts/verify.mjs stays valid.`);
+} else if (hasManifest && explicitOutDir) {
+  notes.push(`Sealed bundle: stats-report.json/md written to the explicit --out-dir ${outDir}.`);
 }
 
 const generatedAt = new Date().toISOString();
@@ -346,14 +358,9 @@ if (notes.length > 0) {
   for (const n of notes) md.push(`- ${n}`);
 }
 
-// Write OUTSIDE the run bundle. A run bundle carries MANIFEST.sha256 over every
-// file in it; adding sidecars invalidates verification and makes published
-// numbers non-reproducible. Derived reports go to docs/stats/.
-const outDir = join(ROOT, 'docs', 'stats');
 mkdirSync(outDir, { recursive: true });
-const slug = basename(runDir).replace(/[^a-zA-Z0-9._-]/g, '_');
-const jsonPath = join(outDir, `${slug}-stats.json`);
-const mdPath = join(outDir, `${slug}-stats.md`);
+const jsonPath = join(outDir, 'stats-report.json');
+const mdPath = join(outDir, 'stats-report.md');
 writeFileSync(jsonPath, `${JSON.stringify(out, null, 2)}\n`);
 writeFileSync(mdPath, `${md.join('\n')}\n`);
 
@@ -378,6 +385,6 @@ if (verdict === 'underpowered') {
 }
 console.log(`wrote ${jsonPath}`);
 console.log(`wrote ${mdPath}`);
-if (hasManifest) {
-  // output lives outside the bundle, so no manifest warning is needed
+if (hasManifest && !explicitOutDir) {
+  console.error(`warning: ${runDir} is a sealed bundle (MANIFEST.sha256); sidecars were written outside it to ${outDir}.`);
 }
