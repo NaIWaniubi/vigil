@@ -18,9 +18,37 @@ import { taskFingerprint } from '../tasks/core/generate.mjs';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const argv = process.argv.slice(2);
 const arg = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? Number(argv[i + 1]) : d; };
-const seeds = arg('--seeds', 120);
+const seeds = arg('--seeds', 150);
 const minDepth = arg('--min-depth', 8);
 const vehicles = arg('--vehicles', 10);
+
+/**
+ * Pin vehicles that never move again after their last optimal move. Their final
+ * position is therefore guaranteed at the end of the oracle, so the constraint
+ * is satisfiable while still forcing the agent to keep it true.
+ */
+function deriveMilestones(board, solution) {
+  const lastMove = new Map();
+  solution.forEach((m, i) => lastMove.set(m.id, i));
+  const sim = board.map((v) => ({ ...v }));
+  const snapshots = [];
+  for (const m of solution) {
+    const v = sim.find((x) => x.id === m.id);
+    if (v.orient === 'H') v.col += m.delta; else v.row += m.delta;
+    snapshots.push(sim.map((x) => ({ ...x })));
+  }
+  const milestones = [];
+  for (const [id, idx] of lastMove) {
+    if (id === 'X') continue;              // X is the goal, already constrained
+    if (idx >= solution.length - 1) continue; // moved on the final step: pinned by the goal
+    const final = snapshots[snapshots.length - 1].find((v) => v.id === id);
+    const earlier = snapshots[idx].find((v) => v.id === id);
+    if (final.row !== earlier.row || final.col !== earlier.col) continue;
+    milestones.push({ id, row: final.row, col: final.col, revealAt: idx + 2 });
+  }
+  // Keep it readable and monotone in reveal order.
+  return milestones.slice(0, 3).sort((a, b) => a.revealAt - b.revealAt);
+}
 
 const tasks = [];
 const t0 = Date.now();
@@ -33,6 +61,12 @@ for (let seed = 1; seed <= seeds; seed++) {
     seed,
     board: r.task.rush.board,
     solution: r.task.rush.solution,
+    // Milestone constraints are derived from the optimal path and are
+    // SATISFIABLE BY CONSTRUCTION: we only pin a vehicle that the optimal
+    // solution has already moved for the last time, so its post-move position
+    // still holds in the final state. Publishing them makes the family carry
+    // more than one accumulating rule instead of a single terminal condition.
+    milestones: deriveMilestones(r.task.rush.board, r.task.rush.solution),
     meta: r.meta,
     fingerprint: createHash('sha256').update(JSON.stringify(r.task.rush.board)).digest('hex'),
   });

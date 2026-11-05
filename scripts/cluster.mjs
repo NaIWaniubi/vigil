@@ -26,7 +26,7 @@ function parseArgs(argv) {
   const a = {
     reps: 3, out: null, resume: false, dryRun: false, budgetUsd: 50,
     tasks: 'grid', models: [], family: 'rush', concurrency: 6, paceMs: 300,
-    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null, sample: null, historyWindow: 0, maxTurns: null,
+    limit: null, seedOffset: 0, channelCaps: {}, minDepth: null, maxDepth: null, sample: null, historyWindow: 0, maxTurns: null, obligations: null,
   };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
@@ -46,6 +46,7 @@ function parseArgs(argv) {
     else if (k === '--sample') a.sample = Number(argv[++i]);
     else if (k === '--history-window') a.historyWindow = Number(argv[++i]);
     else if (k === '--max-turns') a.maxTurns = Number(argv[++i]);
+    else if (k === '--obligations') a.obligations = argv[++i];
     else if (k === '--seed-offset') a.seedOffset = Number(argv[++i]);
     else if (k === '--cap') { const [id, n] = argv[++i].split('='); a.channelCaps[id] = Number(n); }
     else if (k === '--help' || k === '-h') a.help = true;
@@ -74,7 +75,8 @@ Options
   --limit <n>              only first n task configs
   --min-depth <n>          rush: only tasks with optimal depth >= n
   --max-depth <n>          rush: only tasks with optimal depth <= n
-  --sample <n>             stratified sample of n tasks across depths
+  --sample <n>             stratified sample across depth bands (8-9/10-12/13-15/16+)
+  --obligations <list>     comma list: off,decay,deadline (default all)
   --history-window <n>     keep last n turns only (lossless here; ~5-10x cheaper)
   --max-turns <n>          cap turns per cell (recorded in protocol.json)
 `;
@@ -88,10 +90,47 @@ function buildWork(args) {
     // Stratified sample: stride through the depth-sorted list so every depth
     // bucket is represented instead of the first N seeds (which cluster at the
     // shallow end). Sampling is what makes a full curve affordable.
+    if (args.obligations) {
+      const want = new Set(args.obligations.split(','));
+      cfgs = cfgs.filter((c) => want.has(c.obligation));
+    }
     if (args.sample) {
-      cfgs = [...cfgs].sort((a, b) => a.depth - b.depth);
-      const stride = Math.max(1, Math.floor(cfgs.length / args.sample));
-      cfgs = cfgs.filter((_, i) => i % stride === 0).slice(0, args.sample);
+      // TRUE stratified sampling: bucket by depth band, then allocate the quota
+      // proportionally across buckets. A stride over a depth-sorted list is NOT
+      // stratified -- with 390 configs and --sample 44 it never reached depth
+      // 14+, so the advertised depth curve was impossible to produce.
+      const BANDS = [
+        [8, 9], [10, 12], [13, 15], [16, 99],
+      ];
+      const bandOf = (d) => BANDS.findIndex(([lo, hi]) => d >= lo && d <= hi);
+      const buckets = new Map();
+      for (const c of cfgs) {
+        const b = bandOf(c.depth);
+        if (b < 0) continue;
+        if (!buckets.has(b)) buckets.set(b, []);
+        buckets.get(b).push(c);
+      }
+      const present = [...buckets.keys()].sort((a, b) => a - b);
+      if (!present.length) throw new Error('--sample: no tasks in the depth range');
+      const perBucket = Math.max(1, Math.floor(args.sample / present.length));
+      const picked = [];
+      for (const b of present) {
+        const list = buckets.get(b);
+        // Even spacing inside the bucket so seeds spread out.
+        const take = Math.min(list.length, perBucket);
+        const step = list.length / take;
+        for (let i = 0; i < take; i++) picked.push(list[Math.floor(i * step)]);
+      }
+      // Fill any remainder from the largest buckets.
+      let remainder = args.sample - picked.length;
+      for (const b of present) {
+        if (remainder <= 0) break;
+        for (const c of buckets.get(b)) {
+          if (remainder <= 0) break;
+          if (!picked.includes(c)) { picked.push(c); remainder--; }
+        }
+      }
+      cfgs = picked.slice(0, args.sample);
     }
     if (args.limit) cfgs = cfgs.slice(0, args.limit);
     for (const cfg of cfgs) work.push({ family: 'rush', cfg });
@@ -151,6 +190,7 @@ async function main() {
   const protocol = {
     promptVersion: PROMPT_VERSION,
     promptSha256: createHash('sha256').update(SYSTEM_PROMPT).digest('hex'),
+    taskFormat: 'rush-v2 (exit + 3 pinned-vehicle milestones; binding obligations)',
     engineVersion: '0.2.0',
     runner: 'cluster',
     concurrency: args.concurrency,
@@ -244,6 +284,21 @@ async function main() {
           ledger.reserve({ id: `probe:${task.id}:${model}:${rep}`, model, maxInputTokens: 1000, maxOutputTokens: 100 });
           ledger.release(`probe:${task.id}:${model}:${rep}`, 'probe');
         } catch (e) {
+          // UnknownPriceError is a CONFIGURATION gap for one model: record the
+          // cell and keep going. Only genuine BudgetExceeded halts the run.
+          if (e.name === 'UnknownPriceError' || /no price for model/.test(e.message)) {
+            appendFileSync(resultsPath, `${JSON.stringify({
+              taskId: task.id, config: item.cfg, family: item.family, model,
+              channel: channelId, tier: channel?.tier ?? 'reference', rep, seed: 0,
+              fingerprint, status: 'error',
+              error: { message: e.message, kind: 'unpriced_model' },
+              profile: null, records: [], turns: [], at: new Date().toISOString(),
+            })}
+`);
+            finished++;
+            errors++;
+            return;
+          }
           stop(`budget exhausted: ${e.message}`);
           return;
         }

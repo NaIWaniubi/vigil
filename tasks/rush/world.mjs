@@ -11,6 +11,15 @@ export class RushWorld extends World {
     super(task, opts);
     this.board = task.rush.board.map((v) => ({ ...v }));
     this.illegalMoves = 0;
+    // `pos` drives the goal predicate and `board` drives legality. If a task
+    // ships them out of sync, an agent could win on the first noop without ever
+    // moving. Refuse to start rather than score a broken task.
+    for (const v of this.board) {
+      const p = task.initialState?.pos?.[v.id];
+      if (!p || p.row !== v.row || p.col !== v.col) {
+        throw new Error(`rush task ${task.id}: pos.${v.id} disagrees with board (${JSON.stringify(p)} vs r${v.row}c${v.col})`);
+      }
+    }
   }
 
   static create(task, opts = {}) {
@@ -60,22 +69,32 @@ export class RushWorld extends World {
     if (action?.type !== 'move') {
       if (action?.type === 'noop' || action?.type === 'tend') return super.step(action);
       this.illegalMoves++;
-      return super.step({ type: '__illegal_move', args: { reason: `action not allowed in rush: ${action?.type}` } });
+      return super.applyInternal('__illegal_move', { reason: `action not allowed in rush: ${action?.type}` }, action);
     }
 
     const { id, delta } = action.args ?? {};
+    // An unknown or missing vehicle id must be a LOGGED FAILURE, not a crash:
+    // `movesFor` would read `v.orient` on undefined. Design rule 4.
+    if (typeof id !== 'string' || !this.board.some((v) => v.id === id)) {
+      this.illegalMoves++;
+      return super.applyInternal('__illegal_move', { id, delta, reason: 'unknown vehicle id' }, action);
+    }
+    if (!Number.isInteger(Number(delta)) || Number(delta) === 0) {
+      this.illegalMoves++;
+      return super.applyInternal('__illegal_move', { id, delta, reason: 'delta must be a non-zero integer' }, action);
+    }
     const legal = movesFor(this.board, id);
     const match = legal.find((m) => m.id === id && m.delta === Number(delta));
     if (!match) {
       this.illegalMoves++;
-      return super.step({ type: '__illegal_move', args: { id, delta } });
+      return super.applyInternal('__illegal_move', { id, delta }, action);
     }
 
     this.board = applyMove(this.board, match);
     const pos = {};
     for (const v of this.board) pos[v.id] = { row: v.row, col: v.col };
     const next = { ...this.state, pos, moves: (this.state.moves ?? 0) + 1 };
-    return super.step({ type: '__rush_sync', args: { action, state: next } });
+    return super.applyInternal('__rush_sync', { action, state: next }, action);
   }
 
   profile() {

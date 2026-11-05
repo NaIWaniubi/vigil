@@ -19,7 +19,7 @@
 //   6. "每一次失败都要能被定位"
 //      → every violation carries (stepIndex, constraintId, introducedAtStep).
 
-import { canonical, evaluate, holds, reads, validate as validateExpr } from './expr.mjs';
+import { assertSafePath, canonical, evaluate, holds, reads, validate as validateExpr } from './expr.mjs';
 import {
   advance, observe, prng, rearm, repair, spawn,
   validateObligation,
@@ -85,6 +85,7 @@ function clone(v) {
 }
 
 function setPath(state, path, value) {
+  assertSafePath(path);
   const segs = path.split('.');
   let cur = state;
   for (let i = 0; i < segs.length - 1; i++) {
@@ -149,6 +150,18 @@ export class World {
     return newly;
   }
 
+  /**
+   * Adapter-only entry point for internal handoffs. Not reachable from `step`:
+   * that path rejects every `__`-prefixed action. RushWorld/SweWorld call this
+   * after validating the real action themselves.
+   */
+  applyInternal(type, args, action) {
+    if (!type.startsWith('__')) throw new WorldError(`applyInternal requires a __ type, got ${type}`);
+    // Call the BASE step explicitly. `this.step` is the adapter's override, so
+    // dispatching through it would re-enter the adapter and recurse forever.
+    return World.prototype.step.call(this, { type, args }, { internal: true });
+  }
+
   /** What the agent is allowed to see. No predicates, no future rules, no keys. */
   observe() {
     const goals = this.task.goals ?? (this.task.goal ? [this.task.goal] : []);
@@ -169,11 +182,15 @@ export class World {
   }
 
   actionSurface() {
+    const policy = this.task.genericWrites ?? 'none';
+    const generic = policy === 'all' || (policy && Array.isArray(policy.allow));
     const builtin = [
-      { name: 'set', args: ['path', 'value'], cost: 1 },
-      { name: 'inc', args: ['path', 'by'], cost: 1 },
-      { name: 'push', args: ['path', 'value'], cost: 1 },
-      { name: 'remove', args: ['path'], cost: 1 },
+      ...(generic ? [
+        { name: 'set', args: ['path', 'value'], cost: 1 },
+        { name: 'inc', args: ['path', 'by'], cost: 1 },
+        { name: 'push', args: ['path', 'value'], cost: 1 },
+        { name: 'remove', args: ['path'], cost: 1 },
+      ] : []),
       { name: 'noop', args: [], cost: this.task.noopCost ?? 1 },
     ];
     const tenders = [...this.live.values()]
@@ -211,6 +228,29 @@ export class World {
     return this.tickCost.base + this.tickCost.perArg * n;
   }
 
+  /**
+   * Generic writes (set/inc/push/remove) are DANGEROUS: they can write any state
+   * cell, including the cells a goal reads. A task must opt in explicitly via
+   * `task.genericWrites`:
+   *   'none'                -> reject every generic write (default)
+   *   'all'                 -> allow any path (only for test fixtures)
+   *   { allow: ['a.', 'b'] } -> allow a path equal to an entry or under a
+   *                             `prefix.` entry
+   * Custom task actions and family adapters (RushWorld/SweWorld) are NOT subject
+   * to this: their effects are authored by the task, not supplied by the agent.
+   */
+  #mayWrite(path) {
+    const policy = this.task.genericWrites ?? 'none';
+    if (policy === 'all') return true;
+    if (policy === 'none') return false;
+    if (!policy || !Array.isArray(policy.allow)) return false;
+    if (typeof path !== 'string' || !path) return false;
+    return policy.allow.some((entry) => {
+      const p = String(entry);
+      return path === p || (p.endsWith('.') && path.startsWith(p)) || path.startsWith(`${p}.`);
+    });
+  }
+
   #apply(action) {
     const a = action.args ?? {};
     switch (action.type) {
@@ -218,10 +258,12 @@ export class World {
         return { ok: true };
       case 'set':
         if (typeof a.path !== 'string') return { ok: false, error: 'set needs path' };
+        if (!this.#mayWrite(a.path)) return { ok: false, error: `set not permitted on ${a.path} (task.genericWrites)` };
         setPath(this.state, a.path, a.value);
         return { ok: true };
       case 'inc': {
         if (typeof a.path !== 'string') return { ok: false, error: 'inc needs path' };
+        if (!this.#mayWrite(a.path)) return { ok: false, error: `inc not permitted on ${a.path} (task.genericWrites)` };
         const cur = getPath(this.state, a.path);
         const by = typeof a.by === 'number' ? a.by : 1;
         if (typeof cur !== 'number') return { ok: false, error: `inc target not numeric: ${a.path}` };
@@ -230,6 +272,7 @@ export class World {
       }
       case 'push': {
         if (typeof a.path !== 'string') return { ok: false, error: 'push needs path' };
+        if (!this.#mayWrite(a.path)) return { ok: false, error: `push not permitted on ${a.path} (task.genericWrites)` };
         const cur = getPath(this.state, a.path);
         if (!Array.isArray(cur)) return { ok: false, error: `push target not array: ${a.path}` };
         cur.push(clone(a.value));
@@ -237,6 +280,7 @@ export class World {
       }
       case 'remove': {
         if (typeof a.path !== 'string') return { ok: false, error: 'remove needs path' };
+        if (!this.#mayWrite(a.path)) return { ok: false, error: `remove not permitted on ${a.path} (task.genericWrites)` };
         setPath(this.state, a.path, undefined);
         return { ok: true };
       }
@@ -297,8 +341,15 @@ export class World {
    * an invalid action is a logged failure, not a harness crash (this is the
    * "调用失败不算答错" discipline from SoTALab's rst-hle, applied to actions).
    */
-  step(action) {
+  step(action, opts = {}) {
     if (this.done) throw new WorldError('world already terminated');
+    // Internal adapter handoffs (`__swe_sync`, `__rush_sync`) must never be
+    // reachable from an action a model can emit. A bare World accepted them and
+    // let a caller replace the whole state, which forges a win. Adapters call
+    // `applyInternal` instead.
+    if (!opts.internal && action && typeof action.type === 'string' && action.type.startsWith('__')) {
+      return this.#reject(action, `internal action not permitted: ${action.type}`);
+    }
     if (!action || typeof action.type !== 'string') {
       return this.#reject(action, 'action needs a type');
     }

@@ -91,7 +91,13 @@ if (existsSync(join(runDir, 'results.jsonl'))) {
     bucket: b, n: buckets[b].n, winRate: buckets[b].win / buckets[b].n,
   }));
   const first = curve[0], last = curve[curve.length - 1];
-  const monotoneDrop = curve.length >= 2 && first && last && last.winRate < first.winRate;
+  // A depth claim needs BOTH ends to carry enough cells. A single losing cell in
+  // the top bucket is not a curve; it is one observation. MIN_BUCKET_N is the
+  // guard that stops the verdict from resting on n=1 (caught by an external
+  // reviewer on the original reference run: bucket '16+' had n=1).
+  const MIN_BUCKET_N = 5;
+  const curvePowered = curve.length >= 2 && curve.every((c) => c.n >= MIN_BUCKET_N);
+  const monotoneDrop = curvePowered && last.winRate < first.winRate;
 
   report.discrimination = {
     models: rates.length,
@@ -103,7 +109,9 @@ if (existsSync(join(runDir, 'results.jsonl'))) {
         : rates.every((r) => r < 0.05) ? 'TOO HARD (all models < 5%)'
         : 'DISCRIMINATES across models')
       : (monotoneDrop ? 'DISCRIMINATES across depths (single model)'
-        : 'INSUFFICIENT (need >=2 models or a depth gradient)'),
+        : curve.length >= 2
+          ? `INSUFFICIENT (depth buckets need n>=${MIN_BUCKET_N}: ${curve.map((c) => `${c.bucket}=${c.n}`).join(', ')})`
+          : 'INSUFFICIENT (need >=2 models or >=2 depth buckets with n>=5)'),
   };
 } else {
   report.discrimination = { verdict: 'no run data yet — run scripts/cluster.mjs first' };

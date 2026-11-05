@@ -60,6 +60,14 @@ function auditOne(cfg) {
     }
   }
 
+  // Shortcut probe: a generic write must never reach the goal cell. Core now
+  // restricts writes to gadget cells, so this must be rejected.
+  const goalTotal = task.meta?.goalTotal ?? 1e9;
+  const cheat = replay(task, [{ type: 'set', args: { path: 'store.total', value: goalTotal } }], cfg.seed);
+  if (cheat.profile().terminal?.reason === 'goal_met') {
+    findings.push({ check: 'shortcut', verdict: 'fail', detail: 'set on the goal cell wins' });
+  }
+
   const again = replay(task, oracle, cfg.seed);
   const h = (w) => createHash('sha256').update(JSON.stringify({ r: w.records, p: w.profile() })).digest('hex');
   if (h(solved) !== h(again)) {
@@ -71,7 +79,7 @@ function auditOne(cfg) {
     config: cfg,
     family: 'vigil-core',
     fingerprint: createHash('sha256').update(taskFingerprint(task)).digest('hex'),
-    checks: ['oracle', 'lazy', ...(task.obligations?.length ? ['neglect'] : []), 'determinism'],
+    checks: ['oracle', 'lazy', 'shortcut', ...(task.obligations?.length ? ['neglect'] : []), 'determinism'],
     findings,
     status: findings.length ? 'quarantined' : 'admitted',
     oracleProfile: solved.profile(),
@@ -107,6 +115,18 @@ async function auditSwe(cfg) {
     }
   }
 
+  // Shortcut probes: the goal cells (`passed`, `ciRuns`) must not be writable.
+  const ids = task.constraints.map((c) => c.id);
+  const cheat = await SweWorld.create(task, { seed: cfg.seed });
+  for (const a of [
+    { type: 'set', args: { path: 'ciRuns', value: 1 } },
+    { type: 'push', args: { path: 'passed', value: ids[0] } },
+    { type: 'set', args: { path: 'passed', value: ids } },
+  ]) { if (!cheat.done) await cheat.stepAsync(a); }
+  if (cheat.profile().terminal?.reason === 'goal_met') {
+    findings.push({ check: 'shortcut', verdict: 'fail', detail: 'generic write to passed/ciRuns wins' });
+  }
+
   const again = await replaySwe(oracle);
   const h = (w) => createHash('sha256').update(JSON.stringify({ r: w.records, p: w.profile(), s: w.state.passed })).digest('hex');
   if (h(solved) !== h(again)) {
@@ -116,7 +136,7 @@ async function auditSwe(cfg) {
   return {
     taskId: task.id, config: cfg, family: 'vigil-swe',
     fingerprint: createHash('sha256').update(taskFingerprint(task)).digest('hex'),
-    checks: ['oracle', 'lazy', ...(task.obligations?.length ? ['neglect'] : []), 'determinism'],
+    checks: ['oracle', 'lazy', 'shortcut', ...(task.obligations?.length ? ['neglect'] : []), 'determinism'],
     findings,
     status: findings.length ? 'quarantined' : 'admitted',
     oracleProfile: solved.profile(),
@@ -163,6 +183,28 @@ async function auditRush(cfg) {
   if (lazy.profile().terminal?.reason === 'goal_met') {
     findings.push({ check: 'lazy', verdict: 'fail', detail: 'doing nothing solves the task' });
   }
+
+  // Obligations must be BINDING: strip every tend from the oracle and the run
+  // must die. This check was missing for the rush family, so 260 obligation
+  // configurations passed the audit while being winnable with zero tends.
+  if ((task.obligations ?? []).length) {
+    const noTend = oracle.filter((a) => a.type !== 'tend');
+    const neglected = replay(noTend);
+    const np = neglected.profile();
+    if (np.terminal?.reason === 'goal_met' && np.obligationsDead.length === 0) {
+      findings.push({
+        check: 'neglect', verdict: 'fail',
+        detail: 'obligations exist but ignoring them still succeeds',
+      });
+    }
+  }
+
+  // Shortcut resistance: a generic write must never reach the goal. The four
+  // mutators are rejected by policy, but the audit proves it per task family.
+  const probe = replay([{ type: 'set', args: { path: 'store.total', value: 1e9 } }]);
+  if (probe.profile().terminal?.reason === 'goal_met') {
+    findings.push({ check: 'shortcut', verdict: 'fail', detail: 'set on the goal cell wins' });
+  }
   const again = replay(oracle);
   const h = (w) => createHash('sha256').update(JSON.stringify({ r: w.records, p: w.profile() })).digest('hex');
   if (h(solved) !== h(again)) {
@@ -171,7 +213,8 @@ async function auditRush(cfg) {
   return {
     taskId: task.id, config: { seed: cfg.seed, obligation: cfg.obligation, depth: cfg.depth }, family: 'vigil-rush',
     fingerprint: createHash('sha256').update(taskFingerprint(task)).digest('hex'),
-    checks: ['oracle', 'discrimination', 'lazy', 'determinism'],
+    checks: ['oracle', 'discrimination', 'lazy', 'shortcut',
+      ...((task.obligations ?? []).length ? ['neglect'] : []), 'determinism'],
     findings, status: findings.length ? 'quarantined' : 'admitted',
     oracleProfile: solved.profile(),
     optimalDepth: cfg.depth,
@@ -219,7 +262,7 @@ const quarantined = results.filter((r) => r.status === 'quarantined');
 
 const report = {
   generatedAt: new Date().toISOString(),
-  tool: 'vigil self-audit v0.1.0',
+  tool: 'vigil self-audit v0.3.0',
   total: results.length,
   admitted: admitted.length,
   quarantined: quarantined.length,

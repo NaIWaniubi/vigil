@@ -9,6 +9,7 @@ import { World, num, str, ref, op } from '../engine/index.mjs';
 function canaryTask() {
   return {
     id: 'test-canary',
+    genericWrites: 'all',
     maxSteps: 20,
     initialState: { work: { done: 0 } },
     constraints: [

@@ -34,6 +34,30 @@ const sha = (b) => createHash('sha256').update(b).digest('hex');
  *   verifier/      — the oracle + checks, kept OUT of the agent's view
  *   manifest.json  — per-member sha256
  */
+/**
+ * Strip every answer from a task before it is handed to an agent runtime.
+ * environment/ may contain what observe() would show plus the action surface;
+ * it may never contain predicates, expected outputs, oracle sources or the
+ * reference solution.
+ */
+function agentView(task) {
+  const clone = JSON.parse(JSON.stringify(task));
+  for (const c of clone.constraints ?? []) { delete c.predicate; delete c.sweCheck; }
+  if (clone.swe?.module) {
+    delete clone.swe.module.oracle;
+    delete clone.swe.module.naiveFix;
+    for (const r of clone.swe.module.requirements ?? []) delete r.check;
+  }
+  if (clone.rush) delete clone.rush.solution;
+  // Goals carry a predicate too; the agent only needs the text.
+  if (clone.goals) for (const g of clone.goals) delete g.predicate;
+  if (clone.goal) delete clone.goal.predicate;
+  // Canary tokens are bait. Publishing them in the agent view would let a
+  // runtime avoid them on purpose, which defeats the detection.
+  delete clone.canaries;
+  return clone;
+}
+
 function taskDir(outRoot, task, oracle) {
   const dir = join(outRoot, task.id);
   mkdirSync(join(dir, 'environment'), { recursive: true });
@@ -52,8 +76,20 @@ function taskDir(outRoot, task, oracle) {
     `tags: [long-horizon, accumulating-constraints, background-obligations, deterministic-attribution]`,
   ].join('\n');
   writeFileSync(join(dir, 'task.yaml'), `${yaml}\n`);
-  writeFileSync(join(dir, 'environment', 'task.json'), JSON.stringify(task, null, 2));
+  // The agent-facing view is SANITIZED. Shipping the raw task leaked the
+  // answer key: swe.module.oracle (fixed sources), requirements[].check.expect
+  // (expected outputs) and rush.solution (the optimal move list). Everything
+  // the agent may see goes to environment/; every answer goes to verifier/.
+  writeFileSync(join(dir, 'environment', 'task.json'), JSON.stringify(agentView(task), null, 2));
   writeFileSync(join(dir, 'verifier', 'oracle.json'), JSON.stringify({ oracle, fingerprint }, null, 2));
+  writeFileSync(join(dir, 'verifier', 'answer.json'), JSON.stringify({
+    fingerprint,
+    predicates: task.constraints.map((c) => ({ id: c.id, predicate: c.predicate, sweCheck: c.sweCheck })),
+    goals: task.goals,
+    rushSolution: task.rush?.solution ?? null,
+    sweOracle: task.swe?.module?.oracle ?? null,
+    sweNaiveFix: task.swe?.module?.naiveFix ?? null,
+  }, null, 2));
 
   const members = [];
   const walk = (d, prefix) => {

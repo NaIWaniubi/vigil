@@ -44,8 +44,7 @@ export function validate(e) {
       if (typeof e.v !== 'string') throw new ExprError('str must be string');
       return;
     case 'ref':
-      if (typeof e.path !== 'string' || e.path.length === 0) throw new ExprError('ref needs a path');
-      if (e.path.split('.').some((s) => s.length === 0)) throw new ExprError(`bad path: ${e.path}`);
+      assertSafePath(e.path);
       return;
     case 'op': {
       if (!Array.isArray(e.args)) throw new ExprError(`op ${e.name} needs args array`);
@@ -60,11 +59,27 @@ export function validate(e) {
   }
 }
 
+const FORBIDDEN_SEGMENTS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/** Reject paths that could reach the prototype chain. */
+export function assertSafePath(path) {
+  if (typeof path !== 'string' || !path) throw new ExprError('path must be a non-empty string');
+  for (const seg of path.split('.')) {
+    if (seg.length === 0) throw new ExprError(`bad path: ${path}`);
+    if (FORBIDDEN_SEGMENTS.has(seg)) throw new ExprError(`forbidden path segment: ${seg}`);
+  }
+  return path;
+}
+
 export function resolvePath(state, path) {
   let cur = state;
   for (const seg of path.split('.')) {
     if (cur === null || cur === undefined) return undefined;
     if (typeof cur !== 'object') return undefined;
+    // Own properties only: `cur[seg]` would walk into Object.prototype, so a
+    // missing ref could resolve to an inherited value and make a constraint
+    // pass for the wrong reason.
+    if (!Object.hasOwn(cur, seg)) return undefined;
     cur = cur[seg];
   }
   return cur;

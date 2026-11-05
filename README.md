@@ -2,10 +2,13 @@
 
 **A solver-calibrated long-horizon agent benchmark.**
 
-Every task ships a provably shortest solution. Every hard task is proven to defeat a greedy baseline before it is admitted. Every failure is attributed to the exact action and the rule it broke. The evaluator audits itself before it scores anything.
+Every `vigil-rush` task ships a BFS-proven shortest solution, and every task in that family is admitted only after a greedy baseline is proven to fail it. (`vigil-core` and `vigil-swe` ship correct oracles, not shortest-path ones — stated so the word 'shortest' is not doing work it hasn't earned.) Every failure is attributed to the exact action and the rule it broke. The evaluator audits itself before it scores anything.
 
-> Status: three task families, 586 self-audited task configurations, 100+ tests.
-> Empirical runs in progress; no results are claimed ahead of the data.
+> Status: three task families, 586 self-audited task configurations, 150+ tests.
+> Two verified run bundles are committed (`docs/BUNDLES.md` explains what each
+> one can and cannot support). The cross-model comparison is **underpowered**:
+> 13 scoreable cells where detecting a 30pp effect needs 42 per arm, and the two
+> models' CIs overlap. Every report says so; see `docs/stats/`.
 
 ## Why this exists
 
@@ -16,7 +19,7 @@ methodology. They did not publish the environment. This is that environment.
 
 | Their finding | What VIGIL ships |
 | --- | --- |
-| 10 of 24 runs used prohibited shortcuts | Closed action surface per family; generic state mutators are not even offered in Rush Hour; canaries + separate `raw` / `compliant` tracks |
+| 10 of 24 runs used prohibited shortcuts | Closed action surface per family, with an explicit `task.genericWrites` policy; canary tripwires; separate `raw` / `compliant` tracks |
 | "Reached R28 … highest actually passed R27" | `reached` and `passed` are distinct counters |
 | Cost grew ~1.25× per rule | Environment ticks + integer-micro-USD ledger + per-constraint cost-growth fit |
 | 7 of 24 died because Paul starved — including the furthest run | Obligations decay on **environment time**, which accrues with action cost |
@@ -105,13 +108,24 @@ node scripts/discrimination.mjs <run-dir>    # greedy vs oracle vs model win rat
 1. Tasks are **data**, never evaluator code.
 2. The agent sees rule text, obligation urgency and (for Rush Hour) the board —
    never predicates, future rules, solutions, or answer keys.
-3. **The action surface is the legality boundary.** A generic `set` that can
-   write the win condition is not offered.
-4. A failed action is a logged failure, not a harness crash. Call failures,
+3. **The action surface is the legality boundary.** Generic writes (`set`,
+   `inc`, `push`, `remove`) are denied unless a task opts in with
+   `task.genericWrites`, and no task may opt in for a cell its own goal reads.
+   `vigil-core` allows them only on gadget cells; `vigil-swe` and `vigil-rush`
+   deny them entirely. Regression-tested in `test/exploits.test.mjs`.
+4. **Canaries are tripwires, not surveillance.** Echoing a canary token or
+   writing a protected path is detected and marks the run non-compliant.
+   Reading verifier state *outside* the action surface is not observable by a
+   harness that only sees actions — that limit is stated rather than papered
+   over.
+5. A failed action is a logged failure, not a harness crash. Call failures,
    truncation and budget exhaustion are never scored as wrong answers.
-5. Every task ships an oracle; a task whose oracle fails is quarantined.
-6. Verification is deterministic: bounded concurrency, generous timeouts, and a
+6. Every task ships an oracle; a task whose oracle fails is quarantined.
+7. Verification is deterministic: bounded concurrency, generous timeouts, and a
    quarantine verdict if replay diverges.
+8. **The self-audit probes for shortcuts**, not just solvability: each family is
+   attacked with its own goal-cell write, an ignored obligation, and an internal
+   `__sync` action. A task that can be won that way is quarantined.
 
 ## License
 

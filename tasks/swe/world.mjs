@@ -45,7 +45,7 @@ export class SweWorld extends World {
       if (applied.checks) this.sweChecks.push({ step: this.stepIndex, results: applied.checks });
       // Hand the computed state to the engine so its before/after diff sees the
       // real change (files.*, passed) and attribution stays deterministic.
-      const res = super.step({ type: '__swe_sync', args: { action, state: applied.state } });
+      const res = super.applyInternal('__swe_sync', { action, state: applied.state }, action);
       return res;
     }
     return super.step(action);
@@ -58,5 +58,19 @@ export class SweWorld extends World {
       this.done = true;
       this.terminal = { reason: 'step_budget' };
     }
+  }
+
+  /**
+   * Hide what the agent has not earned yet: `requiredIds` names every future
+   * requirement, and `passed` is recomputed against ALL constraints including
+   * unrevealed ones. Only revealed ids may be visible.
+   */
+  observe() {
+    const base = super.observe();
+    const revealed = new Set(this.active.map((c) => c.id));
+    const state = { ...base.state };
+    delete state.requiredIds;
+    state.passed = (state.passed ?? []).filter((id) => revealed.has(id));
+    return { ...base, state };
   }
 }

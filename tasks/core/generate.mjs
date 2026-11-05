@@ -229,6 +229,10 @@ export function generate({ seed = 1, depth = 8, conflict = 'coupled', obligation
     ],
     noopCost: 1,
     tendCost: 1,
+    // Generic writes are confined to gadget cells. `store.total` is the GOAL
+    // cell: if the agent could `set store.total 29` the gadget mechanic would be
+    // pointless. Only task-authored actions (fill_/vent_/divert_) may move it.
+    genericWrites: { allow: gadgets.map((g) => `${g.slot}.`) },
     meta: { seed, depth, conflict, obligation, gadgetCount, goalTotal },
   };
 

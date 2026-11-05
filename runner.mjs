@@ -207,7 +207,7 @@ async function main() {
   const allConfigs = args.tasks === 'quick'
     ? grid({ seeds: [1, 2], depths: [6, 12] })
     : grid({ seeds: [1, 2, 3, 4, 5], depths: [6, 12, 18, 24] });
-  const configs = args.limit ? allConfigs.slice(0, args.limit) : allConfigs;
+  const configs = allConfigs;
 
   // The swe family is generated separately and appended when requested.
   const sweConfigs = [];
@@ -219,7 +219,12 @@ async function main() {
       }
     }
   }
-  const useCore = args.family !== 'swe';
+  const KNOWN = new Set(['core', 'swe', 'rush', 'both']);
+  if (!KNOWN.has(args.family)) {
+    throw new Error(`unknown --family ${args.family}; expected core|swe|rush|both`);
+  }
+  const useCore = args.family === 'core' || args.family === 'both';
+  const useRush = args.family === 'rush' || args.family === 'both';
 
   let targets;
   if (args.dryRun) {
@@ -242,6 +247,7 @@ async function main() {
   const protocol = {
     promptVersion: PROMPT_VERSION,
     promptSha256: createHash('sha256').update(SYSTEM_PROMPT).digest('hex'),
+    taskFormat: 'rush-v2 (exit + 3 pinned-vehicle milestones; binding obligations)',
     engineVersion: '0.1.0',
     temperature: 0,
     maxTokens: 4096,
@@ -257,7 +263,15 @@ async function main() {
   // resume keying and ledger.
   const work = [];
   if (useCore) for (const cfg of configs) work.push({ family: 'core', cfg });
+  if (useRush) {
+    const { rushConfigs } = await import('./tasks/rush/load.mjs');
+    for (const cfg of rushConfigs({ obligations: ['off'] })) work.push({ family: 'rush', cfg });
+  }
   for (const cfg of sweConfigs) work.push({ family: 'swe', cfg });
+
+  // `--limit` applies to the UNIFIED work list, so `--family both --limit 4`
+  // really means 4 tasks, not 4 core tasks plus every swe/rush config.
+  if (args.limit) work.length = Math.min(work.length, args.limit);
 
   const totalCells = work.length * targets.length * args.reps;
   console.log(`vigil run · ${work.length} tasks x ${targets.length} models x ${args.reps} reps = ${totalCells} cells`);
@@ -271,7 +285,9 @@ async function main() {
     const { family, cfg } = item;
     const { task, oracle } = family === 'swe'
       ? (await import('./tasks/swe/generate.mjs')).generateSwe(cfg)
-      : generate(cfg);
+      : family === 'rush'
+        ? (await import('./tasks/rush/load.mjs')).generateRushFromConfig(cfg)
+        : generate(cfg);
     const fingerprint = createHash('sha256').update(taskFingerprint(task)).digest('hex');
     writeFileSync(join(out, `${task.id}.task.json`), JSON.stringify({ task, oracle, fingerprint }, null, 2));
     for (const { channel, model } of targets) {

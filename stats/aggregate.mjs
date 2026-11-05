@@ -35,6 +35,21 @@ export function modelProfiles(rows) {
     byModel.get(r.model).push(r);
   }
   const out = [];
+  // A model with zero scoreable cells must still appear, otherwise "excluded
+  // infrastructure failures" silently hides which models were never measured.
+  for (const [model, all] of byModel) {
+    const scoreable = all.filter(isScoreable);
+    if (scoreable.length === 0) {
+      out.push({
+        model, track: 'raw', cells: 0, wins: 0, winRate: null, winRateCI95: null,
+        reachedMean: null, passedMean: null, violationsByClass: {},
+        oldestViolatedConstraintAge: 0, obligationDeaths: 0,
+        turnsMean: null, turnsStd: null, ticksMean: null,
+        nonCompliant: 0, excludedInfraErrors: all.length, attempted: all.length,
+        note: 'no scoreable cells (all attempts were infrastructure failures)',
+      });
+    }
+  }
   for (const [model, all] of byModel) {
     const scoreable = all.filter(isScoreable);
     const compliant = scoreable.filter((r) => r.profile?.compliant !== false);

@@ -141,6 +141,10 @@ export function generateSwe({ repoIndex, moduleIndex = 0, depth = 5, obligation 
     ],
     noopCost: 1,
     tendCost: 2,
+    // No generic writes: `passed` and `ciRuns` are the goal cells and are only
+    // supposed to move when the harness RUNS the repo. Allowing `set passed`
+    // would let an agent declare success without editing a line.
+    genericWrites: 'none',
     meta: { seed, module: mod.id, repo: mod.id, depth: reqs.length, obligation, entry: mod.entry,
       files: Object.keys(mod.initial), oracleSteps: oracle.length },
     swe: { module: mod, requiredIds: reqs.map((r) => r.id) },

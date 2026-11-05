@@ -17,6 +17,15 @@
 // A thrown error, a syntax error, a missing file or a timeout is a FAILED
 // check with an error verdict — never a harness crash. `passed` is recomputed
 // by running code, never by asking a model whether the code looks right.
+//
+// Known limits of this sandbox, stated rather than implied:
+//   - one child process per BATCH, not per check: a candidate that patches a
+//     global (Object.keys, JSON.stringify, Promise) can influence later checks
+//     in the same batch. Module instances are still fresh per check.
+//   - `--permission` denies filesystem, child process and worker access, but it
+//     does NOT deny network. The env is scrubbed so there are no keys to steal,
+//     but outbound requests are not blocked. Run untrusted candidates inside a
+//     network-isolated container if that matters.
 
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -137,9 +146,20 @@ function runBatch(files, checks, timeoutMs) {
     }
     let child;
     try {
+      // Pass a MINIMAL env. Inheriting process.env handed candidate code every
+      // API key this shell has. `--permission` restricts the filesystem, child
+      // processes and workers, but NOT network or environment reads.
+      const safeEnv = {
+        PATH: process.env.PATH ?? '',
+        SystemRoot: process.env.SystemRoot ?? '',
+        TEMP: process.env.TEMP ?? '',
+        TMP: process.env.TMP ?? '',
+        NODE_OPTIONS: '',
+      };
       child = spawn(process.execPath, ['--permission', RUNNER_PATH], {
         stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true,
+        env: safeEnv,
       });
     } catch (e) {
       resolve(checks.map((c) => ({ id: c.id, ok: false, actual: null, error: `runner: ${e.message}` })));

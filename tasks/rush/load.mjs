@@ -42,9 +42,33 @@ export function taskFromEntry(entry, { obligation = 'off' } = {}) {
     kind: 'goal',
   }];
 
+  // Milestones come from the dataset (see build-rush-dataset.mjs). Each pins a
+  // vehicle that the optimal solution has already parked, so it is satisfiable
+  // AND it accumulates: once revealed, the agent must keep it true for the rest
+  // of the run. Without these the family would ship a single terminal rule.
+  for (const ms of entry.milestones ?? []) {
+    constraints.push({
+      id: `pin_${ms.id}`,
+      revealAt: ms.revealAt,
+      text: `Vehicle ${ms.id} must stay at row ${ms.row}, column ${ms.col} from now on.`,
+      predicate: op('and',
+        op('eq', ref(`pos.${ms.id}.row`), num(ms.row)),
+        op('eq', ref(`pos.${ms.id}.col`), num(ms.col))),
+      kind: 'milestone',
+    });
+  }
+  constraints.sort((a, b) => a.revealAt - b.revealAt || a.id.localeCompare(b.id));
+
   const obligations = [];
   if (obligation !== 'off') {
-    const slack = Math.max(10, depth * 2);
+    // The budget must be TIGHT enough that ignoring the obligation fails, and
+    // loose enough that periodic tending survives. The oracle spends `depth`
+    // ticks on moves plus ~1 tick per tend, so:
+    //   neglect must die:  slack < depth
+    //   tending must live: slack > 2 * tendEvery
+    // `depth * 2` satisfied neither (260/260 rush obligation configs won with
+    // zero tends -- caught by an external reviewer).
+    const slack = Math.max(4, Math.floor(depth * 0.6));
     obligations.push(obligation === 'decay'
       ? { id: 'fuel', kind: 'decay', revealAt: 1, initial: slack, rate: 1, repairAction: 'tend', repairAmount: slack,
           doc: 'Fuel burns one unit per environment tick. Tend to refuel.' }
@@ -54,7 +78,13 @@ export function taskFromEntry(entry, { obligation = 'off' } = {}) {
 
   const oracle = solution.map((m) => ({ type: 'move', args: { id: m.id, delta: m.delta } }));
   if (obligation !== 'off') {
-    const tendEvery = Math.max(1, Math.floor(obligations[0].initial / 2) - 1);
+    // deadline obligations have no `initial`; derive the budget from the
+    // window they actually have. Using `initial` here produced NaN for
+    // deadline, so the oracle never tended and killed its own run.
+    const ob0 = obligations[0];
+    const slack = ob0.initial ?? (ob0.dueAt - ob0.revealAt);
+    const tendEvery = Math.max(1, Math.floor(slack / 2) - 1);
+    // eslint-disable-next-line no-unused-expressions
     const withTend = [];
     let since = 0;
     for (const a of oracle) {
@@ -77,6 +107,7 @@ export function taskFromEntry(entry, { obligation = 'off' } = {}) {
     goals: [{ id: 'exit', text: 'X reaches the exit.', predicate: constraints[0].predicate }],
     canaries: [{ id: 'solution', token: `VIGIL_RUSH_SOL_${entry.seed}`, path: '_solver' }],
     noopCost: 1, tendCost: 1,
+    genericWrites: 'none',
     meta: { ...entry.meta, seed: entry.seed, obligation },
     rush: { board, solution },
   };

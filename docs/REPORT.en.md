@@ -33,8 +33,12 @@ Three design choices fill a verified gap in the literature:
    differencing, not inferred. Post-hoc attribution work (Who&When / TRAIL /
    AgentRx) tops out at 14.2% step localisation.
 3. **A self-auditing evaluator whose verification is itself deterministic** —
-   four admission checks per task, byte-identical replay, and a quarantine verdict
-   on any divergence. 586/586 configurations admitted.
+   per-task admission checks (solvable, non-trivial, obligations binding,
+   shortcut-resistant, byte-identical replay) and a quarantine verdict on any
+   divergence. 586/586 configurations admitted. Repeat-stability and blind-judge
+   agreement are **not** reported: no run has more than one repetition per cell,
+   and the blind-comparison layer is not implemented (`stats/judge.mjs` says so
+   in its own header).
 
 ---
 
@@ -42,9 +46,9 @@ Three design choices fill a verified gap in the literature:
 
 | SoTALab's finding | What VIGIL ships | Location |
 | --- | --- | --- |
-| 10 of 24 runs used prohibited shortcuts | Closed action surface per family; Rush Hour does not offer generic mutators; canaries + separate `raw`/`compliant` tracks | `tasks/rush/world.mjs` |
+| 10 of 24 runs used prohibited shortcuts | Closed action surface per family with an explicit `task.genericWrites` policy; canary tripwires; separate `raw`/`compliant` tracks. Canaries detect *echoing a token or writing a protected path* — not reading verifier state outside the action surface, which a harness that only sees actions cannot observe | `tasks/rush/world.mjs` |
 | "Reached R28 … highest actually passed R27" | `reached` and `passed` are distinct counters | `engine/world.mjs` |
-| Cost grew ~1.25× per rule | Environment ticks + integer micro-USD ledger + cost-growth fit | `providers/ledger.mjs` |
+| Cost grew ~1.25× per rule | Environment ticks + integer micro-USD ledger + cost-growth fit (for rush this is cost **per optimal move**, since a rush task carries one rule per milestone; the per-rule reading applies to `vigil-core`) | `providers/ledger.mjs` |
 | 7 of 24 died because Paul starved — including the furthest run | Obligations decay on **environment time**, accruing with action cost | `engine/clock.mjs` |
 | "Sub-scores carry more information than the headline number" | Capability profile, never a bare total | `stats/aggregate.mjs` |
 | "Every failure must be locatable" | Six attribution classes with witnesses | `engine/attribute.mjs` |
@@ -56,9 +60,11 @@ Three design choices fill a verified gap in the literature:
 ### 2.1 Why the family changed
 
 The original `vigil-core` gadget gave each slot its own state; solving slot 1 said
-nothing about slot 2. There was no cross-slot search. Measured on deepseek-chat
-(`runs/core-deepseek`): 96 cells, $12.34, **80.2% win rate**, **11/16 conditions
-all-win**. That is a recipe, not a search problem.
+nothing about slot 2. There was no cross-slot search. Measured on deepseek-chat in a local run (96 cells, $12.34, **80.2% win rate**,
+**11/16 conditions all-win**). That run predates the write-policy fix below, so
+its absolute number is not reproducible from this repository; the *shape* of the
+result — a benchmark everything passes — is what motivated the family change. The
+quote is labelled as a historical observation, not as a published bundle.
 
 ### 2.2 Calibration pipeline
 
@@ -84,7 +90,21 @@ Current dataset (`tasks/rush/dataset.json`, generated once and committed):
 Shallow tasks dominate — a natural consequence of calibration, and the reason
 runs must use **stratified sampling** (`--sample`) rather than the first N seeds.
 
-### 2.3 Baselines
+### 2.3 What a shipped task actually contains
+
+Each rush task ships **four constraints**, revealed over time:
+
+1. `exit` — X must reach the exit (the goal, visible from step 0).
+2. Three `pin_*` milestones — vehicles that the optimal solution has already
+   parked; each must *stay* where it is. They are satisfiable by construction
+   (the optimal path leaves those vehicles parked) and they accumulate: once
+   revealed, they are checked on every subsequent step.
+
+Background obligations are **binding**: the budget is derived from the oracle's
+own tick count, so ignoring the obligation kills the run. The self-audit proves
+this per task by replaying the oracle with every `tend` stripped.
+
+### 2.4 Baselines
 
 - `solve()`: BFS over slide moves, returns the shortest sequence; `maxStates` caps
   pathological boards during generation.
@@ -179,6 +199,14 @@ have destroyed credibility outright.
 **Reward hacking.** In v7 a model used `set pos.X.col` to fake a win (§3.2). Fix:
 reject generic mutators, hide them from the action surface, add two explicit
 regression tests.
+
+**Two of three families were winnable with their own advertised actions.** After
+the Rush Hour fix, an external reviewer showed that `vigil-core` could be won with
+`set store.total <goal>` and `vigil-swe` with `push passed <id>` + `set ciRuns 1`,
+without a single gadget action or source edit. The fix is now structural: generic
+writes are denied unless a task opts in, no task may opt in for a cell its goal
+reads, internal `__sync` actions are unreachable from the public `step`, and the
+self-audit attacks every family with its own goal-cell write.
 
 **Nondeterministic verification.** The gate once quarantined
 `swe-todo-d5-off-s1` as `replay diverged`. The cause was not the task: running 586

@@ -1,10 +1,12 @@
 {
   "name": "vigil-bench",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "An executable long-horizon agent benchmark: accumulating conflicting constraints, background obligations on an environment clock, deterministic failure attribution, and a self-auditing evaluator.",
   "type": "module",
   "license": "Apache-2.0",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "exports": {
     "./engine": "./engine/index.mjs",
     "./tasks": "./tasks/index.mjs"

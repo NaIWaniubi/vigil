@@ -1,6 +1,6 @@
 # 评测器自审报告
 
-生成方式：`node scripts/self-audit.mjs`（结果落盘 `docs/self-audit.json`）
+生成方式：`npm run audit:full`（= `node scripts/self-audit.mjs`，结果落盘 `docs/self-audit.json`）
 
 ## 为什么需要这份报告
 
@@ -14,8 +14,13 @@ VIGIL 在评任何模型之前先评自己。每个任务必须通过四项检�
 | --- | --- | --- |
 | oracle | 随附解必须达到 `goal_met` | 隔离 |
 | lazy | 全程 noop 不得成功 | 隔离 |
-| neglect | 有义务时，不履行义务不得成功 | 隔离 |
+| **shortcut** | 用该族自己的目标格写入器**不得**伪造胜利 | 隔离 |
+| neglect | 有义务时，剥掉所有维护动作必须死亡 | 隔离 |
 | determinism | 重放 oracle 逐字节一致 | 隔离 |
+| discrimination | rush 族额外要求 greedy 仍必败 | 隔离 |
+
+`shortcut` 是新增的，也是自审里最重要的一项：它直接攻击"动作面是不是权限边界"这个
+核心主张，而不是只检查"能不能解出来"。
 
 被隔离的任务**公开列出**，不静默丢弃。
 

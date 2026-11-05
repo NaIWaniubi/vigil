@@ -1,7 +1,7 @@
 {
   "name": "vigil-rush",
   "version": "1.0.0",
-  "generatedAt": "2026-11-04T13:09:50.504Z",
+  "generatedAt": "2026-11-05T19:23:13.834Z",
   "calibration": {
     "solver": "optimal BFS over slide moves",
     "minDepth": 8,
@@ -158,6 +158,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 5,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 1,
+          "revealAt": 8
+        },
+        {
+          "id": "C",
+          "row": 4,
+          "col": 1,
+          "revealAt": 13
+        }
+      ],
       "meta": {
         "seed": 1,
         "obligation": "off",
@@ -277,6 +297,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 4,
+          "col": 0,
+          "revealAt": 5
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 7
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 3,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -404,6 +444,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 2,
+          "revealAt": 8
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 5,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 3,
         "obligation": "off",
@@ -523,6 +583,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 2,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 5,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 3,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -648,6 +728,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 0,
+          "col": 5,
+          "revealAt": 5
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 0,
+          "revealAt": 8
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -807,6 +907,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 4,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "E",
+          "row": 4,
+          "col": 0,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 6,
         "obligation": "off",
@@ -926,6 +1046,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 2,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -1065,6 +1205,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 1,
+          "revealAt": 11
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 4,
+          "revealAt": 12
+        }
+      ],
       "meta": {
         "seed": 8,
         "obligation": "off",
@@ -1192,6 +1352,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
+        },
+        {
+          "id": "C",
+          "row": 5,
+          "col": 2,
+          "revealAt": 9
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 5,
+          "revealAt": 10
         }
       ],
       "meta": {
@@ -1327,6 +1507,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 5,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 10,
         "obligation": "off",
@@ -1446,6 +1646,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "I",
+          "row": 4,
+          "col": 4,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 1,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -1569,6 +1789,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 5,
+          "col": 0,
+          "revealAt": 5
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
+        }
+      ],
       "meta": {
         "seed": 12,
         "obligation": "off",
@@ -1688,6 +1928,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 3,
+          "revealAt": 7
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -1827,6 +2087,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 4,
+          "col": 2,
+          "revealAt": 5
+        },
+        {
+          "id": "I",
+          "row": 1,
+          "col": 2,
+          "revealAt": 10
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 2,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 14,
         "obligation": "off",
@@ -1948,6 +2228,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 5,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 1,
+          "col": 1,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 16,
         "obligation": "off",
@@ -2067,6 +2367,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -2202,6 +2522,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 4,
+          "revealAt": 2
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 3,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 19,
         "obligation": "off",
@@ -2321,6 +2661,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 4,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -2464,6 +2824,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 0,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 1,
+          "revealAt": 12
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 4,
+          "revealAt": 13
+        }
+      ],
       "meta": {
         "seed": 21,
         "obligation": "off",
@@ -2583,6 +2963,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 2,
+          "col": 2,
+          "revealAt": 6
+        },
+        {
+          "id": "F",
+          "row": 5,
+          "col": 2,
+          "revealAt": 7
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 5,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -2714,6 +3114,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 23,
         "obligation": "off",
@@ -2843,6 +3263,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 2,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 24,
         "obligation": "off",
@@ -2968,6 +3408,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 5,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 1,
+          "col": 2,
+          "revealAt": 6
+        }
+      ],
       "meta": {
         "seed": 25,
         "obligation": "off",
@@ -3089,6 +3549,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 3,
+          "revealAt": 7
+        }
+      ],
       "meta": {
         "seed": 26,
         "obligation": "off",
@@ -3208,6 +3688,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 1,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 3,
+          "revealAt": 5
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 3,
+          "revealAt": 7
         }
       ],
       "meta": {
@@ -3343,6 +3843,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 3,
+          "revealAt": 2
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 0,
+          "revealAt": 9
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 28,
         "obligation": "off",
@@ -3464,6 +3984,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 6
+        }
+      ],
       "meta": {
         "seed": 29,
         "obligation": "off",
@@ -3583,6 +4123,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "E",
+          "row": 5,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 2,
+          "col": 0,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -3730,6 +4290,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 1,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 5,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 14
+        }
+      ],
       "meta": {
         "seed": 31,
         "obligation": "off",
@@ -3853,6 +4433,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -4004,6 +4604,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 3,
+          "revealAt": 10
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 35,
         "obligation": "off",
@@ -4123,6 +4743,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 2,
+          "revealAt": 7
         }
       ],
       "meta": {
@@ -4254,6 +4894,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 3,
+          "col": 3,
+          "revealAt": 6
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 2,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 37,
         "obligation": "off",
@@ -4377,6 +5037,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 1,
+          "revealAt": 8
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -4508,6 +5188,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "I",
+          "row": 1,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 40,
         "obligation": "off",
@@ -4631,6 +5331,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 0,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 0,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 1,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -4760,6 +5480,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 1,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -4895,6 +5635,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 4,
+          "col": 1,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 0,
+          "revealAt": 6
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 2,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 43,
         "obligation": "off",
@@ -5024,6 +5784,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 5,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "C",
+          "row": 2,
+          "col": 1,
+          "revealAt": 8
+        }
+      ],
       "meta": {
         "seed": 44,
         "obligation": "off",
@@ -5147,6 +5927,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -5302,6 +6102,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 0,
+          "revealAt": 8
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 15
+        }
+      ],
       "meta": {
         "seed": 47,
         "obligation": "off",
@@ -5423,6 +6243,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 8
+        }
+      ],
       "meta": {
         "seed": 49,
         "obligation": "off",
@@ -5542,6 +6382,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 5,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -5667,6 +6527,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 5,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 2,
+          "col": 1,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -5814,6 +6694,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 3,
+          "col": 0,
+          "revealAt": 7
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 4,
+          "revealAt": 11
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 3,
+          "revealAt": 12
+        }
+      ],
       "meta": {
         "seed": 52,
         "obligation": "off",
@@ -5937,6 +6837,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 4,
+          "col": 1,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -6066,6 +6986,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -6213,6 +7153,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 4,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 5,
+          "col": 2,
+          "revealAt": 8
+        },
+        {
+          "id": "G",
+          "row": 4,
+          "col": 1,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 55,
         "obligation": "off",
@@ -6332,6 +7292,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 4,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 3,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -6461,6 +7441,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 1,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 0,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -6598,6 +7598,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 1,
+          "revealAt": 8
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 3,
+          "revealAt": 11
         }
       ],
       "meta": {
@@ -6745,6 +7765,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 0,
+          "col": 2,
+          "revealAt": 11
+        },
+        {
+          "id": "D",
+          "row": 4,
+          "col": 2,
+          "revealAt": 12
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 13
+        }
+      ],
       "meta": {
         "seed": 59,
         "obligation": "off",
@@ -6872,6 +7912,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 9
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 4,
+          "revealAt": 10
         }
       ],
       "meta": {
@@ -7023,6 +8083,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 3,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 0,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 2,
+          "col": 0,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 61,
         "obligation": "off",
@@ -7156,6 +8236,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 5,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "I",
+          "row": 1,
+          "col": 0,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 62,
         "obligation": "off",
@@ -7275,6 +8375,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -7414,6 +8534,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 2,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 1,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 2,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 64,
         "obligation": "off",
@@ -7543,6 +8683,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 4,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 5,
+          "col": 0,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 65,
         "obligation": "off",
@@ -7662,6 +8822,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 3,
+          "revealAt": 6
         }
       ],
       "meta": {
@@ -7797,6 +8977,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 4,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 4,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 68,
         "obligation": "off",
@@ -7916,6 +9116,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 4,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -8043,6 +9263,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 5,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 4,
+          "col": 1,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 70,
         "obligation": "off",
@@ -8164,6 +9404,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 5,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 4,
+          "col": 1,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 71,
         "obligation": "off",
@@ -8283,6 +9543,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 4,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -8410,6 +9690,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 0,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 73,
         "obligation": "off",
@@ -8529,6 +9829,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 4,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 4,
+          "revealAt": 7
         }
       ],
       "meta": {
@@ -8654,6 +9974,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 1,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 4,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -8795,6 +10135,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 1,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -8950,6 +10310,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 4,
+          "col": 0,
+          "revealAt": 13
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 5,
+          "revealAt": 16
+        }
+      ],
       "meta": {
         "seed": 79,
         "obligation": "off",
@@ -9069,6 +10449,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 2,
+          "col": 1,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -9192,6 +10592,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 1,
+          "col": 2,
+          "revealAt": 6
+        },
+        {
+          "id": "A",
+          "row": 0,
+          "col": 2,
+          "revealAt": 7
+        }
+      ],
       "meta": {
         "seed": 81,
         "obligation": "off",
@@ -9311,6 +10731,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -9482,6 +10922,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 14
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 3,
+          "revealAt": 18
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 19
+        }
+      ],
       "meta": {
         "seed": 83,
         "obligation": "off",
@@ -9609,6 +11069,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -9740,6 +11220,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 85,
         "obligation": "off",
@@ -9859,6 +11359,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 1,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "A",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 4,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -9984,6 +11504,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 5,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -10119,6 +11659,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 1,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 4,
+          "col": 0,
+          "revealAt": 5
+        },
+        {
+          "id": "E",
+          "row": 2,
+          "col": 2,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 88,
         "obligation": "off",
@@ -10248,6 +11808,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 5,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 89,
         "obligation": "off",
@@ -10367,6 +11947,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 2,
+          "col": 2,
+          "revealAt": 6
+        },
+        {
+          "id": "E",
+          "row": 5,
+          "col": 2,
+          "revealAt": 7
         }
       ],
       "meta": {
@@ -10494,6 +12094,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 5,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 5,
+          "revealAt": 4
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 2,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 91,
         "obligation": "off",
@@ -10615,6 +12235,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 1,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "E",
+          "row": 1,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 4,
+          "col": 1,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 94,
         "obligation": "off",
@@ -10734,6 +12374,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "I",
+          "row": 2,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -10865,6 +12525,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 3,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 97,
         "obligation": "off",
@@ -10986,6 +12666,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 4,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 2,
+          "col": 2,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 99,
         "obligation": "off",
@@ -11105,6 +12805,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 1,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 3,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -11256,6 +12976,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 9
+        },
+        {
+          "id": "A",
+          "row": 4,
+          "col": 0,
+          "revealAt": 13
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 4,
+          "revealAt": 14
+        }
+      ],
       "meta": {
         "seed": 101,
         "obligation": "off",
@@ -11389,6 +13129,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 0,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 3,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 102,
         "obligation": "off",
@@ -11516,6 +13276,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -11647,6 +13427,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 2,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 104,
         "obligation": "off",
@@ -11766,6 +13566,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 5,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 3,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -11893,6 +13713,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 5,
+          "col": 2,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 106,
         "obligation": "off",
@@ -12012,6 +13852,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 1,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "E",
+          "row": 5,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -12143,6 +14003,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 10
+        }
+      ],
       "meta": {
         "seed": 108,
         "obligation": "off",
@@ -12262,6 +14142,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 3,
+          "revealAt": 2
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 5,
+          "col": 3,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -12429,6 +14329,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "I",
+          "row": 0,
+          "col": 4,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 2,
+          "revealAt": 18
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 4,
+          "revealAt": 19
+        }
+      ],
       "meta": {
         "seed": 111,
         "obligation": "off",
@@ -12586,6 +14506,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "B",
+          "row": 5,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 4,
+          "col": 4,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 112,
         "obligation": "off",
@@ -12705,6 +14645,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 4,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 4,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -12834,6 +14794,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 0,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 4,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -12969,6 +14949,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 3,
+          "col": 1,
+          "revealAt": 7
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 5,
+          "revealAt": 8
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 4,
+          "revealAt": 9
+        }
+      ],
       "meta": {
         "seed": 116,
         "obligation": "off",
@@ -13100,6 +15100,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 1,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 2,
+          "revealAt": 11
         }
       ],
       "meta": {
@@ -13243,6 +15263,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 5,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 12
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 5,
+          "revealAt": 13
+        }
+      ],
       "meta": {
         "seed": 119,
         "obligation": "off",
@@ -13368,6 +15408,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 0,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 1,
+          "col": 2,
+          "revealAt": 5
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 2,
+          "revealAt": 6
+        }
+      ],
       "meta": {
         "seed": 120,
         "obligation": "off",
@@ -13487,6 +15547,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 5,
+          "col": 4,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 4,
+          "col": 4,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -13616,6 +15696,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "F",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "H",
+          "row": 1,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 4,
+          "revealAt": 10
         }
       ],
       "meta": {
@@ -13751,6 +15851,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 4,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "F",
+          "row": 5,
+          "col": 2,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 123,
         "obligation": "off",
@@ -13884,6 +16004,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "B",
+          "row": 4,
+          "col": 2,
+          "revealAt": 10
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 5,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 124,
         "obligation": "off",
@@ -14003,6 +16143,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -14132,6 +16292,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 4,
+          "revealAt": 6
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 3,
+          "revealAt": 7
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 3,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -14271,6 +16451,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 2,
+          "revealAt": 10
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 11
+        }
+      ],
       "meta": {
         "seed": 127,
         "obligation": "off",
@@ -14390,6 +16590,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "H",
+          "row": 5,
+          "col": 1,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 0,
+          "col": 2,
+          "revealAt": 8
         }
       ],
       "meta": {
@@ -14513,6 +16733,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "A",
+          "row": 4,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 3,
+          "revealAt": 8
+        }
+      ],
       "meta": {
         "seed": 130,
         "obligation": "off",
@@ -14634,6 +16874,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 2,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 5,
+          "col": 0,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 131,
         "obligation": "off",
@@ -14753,6 +17013,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "C",
+          "row": 4,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "E",
+          "row": 0,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "A",
+          "row": 5,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -14882,6 +17162,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 1,
+          "col": 2,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "G",
+          "row": 3,
+          "col": 4,
+          "revealAt": 9
         }
       ],
       "meta": {
@@ -15021,6 +17321,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "G",
+          "row": 3,
+          "col": 3,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 3,
+          "revealAt": 6
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 12
+        }
+      ],
       "meta": {
         "seed": 134,
         "obligation": "off",
@@ -15146,6 +17466,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "F",
+          "row": 3,
+          "col": 5,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 135,
         "obligation": "off",
@@ -15265,6 +17605,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 4,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -15392,6 +17752,26 @@
           "delta": 2
         }
       ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 5,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 0,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 2,
+          "col": 1,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 137,
         "obligation": "off",
@@ -15513,6 +17893,26 @@
           "delta": 4
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 4,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 4,
+          "revealAt": 4
+        }
+      ],
       "meta": {
         "seed": 138,
         "obligation": "off",
@@ -15632,6 +18032,26 @@
         {
           "id": "X",
           "delta": 1
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 5,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "B",
+          "row": 1,
+          "col": 2,
+          "revealAt": 6
+        },
+        {
+          "id": "D",
+          "row": 4,
+          "col": 2,
+          "revealAt": 7
         }
       ],
       "meta": {
@@ -15757,6 +18177,26 @@
         {
           "id": "X",
           "delta": 4
+        }
+      ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 1,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "revealAt": 3
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 4,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -15896,6 +18336,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 4,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "B",
+          "row": 0,
+          "col": 5,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 3,
+          "col": 5,
+          "revealAt": 12
+        }
+      ],
       "meta": {
         "seed": 141,
         "obligation": "off",
@@ -16015,6 +18475,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 5,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "I",
+          "row": 4,
+          "col": 0,
+          "revealAt": 4
+        },
+        {
+          "id": "H",
+          "row": 2,
+          "col": 0,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -16142,6 +18622,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 3,
+          "revealAt": 4
+        },
+        {
+          "id": "D",
+          "row": 0,
+          "col": 4,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 143,
         "obligation": "off",
@@ -16261,6 +18761,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 1,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "revealAt": 4
+        },
+        {
+          "id": "C",
+          "row": 5,
+          "col": 2,
+          "revealAt": 5
         }
       ],
       "meta": {
@@ -16404,6 +18924,26 @@
           "delta": 1
         }
       ],
+      "milestones": [
+        {
+          "id": "B",
+          "row": 5,
+          "col": 3,
+          "revealAt": 2
+        },
+        {
+          "id": "C",
+          "row": 4,
+          "col": 2,
+          "revealAt": 12
+        },
+        {
+          "id": "I",
+          "row": 3,
+          "col": 5,
+          "revealAt": 13
+        }
+      ],
       "meta": {
         "seed": 145,
         "obligation": "off",
@@ -16523,6 +19063,26 @@
         {
           "id": "X",
           "delta": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "D",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 1,
+          "revealAt": 4
         }
       ],
       "meta": {
@@ -16654,6 +19214,26 @@
           "delta": 3
         }
       ],
+      "milestones": [
+        {
+          "id": "A",
+          "row": 0,
+          "col": 0,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 0,
+          "col": 1,
+          "revealAt": 3
+        },
+        {
+          "id": "B",
+          "row": 3,
+          "col": 0,
+          "revealAt": 5
+        }
+      ],
       "meta": {
         "seed": 149,
         "obligation": "off",
@@ -16777,6 +19357,26 @@
         {
           "id": "X",
           "delta": 3
+        }
+      ],
+      "milestones": [
+        {
+          "id": "E",
+          "row": 3,
+          "col": 5,
+          "revealAt": 2
+        },
+        {
+          "id": "F",
+          "row": 5,
+          "col": 2,
+          "revealAt": 3
+        },
+        {
+          "id": "A",
+          "row": 3,
+          "col": 1,
+          "revealAt": 4
         }
       ],
       "meta": {

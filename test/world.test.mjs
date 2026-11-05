@@ -9,6 +9,7 @@ import { World, num, str, ref, op, summariseAttribution } from '../engine/index.
 function conflictTask(overrides = {}) {
   return {
     id: 'test-conflict',
+    genericWrites: 'all',
     maxSteps: 40,
     initialState: { tank: { level: 0 }, pipe: { open: false }, bypass: { level: 0 } },
     constraints: [

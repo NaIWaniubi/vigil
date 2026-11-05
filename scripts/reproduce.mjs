@@ -247,7 +247,11 @@ function discriminationSummary(models) {
   }));
   const first = curve[0];
   const last = curve[curve.length - 1];
-  const monotoneDrop = curve.length >= 2 && first && last && last.winRate < first.winRate;
+  // A depth claim needs both ends to carry enough cells. Matches
+  // scripts/discrimination.mjs: a single losing cell is not a curve.
+  const MIN_BUCKET_N = 5;
+  const curvePowered = curve.length >= 2 && curve.every((c) => c.n >= MIN_BUCKET_N);
+  const monotoneDrop = curvePowered && last.winRate < first.winRate;
   return {
     models: rates.length,
     winRateSpread: rates.length ? Math.max(...rates) - Math.min(...rates) : null,
@@ -258,7 +262,9 @@ function discriminationSummary(models) {
         : rates.every((r) => r < 0.05) ? 'TOO HARD (all models < 5%)'
         : 'DISCRIMINATES across models')
       : (monotoneDrop ? 'DISCRIMINATES across depths (single model)'
-        : 'INSUFFICIENT (need >=2 models or a depth gradient)'),
+        : curve.length >= 2
+          ? `INSUFFICIENT (depth buckets need n>=${MIN_BUCKET_N}: ${curve.map((c) => `${c.bucket}=${c.n}`).join(', ')})`
+          : 'INSUFFICIENT (need >=2 models or >=2 depth buckets with n>=5)'),
   };
 }
 

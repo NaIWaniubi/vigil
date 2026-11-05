@@ -69,26 +69,36 @@ function checkProtocol(dir) {
 
 function checkNumbers(dir) {
   const path = join(dir, 'report.json');
-  if (!existsSync(path)) return { ok: false, problems: ['report.json missing — run scripts/report.mjs first'] };
+  if (!existsSync(path)) return { ok: false, problems: ['report.json missing — run: node scripts/verify.mjs <dir> --write'] };
   const published = JSON.parse(readFileSync(path, 'utf8'));
   const fresh = aggregate(dir);
+  // Compare the WHOLE report except fields that are legitimately
+  // run-environment-specific. A partial comparison let an edited unchecked
+  // field pass, which contradicts the "tamper one byte -> exit 1" claim.
+  const IGNORE = new Set(['generatedAt', 'run']);
   const problems = [];
-  const cmp = (label, a, b) => {
-    if (JSON.stringify(a) !== JSON.stringify(b)) problems.push(`${label} differs`);
+  const walk = (a, b, at) => {
+    if (problems.length > 20) return;
+    if (a === b) return;
+    const ta = a === null ? 'null' : Array.isArray(a) ? 'array' : typeof a;
+    const tb = b === null ? 'null' : Array.isArray(b) ? 'array' : typeof b;
+    if (ta !== tb) { problems.push(`${at}: type ${ta} vs ${tb}`); return; }
+    if (ta === 'object' || ta === 'array') {
+      if (ta === 'array') {
+        if (a.length !== b.length) { problems.push(`${at}: length ${a.length} vs ${b.length}`); return; }
+        for (let i = 0; i < a.length; i++) walk(a[i], b[i], `${at}[${i}]`);
+        return;
+      }
+      const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+      for (const k of keys) {
+        if (!at && IGNORE.has(k)) continue;
+        walk(a[k], b[k], at ? `${at}.${k}` : k);
+      }
+      return;
+    }
+    problems.push(`${at}: ${JSON.stringify(a)} vs ${JSON.stringify(b)}`);
   };
-  cmp('cells', published.cells, fresh.cells);
-  cmp('scoreable', published.scoreable, fresh.scoreable);
-  cmp('infraErrors', published.infraErrors, fresh.infraErrors);
-  cmp('spendUsd', published.spendUsd, fresh.spendUsd);
-  cmp('apiCalls', published.apiCalls, fresh.apiCalls);
-  cmp('profiles', published.profiles, fresh.profiles);
-  cmp('stability.summary', {
-    a: published.stability.cellsWithRepeats, b: published.stability.meanConsistency,
-  }, {
-    a: fresh.stability.cellsWithRepeats, b: fresh.stability.meanConsistency,
-  });
-  cmp('hypotheses', published.hypotheses, fresh.hypotheses);
-  cmp('costCurves', published.costCurves, fresh.costCurves);
+  walk(published, fresh, '');
   return { ok: problems.length === 0, problems };
 }
 

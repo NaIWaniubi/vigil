@@ -4,14 +4,14 @@
 中主张：「benchmark 是一套完整的测量协议，而不是可以随手替换的题库。」协议包含任务、数据、
 输入输出格式、评分规则、运行环境、汇总方式六个成分。以下逐项固定。
 
-协议版本：`vigil-protocol-1`
-提示词版本：`vigil-agent-v1`（sha256 记入每个 run 的 `protocol.json`）
+协议版本：`vigil-protocol-2`（本文件的版本；每个 run 的 `protocol.json` 记录其 `promptVersion` 与 `promptSha256`，不重复记录本文件版本号）
+提示词版本：`vigil-agent-v2`（sha256 记入每个 run 的 `protocol.json`）
 
 ---
 
 ## 1. 任务
 
-两个任务族，全部程序化生成、全部附 oracle、全部通过自审后才允许参与评分。
+三个任务族（`vigil-rush` 难度核心 / `vigil-swe` 回归耦合 / `vigil-core` 受控消融），全部附 oracle、全部通过自审后才允许参与评分。
 
 ### vigil-core（合成族，受控消融）
 
@@ -34,7 +34,7 @@
 
 ### vigil-swe（仓库族，可执行验证）
 
-三个自编模块（ini-parser / semver-compare / slugify），每个 5 条需求随时间揭示。
+四个自编多文件仓（STORE / TODO / ROUTER / QUERY），每个 4 个模块、6 条需求随时间揭示。
 需求判定**通过真实运行候选代码**完成：候选源码从 `data:` URL 加载，无法读文件系统、
 无法看到 verifier。CI watchdog 是背景义务，不跑 CI 就会过期。
 
@@ -52,9 +52,26 @@ NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
 **130/130 全部击败 greedy**。由 `scripts/build-rush-dataset.mjs` 一次性生成、
 提交入库、带指纹——像 SWE-bench，不在每次跑数时重新生成。
 
+**通用写入必须显式授权。** `set/inc/push/remove` 是危险动作：它们能写任意状态格，
+包括目标读取的那一格。任务必须用 `task.genericWrites` 显式放行：
+
+- `'none'`（默认）—— 拒绝一切通用写入（`vigil-swe`、`vigil-rush`）
+- `{allow: ['alpha.', 'beta.']}` —— 只允许前缀内的路径（`vigil-core` 放行 gadget 格，
+  但**不放行 `store.total`**，否则 `set store.total 29` 直接满足目标，gadget 机制就失去意义）
+
+违反时动作被拒、状态不变、记录为失败。回归测试见 `test/exploits.test.mjs`。
+
 **合法动作就是权限边界**：`move(id, delta)` 经过棋盘校验；`set/inc/push/remove`
 这些通用状态修改器**不出现在动作面里**，也无法在 `RushWorld` 中生效。
 （`v7` 实测发现模型会 `set pos.X.col` 直接改胜利条件，已修复并加回归测试。）
+
+### `vigil-swe` 执行沙箱的能力与限制
+
+- 每个**批次**一个子进程，argv 带 `--permission` 且无任何 `--allow-*`：候选代码读文件
+  系统、起子进程、开 worker 都会被拒（`ERR_ACCESS_DENIED`）。
+- 子进程 env 被**裁剪**（只保留 PATH/SystemRoot/TEMP），候选代码拿不到本机 API key。
+- **限制**：`--permission` 不拦网络；同一批次内共享全局对象，恶意候选可以 monkey-patch
+  `Object.keys`/`JSON.stringify` 影响后续检查。需要更强隔离时放到无网络容器里跑。
 
 ### 任务准入（自审）
 
@@ -92,7 +109,12 @@ NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
 ### Agent 不可见
 
 - 约束谓词 AST、未来约束、oracle、答案 key、verifier 内部
-- canary token 埋在被保护路径与动作参数扫描中，越界即标记 non-compliant
+- canary token **不进入观察**，也不进入 harbor 导出的 environment/；检测点是
+  "动作参数里回显了 token" 或 "写入被保护路径"
+
+> **能力边界（写明而不是暗示）**：canary 只能发现"回显 token / 写保护路径"。
+> 一个只观察动作的 harness **无法**发现 agent 通过其他渠道读取 verifier 状态。
+> 因此 `raw`/`compliant` 双轨在没有任何越界动作时必然相同——参考 run 就是这种情况。
 
 ### 回复格式
 
@@ -145,7 +167,7 @@ NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
 | --- | --- |
 | 引擎 | Node.js >= 22（实测 v24.22.1） |
 | 温度 | 0（kimi-k3 官方要求 1，已在 registry 中钉死并标注） |
-| max_tokens | 4096 |
+| max_tokens | 4096（按通道可覆盖；`providers/registry.mjs` 给推理型通道 16384） |
 | 重复次数 | 每格 3 次（默认） |
 | 通道分级 | `official` / `relay` / `local`；主榜只收 official |
 | 密钥 | 仅从环境变量读取，永不落盘、永不打印 |

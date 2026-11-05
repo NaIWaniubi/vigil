@@ -127,7 +127,7 @@ TB4.0 无许可证代码）。
 
 ```bash
 node scripts/gate.mjs                       # 测试 + 自审 + 卫生
-node scripts/audit:full 2>/dev/null || node scripts/self-audit.mjs   # 586 配置全审
+npm run audit:full        # 586 配置全审（含抗捷径/义务有约束力检查）
 node scripts/verify.mjs <run-dir>           # MANIFEST + 指纹 + 数字重算
 node scripts/discrimination.mjs <run-dir>   # 胜率 / 深度曲线 / 差异度判定
 ```
