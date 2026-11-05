@@ -1,6 +1,6 @@
 # Statistical report — E:\myzcode\vigil\docs\reference-run
 
-Generated: 2026-11-05T18:45:33.842Z
+Generated: 2026-11-05T18:53:49.037Z
 
 **verdict: underpowered**
 
@@ -35,4 +35,4 @@ This run's achieved n is **13**. Power at that n for a 30pp effect is **0.329**.
 - qwen3.8-max, deepseek-v4-flash produced zero scoreable cells (20, 19 attempts). No win rate can be reported for them.
 - Detecting a 30pp effect at 80% power needs 42 cells per group; this run has 13. It cannot support a claim at that effect size.
 - Wilson 95% CI for gemini-3-flash-preview spans [12.7%, 57.6%] (width 45.0%); the point estimate is weakly identified.
-- This run has a MANIFEST.sha256. Derived reports are written to docs/stats/ (outside the bundle) so the manifest stays valid.
+- This run is a sealed bundle (MANIFEST.sha256); stats-report.json/md were written outside it to E:\myzcode\vigil\docs\stats\reference-run so scripts/verify.mjs stays valid.

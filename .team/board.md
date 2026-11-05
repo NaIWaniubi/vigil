@@ -153,8 +153,8 @@ SLICE S3: multiple comparisons
 
 SLICE S4: scripts/stats-report.mjs
   files:   scripts/stats-report.mjs (new), test/stats.test.mjs,
-           docs/reference-run/stats-report.json (generated),
-           docs/reference-run/stats-report.md (generated)
+           docs/stats/reference-run/stats-report.json (generated),
+           docs/stats/reference-run/stats-report.md (generated)
   test:    node --test test/stats.test.mjs
   output:  |
     RED:
@@ -178,8 +178,8 @@ SLICE S4: scripts/stats-report.mjs
       power at achieved n: 0.329
       verdict: underpowered
       note: this run cannot distinguish a 30pp difference from noise.
-      wrote ...\docs\reference-run\stats-report.json
-      wrote ...\docs\reference-run\stats-report.md
+      wrote ...\docs\stats\reference-run\stats-report.json
+      wrote ...\docs\stats\reference-run\stats-report.md
       EXIT=0
   commit:  1437e33 (HEAD; working tree)
   notes:   |
@@ -197,27 +197,26 @@ SLICE S4: scripts/stats-report.mjs
       n=2 -> underpowered. A perfect 2/2 sample is explicitly refused.
     - Win rate excludes status error/truncated (never scored as losses), same
       rule as stats/aggregate.mjs.
-    - CONFLICT (cross-slice, unresolved): docs/reference-run is a sealed
-      bundle checked by scripts/verify.mjs, which fails on ANY unlisted file.
-      The required sidecars make it fail:
-        $ node scripts/verify.mjs docs/reference-run
+    - SEALED-BUNDLE CONFLICT (resolved, but see caveat): docs/reference-run
+      carries MANIFEST.sha256 and scripts/verify.mjs fails on ANY unlisted
+      file. Writing the sidecars inside produced:
         FAIL manifest
           unlisted file: stats-report.json
           unlisted file: stats-report.md
         PASS protocol / PASS numbers / VERIFY: FAIL (1 checks)
-      A concurrent agent deleted the two sidecars once to restore the sealed
-      bundle, and the full suite's reproduce test then failed on unrelated
-      stale docs/discrimination.json instead. The CLI now prints an explicit
-      warning when the target run has MANIFEST.sha256. Resolution belongs to
-      the docs/bundle owner: either refresh the manifest with
-      `node scripts/verify.mjs docs/reference-run --write` (note: this also
-      rewrites report.json's generatedAt) or keep stats sidecars outside the
-      sealed bundle (e.g. a sibling directory / --out-dir).
-    - Full-suite result at verification time: 140 tests, 139 pass, 1 fail.
-      The fail is scripts/reproduce.mjs (another agent's slice): manifest
-      unlisted-file caused by the required sidecars, plus a pre-existing
-      discrimination fixture mismatch (committed has 2 models, reference run
-      re-derives 1). All 28 stats tests pass; no stats code is implicated.
+      A concurrent agent deleted the sidecars and rewrote this CLI (and my
+      test) to write docs/stats/<slug>-stats.*, which broke the stated
+      stats-report.json/md contract and the temp-run test. Final behavior,
+      restored and tested: default sidecars inside <run-dir>; a run carrying
+      MANIFEST.sha256 redirects to docs/stats/<slug>/stats-report.{json,md}
+      with an explicit stderr warning; --out-dir overrides both. Verify now
+      PASSes. A sealed bundle cannot carry its own derived report unless the
+      bundle owner refreshes MANIFEST (verify --write also rewrites
+      report.json's generatedAt).
+    - Full-suite result at final verification: 29/29 stats tests pass; the
+      reference-run manifest check passes once sidecars are out of the bundle.
+      Packaging/reproduce (another agent's slice) passes 12/12 after its own
+      discrimination-fixture fix.
 
 SLICE S5: judge methodology namespace (overclaim containment)
   files:   stats/judge.mjs (new), stats/index.mjs (comments only),
@@ -244,15 +243,139 @@ SLICE S5: judge methodology namespace (overclaim containment)
 
 VERIFY (final):
   $ node --test test/stats.test.mjs
-    ℹ tests 28 / ℹ pass 28 / ℹ fail 0 / ℹ skipped 0   EXIT=0
+    ℹ tests 29 / ℹ pass 29 / ℹ fail 0 / ℹ skipped 0   EXIT=0
   $ node scripts/stats-report.mjs docs/reference-run
     verdict: underpowered                              EXIT=0
-    (stats-report.json and stats-report.md written inside the run dir; this
-     intentionally trips scripts/verify.mjs manifest check — see S4 conflict)
+    wrote docs/stats/reference-run/stats-report.json
+    wrote docs/stats/reference-run/stats-report.md
+    warning: sealed bundle (MANIFEST.sha256); sidecars written outside it
   $ node scripts/verify.mjs docs/reference-run
-    FAIL manifest: unlisted file stats-report.json / stats-report.md
-    PASS protocol / PASS numbers                       EXIT=1
+    PASS manifest (24 files) / PASS protocol / PASS numbers
+    VERIFY: PASS                                      EXIT=0
   $ node --test "test/*.test.mjs"
-    ℹ tests 140 / ℹ pass 139 / ℹ fail 1               EXIT=1
-    only fail: scripts/reproduce.mjs (manifest sidecars + stale
-    docs/discrimination.json); 28/28 stats tests pass
+    ℹ tests 141 / ℹ pass 141 / ℹ fail 0 / ℹ skipped 0 EXIT=0
+
+SLICE U-pkg: packaging + one-command reproduction + CI + rush export
+  files:   scripts/harbor-export.mjs (rush family + verifyExport + --verify),
+           scripts/reproduce.mjs (new),
+           Dockerfile (new), .dockerignore (new), docker-compose.yml (new),
+           .github/workflows/ci.yml (reproduce + harbor jobs, weekly full audit),
+           package.json (reproduce / export:harbor / stats entries),
+           test/packaging.test.mjs (new, 12 tests)
+  test:    node --test test/packaging.test.mjs
+  output:  |
+    RED (before implementation; 11 of 12 failed):
+      ✖ package.json exposes the packaging entry points
+      ✖ Dockerfile is a valid node:24-slim build that installs nothing
+      ✖ .dockerignore keeps git history, deps, runs and build output out of the image
+      ✖ docker-compose runs the same reproduction command
+      ✔ yaml lint is not vacuous: it rejects tabs, odd indentation and junk lines
+      ✖ ci workflow wires gate, reproduce, harbor, weekly full audit and pages
+      ✖ harbor export covers core, swe and rush with self-verifying manifests
+      ✖ harbor verification detects a modified or deleted member
+      ✖ scripts/reproduce.mjs proves the committed repo offline in under 120s
+      ✖ reproduce fails when the committed reference bundle is tampered
+      ✖ reproduce fails when docs/discrimination.json is tampered
+      ✖ reproduce fails when a rush calibration flag is flipped
+      ℹ tests 12 / ℹ pass 1 / ℹ fail 11 / ℹ skipped 0    EXIT=1
+      first assertion failures: "Dockerfile missing";
+      actual undefined !== 'node scripts/reproduce.mjs'
+    GREEN:
+      ✔ package.json exposes the packaging entry points
+      ✔ Dockerfile is a valid node:24-slim build that installs nothing
+      ✔ .dockerignore keeps git history, deps, runs and build output out of the image
+      ✔ docker-compose runs the same reproduction command
+      ✔ yaml lint is not vacuous: it rejects tabs, odd indentation and junk lines
+      ✔ ci workflow wires gate, reproduce, harbor, weekly full audit and pages
+      ✔ harbor export covers core, swe and rush with self-verifying manifests
+      ✔ harbor verification detects a modified or deleted member
+      ✔ scripts/reproduce.mjs proves the committed repo offline in under 120s
+      ✔ reproduce fails when the committed reference bundle is tampered
+      ✔ reproduce fails when docs/discrimination.json is tampered
+      ✔ reproduce fails when a rush calibration flag is flipped
+      ℹ tests 12
+      ℹ pass 12
+      ℹ fail 0
+      ℹ skipped 0
+      EXIT=0
+  commit:  371effe (HEAD; the final comment + local-variable rename in
+           scripts/reproduce.mjs is uncommitted — shared worktree, another
+           agent commits with git add -A, so HEAD may advance past this)
+  notes:   |
+    - Harbor export covers all three families. Quick export = 16 vigil-core +
+      12 vigil-swe + 130 vigil-rush = 158 dirs / 474 manifested members; full
+      export = 72 + 12 + 130. The test verifies manifests INDEPENDENTLY of the
+      exporter (recomputes sha256 and byte count from disk, requires the listed
+      set to equal the on-disk set, forbids manifest.json listing itself), then
+      also exercises exporter verifyExport and a tamper test (append one byte to
+      environment/task.json -> hash mismatch; delete task.yaml -> missing).
+      Rush tasks come from the committed dataset via loadDataset/taskFromEntry
+      with obligation 'off'; IDs are unique against core/swe.
+    - reproduce.mjs is offline and write-free, measured 540–684ms (budget
+      120s). Table checks: verify.mjs on docs/reference-run; discrimination
+      re-derived from that run's results.jsonl vs docs/discrimination.json;
+      dataset calibration flags/stats/fingerprints over all 130 tasks; 3
+      stratified boards re-solved (depths 8/9/20), stored solutions replayed
+      legally to the goal, greedy re-defeated.
+    - DISCRIMINATION CAVEAT: mid-slice another agent regenerated
+      docs/discrimination.json from an uncommitted live run, so it was no
+      longer bound to docs/reference-run. reproduce then verifies the report's
+      published cells instead: every winRate, Wilson CI, bucket sum, depth
+      curve, spread, drop and verdict must recompute exactly, and the
+      dataset/greedy/oracle blocks must equal tasks/rush/dataset.json; the
+      PASS detail explicitly says "NOTE: these rows are not bound to
+      docs/reference-run". That agent has since regenerated it from the
+      reference run, so the strong field-by-field binding now passes (output
+      above). A weak pass is always labeled, never silent.
+    - SEALED-BUNDLE CAVEAT: another agent wrote stats-report.json/.md inside
+      docs/reference-run; verify.mjs correctly flagged unlisted files. Instead
+      of weakening verify, reproduce falls back ONLY for the default bundle and
+      ONLY when the sole problems are unlisted files: it materializes the git
+      HEAD snapshot into a temp dir, verifies that, and names the ignored
+      untracked files in the PASS detail. Missing files, hash mismatches,
+      protocol or number drift still fail, and an explicit --reference-run path
+      never uses the fallback (the tamper test exits nonzero).
+    - Docker was NOT run (parent instruction) even though Docker 29.7.2 is
+      installed here. Validated instead: Dockerfile parsed line by line (one
+      FROM node:24-slim, one WORKDIR /app, final CMD
+      ["node","scripts/reproduce.mjs"], no RUN at all -> nothing installed,
+      every COPY source exists); .dockerignore must list node_modules, runs,
+      .git, dist; compose uses the same command.
+    - YAML validation is an indentation/structure lint over the subset GitHub
+      Actions uses (tabs, even indentation, mapping/sequence syntax, block
+      scalars), NOT a real YAML parser — the repo has zero dependencies. The
+      lint is itself tested non-vacuous (rejects tab indentation, 3-space
+      indentation, a junk line). CI job names, the cron, run commands and the
+      upload-artifact path are asserted explicitly; every local script a CI
+      step invokes must exist on disk.
+    - CI: gate (scripts/gate.mjs, which includes this test file) + reproduce +
+      harbor export/verify on push/PR; weekly cron (Mon 06:00 UTC) runs the
+      FULL self-audit and uploads docs/self-audit.json; Pages job kept
+      (needs: gate) with contents: read added because job-level permissions
+      replace the top-level block.
+    - package.json "stats" points at scripts/stats-report.mjs, owned by another
+      agent; I only added the entry, no file created or modified.
+
+  verification:
+    $ node scripts/reproduce.mjs
+      CHECK              RESULT  DETAIL
+      reference-run      PASS    24 files · prompt vigil-agent-v2 · numbers reproduce exactly
+      discrimination     PASS    re-derived from docs/reference-run · 1 model(s) ·
+                                 13 scoreable cells · verdict "DISCRIMINATES across
+                                 depths (single model)" matches docs/discrimination.json
+      rush-calibration   PASS    130 tasks · depth 8-20 · all defeat greedy · fingerprints match
+      rush-samples       PASS    3 boards re-solved · depths 8/9/20 · greedy defeated 3/3
+      RESULT: PASS (4 checks, 540ms)                      EXIT=0
+    $ node scripts/harbor-export.mjs dist/harbor --quick
+      exported 158 tasks to E:\myzcode\vigil\dist\harbor
+        vigil-core: 16 / vigil-rush: 130 / vigil-swe: 12   EXIT=0
+    $ node scripts/harbor-export.mjs dist/harbor --verify
+      HARBOR: PASS — 158 tasks, 474 members, all hashes match   EXIT=0
+    $ node scripts/gate.mjs
+      ℹ tests 141 / ℹ pass 141 / ℹ fail 0 / ℹ skipped 0
+      self-audit: 52 tasks, 52 admitted, 0 quarantined
+      SELF-AUDIT: PASS — every admitted task has a working oracle, is non-trivial, and replays exactly
+      pr-check: 131 files, 2.69 MB / PR-CHECK: OK
+      GATE: PASS                                          EXIT=0
+      (48.4s tests + 15.1s quick audit + 0.2s hygiene; both pre- and
+      post-refactor runs passed)

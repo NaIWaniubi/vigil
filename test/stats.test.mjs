@@ -258,7 +258,7 @@ test('holmBonferroni is never below the raw p-value and stays in [0,1]', () => {
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { basename, join } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { twoProportionPValue } from '../stats/inference.mjs';
 
@@ -303,11 +303,10 @@ test('stats-report CLI writes JSON+markdown with Wilson, bootstrap, Holm and ver
     assert.equal(run.status, 0, `CLI failed:\n${run.stderr}`);
     assert.match(run.stdout, /verdict: underpowered/);
 
-    // Derived reports are written OUTSIDE the run bundle (docs/stats/<slug>-stats.*)
-    // so a bundle's MANIFEST stays valid. Mirror the CLI's slug rule here.
-    const slug = basename(dir).replace(/[^a-zA-Z0-9._-]/g, '_');
-    const jsonPath = join(REPO_ROOT, 'docs', 'stats', `${slug}-stats.json`);
-    const mdPath = join(REPO_ROOT, 'docs', 'stats', `${slug}-stats.md`);
+    // A run dir without MANIFEST.sha256 gets the sidecars inside it, named
+    // exactly stats-report.json / stats-report.md.
+    const jsonPath = join(dir, 'stats-report.json');
+    const mdPath = join(dir, 'stats-report.md');
     assert.ok(existsSync(jsonPath) && existsSync(mdPath), 'both report files must be written');
     const report = JSON.parse(readFileSync(jsonPath, 'utf8'));
     assert.equal(report.verdict, 'underpowered');
@@ -348,6 +347,26 @@ test('stats-report CLI refuses a directory without results.jsonl', () => {
     const usage = spawnSync(process.execPath, [cli], { encoding: 'utf8' });
     assert.equal(usage.status, 2);
     assert.match(usage.stderr, /usage/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('stats-report CLI can write sidecars to an explicit --out-dir', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'vigil-stats-outdir-'));
+  const out = join(dir, 'derived');
+  try {
+    const rows = [
+      { taskId: 'a', model: 'alpha', status: 'completed', terminal: { reason: 'goal_met' } },
+      { taskId: 'b', model: 'alpha', status: 'completed', terminal: { reason: 'step_budget' } },
+    ];
+    writeFileSync(join(dir, 'results.jsonl'), `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);
+    const cli = join(REPO_ROOT, 'scripts', 'stats-report.mjs');
+    const run = spawnSync(process.execPath, [cli, dir, '--out-dir', out], { encoding: 'utf8' });
+    assert.equal(run.status, 0, run.stderr);
+    assert.ok(existsSync(join(out, 'stats-report.json')));
+    assert.ok(existsSync(join(out, 'stats-report.md')));
+    assert.ok(!existsSync(join(dir, 'stats-report.json')), 'the run directory must stay untouched');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

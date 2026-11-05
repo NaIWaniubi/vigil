@@ -8,10 +8,14 @@
 //   1. reference-run     — scripts/verify.mjs re-checks the committed run
 //                          bundle: MANIFEST hashes, prompt fingerprint, and
 //                          every aggregate number recomputed from results.jsonl.
-//   2. discrimination    — rebuild the discrimination report from that run's
-//                          results.jsonl (same computation as
-//                          scripts/discrimination.mjs) and compare it, field by
-//                          field, to the committed docs/discrimination.json.
+//   2. discrimination    — re-derive the discrimination report from the
+//                          committed reference run (same computation as
+//                          scripts/discrimination.mjs, compared field by field
+//                          to docs/discrimination.json). If the committed
+//                          artifact was generated from a different run, fall
+//                          back to recomputing every published number and the
+//                          verdict from the report's own cells plus the committed
+//                          dataset, and say that the model rows are unbound.
 //   3. rush-calibration  — re-check every calibration flag, statistic and
 //                          fingerprint in tasks/rush/dataset.json: min depth,
 //                          greedy-must-fail, solution length, board hashes,
@@ -102,8 +106,8 @@ function onlyUnlistedProblems(output) {
  * not part of it. Returns the temp dir or null when git/HEAD is unavailable.
  */
 function materializeHead(dir) {
-  const rel = relative(ROOT, dir).replace(/\\/g, '/');
-  const listed = spawnSync('git', ['-C', ROOT, 'ls-tree', '-r', '--name-only', 'HEAD', '--', rel], { encoding: 'utf8' });
+  const bundleRel = relative(ROOT, dir).replace(/\\/g, '/');
+  const listed = spawnSync('git', ['-C', ROOT, 'ls-tree', '-r', '--name-only', 'HEAD', '--', bundleRel], { encoding: 'utf8' });
   if (listed.error || listed.status !== 0) return null;
   const files = listed.stdout.split('\n').filter(Boolean);
   if (files.length === 0) return null;
