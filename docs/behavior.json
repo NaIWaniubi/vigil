@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-11-05T18:31:57.220Z",
+  "run": "./docs/reference-run",
+  "cells": 55,
+  "scoreable": 13,
+  "definition": {
+    "waste": "(noops + illegalMoves) / turns — paid turns that produced nothing",
+    "efficiency": "legalMoves / optimalDepth — 1.0 means it solved in the shortest path",
+    "note": "computed from the action log, NOT from the `neglected` attribution label"
+  },
+  "models": [
+    {
+      "model": "gemini-3-flash-preview",
+      "all": {
+        "n": 13,
+        "turnsMean": 53.76923076923077,
+        "turnsMedian": 62,
+        "legalMean": 27.23076923076923,
+        "illegalMean": 5.076923076923077,
+        "noopMean": 15.923076923076923,
+        "wasteMean": 0.30850814924376435,
+        "efficiencyMedian": 2.2222222222222223,
+        "efficiencyMax": 7.625
+      },
+      "wins": {
+        "n": 4,
+        "turnsMean": 21.25,
+        "turnsMedian": 20,
+        "legalMean": 14,
+        "illegalMean": 1.5,
+        "noopMean": 0.5,
+        "wasteMean": 0.08580776808330988,
+        "efficiencyMedian": 1.7708333333333335,
+        "efficiencyMax": 2.125
+      },
+      "losses": {
+        "n": 9,
+        "turnsMean": 68.22222222222223,
+        "turnsMedian": 66,
+        "legalMean": 33.111111111111114,
+        "illegalMean": 6.666666666666667,
+        "noopMean": 22.77777777777778,
+        "wasteMean": 0.4074860964261886,
+        "efficiencyMedian": 2.625,
+        "efficiencyMax": 7.625
+      }
+    }
+  ]
+}
