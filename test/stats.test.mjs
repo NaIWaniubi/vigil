@@ -129,3 +129,98 @@ test('neglectIndependence counts max-progress-but-died cells', () => {
   assert.equal(n.n, 2);
   assert.equal(n.maxProgressButDied, 1, 'the H2 signature: full progress, still died');
 });
+
+// ---------------------------------------------------------------------------
+// Slice S1: bootstrap confidence intervals
+// ---------------------------------------------------------------------------
+import { bootstrapCI, bootstrapDiffCI } from '../stats/inference.mjs';
+
+const meanOf = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+// A deterministic sample whose population mean is exactly 0.5 (uniform grid).
+const uniformGrid = Array.from({ length: 100 }, (_, i) => i / 99);
+
+test('bootstrapCI is deterministic for a fixed seed', () => {
+  const a = bootstrapCI(uniformGrid, meanOf, { iterations: 2000, seed: 12345 });
+  const b = bootstrapCI(uniformGrid, meanOf, { iterations: 2000, seed: 12345 });
+  assert.deepEqual(a, b);
+  assert.deepEqual(Object.keys(a).sort(), ['hi', 'lo', 'point']);
+  const c = bootstrapCI(uniformGrid, meanOf, { iterations: 2000, seed: 54321 });
+  assert.notDeepEqual(a, c, 'a different seed must move the resampled bounds');
+});
+
+test('bootstrapCI brackets the true mean of a known distribution', () => {
+  const { lo, hi, point } = bootstrapCI(uniformGrid, meanOf, { iterations: 5000, seed: 7 });
+  assert.ok(Math.abs(point - 0.5) < 1e-12, 'point is the statistic on the observed sample');
+  assert.ok(lo < 0.5 && hi > 0.5, `CI [${lo},${hi}] must bracket the true mean 0.5`);
+  assert.ok(lo > 0.4 && hi < 0.6, 'with n=100 the 95% CI should be fairly tight');
+});
+
+test('bootstrapCI widens as alpha falls; degenerate samples collapse', () => {
+  const ci90 = bootstrapCI(uniformGrid, meanOf, { alpha: 0.10, iterations: 4000, seed: 9 });
+  const ci99 = bootstrapCI(uniformGrid, meanOf, { alpha: 0.01, iterations: 4000, seed: 9 });
+  assert.ok(ci90.lo >= ci99.lo, '90% lower bound cannot be below the 99% one');
+  assert.ok(ci90.hi <= ci99.hi, '90% upper bound cannot be above the 99% one');
+
+  const single = bootstrapCI([0.7], meanOf, { iterations: 100, seed: 1 });
+  assert.deepEqual(single, { lo: 0.7, hi: 0.7, point: 0.7 });
+  assert.throws(() => bootstrapCI([], meanOf), /non-empty/);
+  assert.throws(() => bootstrapCI([1, 2], meanOf, { alpha: 1.5 }), /alpha/);
+  assert.throws(() => bootstrapCI([1, 2], meanOf, { iterations: 0 }), /iterations/);
+});
+
+test('bootstrapDiffCI recovers the difference of two proportions', () => {
+  // 0.50 vs 0.25, n=40 each.
+  const a = [...Array(20).fill(1), ...Array(20).fill(0)];
+  const b = [...Array(10).fill(1), ...Array(30).fill(0)];
+  const r = bootstrapDiffCI(a, b, { iterations: 5000, seed: 2026 });
+  assert.equal(r.point, 0.25);
+  assert.ok(r.lo < 0.25 && r.hi > 0.25, `CI [${r.lo},${r.hi}] must bracket the point estimate`);
+  assert.ok(r.lo >= -1 && r.hi <= 1);
+  assert.deepEqual(r, bootstrapDiffCI(a, b, { iterations: 5000, seed: 2026 }));
+
+  // Perfect separation collapses to a point mass at 1.
+  const p = bootstrapDiffCI([1, 1, 1, 1, 1], [0, 0, 0, 0, 0], { iterations: 500, seed: 3 });
+  assert.deepEqual(p, { lo: 1, hi: 1, point: 1 });
+  assert.throws(() => bootstrapDiffCI([], [1]), /non-empty/);
+});
+
+// ---------------------------------------------------------------------------
+// Slice S2: power and minimum detectable effect
+// ---------------------------------------------------------------------------
+import { powerTwoProportions, minNForEffect } from '../stats/inference.mjs';
+
+test('powerTwoProportions is monotone in n and matches textbook limits', () => {
+  const powers = [1, 5, 10, 20, 40, 80, 160].map((n) =>
+    powerTwoProportions({ p1: 0.3, p2: 0.6, n, alpha: 0.05 }));
+  for (let i = 1; i < powers.length; i++) {
+    assert.ok(powers[i] >= powers[i - 1], `power must not fall with n: ${powers}`);
+  }
+  assert.ok(powers[0] < 0.1, 'n=1 cannot detect a 30pp effect');
+  assert.ok(powers[powers.length - 1] > 0.99, 'n=160 should be near-certain');
+  // A symmetric comparison gives the same power in either direction.
+  const ab = powerTwoProportions({ p1: 0.3, p2: 0.6, n: 50 });
+  const ba = powerTwoProportions({ p1: 0.6, p2: 0.3, n: 50 });
+  assert.ok(Math.abs(ab - ba) < 1e-12);
+});
+
+test('powerTwoProportions returns alpha for a true null', () => {
+  const p = powerTwoProportions({ p1: 0.5, p2: 0.5, n: 100, alpha: 0.05 });
+  assert.ok(Math.abs(p - 0.05) < 0.005, `null power should equal alpha, got ${p}`);
+  // A stricter alpha lowers power at fixed n.
+  const lenient = powerTwoProportions({ p1: 0.3, p2: 0.6, n: 20, alpha: 0.10 });
+  const strict = powerTwoProportions({ p1: 0.3, p2: 0.6, n: 20, alpha: 0.01 });
+  assert.ok(lenient > strict);
+});
+
+test('minNForEffect round-trips through powerTwoProportions', () => {
+  const n = minNForEffect({ p1: 0.3, p2: 0.6, alpha: 0.05, power: 0.8 });
+  assert.ok(Number.isInteger(n), `required n must be an integer, got ${n}`);
+  const atN = powerTwoProportions({ p1: 0.3, p2: 0.6, n, alpha: 0.05 });
+  const belowN = powerTwoProportions({ p1: 0.3, p2: 0.6, n: n - 1, alpha: 0.05 });
+  assert.ok(atN >= 0.8, `power at the returned n must reach the target, got ${atN}`);
+  assert.ok(belowN < 0.8, `n-1 must fall short, got ${belowN}`);
+  assert.ok(n >= 30 && n <= 60, `30pp at 80% power is ~40-50 per group, got ${n}`);
+  assert.equal(minNForEffect({ p1: 0.4, p2: 0.4 }), Infinity, 'no n detects a zero effect');
+  assert.throws(() => powerTwoProportions({ p1: 1.2, p2: 0.5, n: 10 }), /p1/);
+  assert.throws(() => powerTwoProportions({ p1: 0.5, p2: 0.5, n: 0 }), /n/);
+});
