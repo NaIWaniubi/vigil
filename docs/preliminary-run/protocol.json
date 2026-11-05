@@ -1,0 +1,107 @@
+{
+  "promptVersion": "vigil-agent-v2",
+  "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
+  "engineVersion": "0.2.0",
+  "runner": "cluster",
+  "concurrency": 6,
+  "paceMs": 300,
+  "historyWindow": 3,
+  "maxTurns": 32,
+  "temperature": 0,
+  "maxTokens": 4096,
+  "reps": 1,
+  "family": "rush",
+  "targets": [
+    {
+      "channel": "agent2api-local",
+      "model": "glm-5.3-flash",
+      "tier": "relay"
+    },
+    {
+      "channel": "magpie-local",
+      "model": "agent2api/auto",
+      "tier": "local"
+    }
+  ],
+  "channels": [
+    {
+      "id": "deepseek",
+      "baseUrl": "https://api.deepseek.com/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "deepseek-anthropic",
+      "baseUrl": "https://api.deepseek.com/anthropic",
+      "protocol": "anthropic",
+      "tier": "official"
+    },
+    {
+      "id": "sensenova",
+      "baseUrl": "https://token.sensenova.cn/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "sensenova-kimi",
+      "baseUrl": "https://token.sensenova.cn/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "stepfun",
+      "baseUrl": "https://api.stepfun.com/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "bigmodel",
+      "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+      "protocol": "anthropic",
+      "tier": "official"
+    },
+    {
+      "id": "bitdeer",
+      "baseUrl": "https://api-inference.bitdeer.ai/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "gmi",
+      "baseUrl": "https://api.gmi-serving.com/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "openrouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "protocol": "openai",
+      "tier": "official"
+    },
+    {
+      "id": "magpie-local",
+      "baseUrl": "http://127.0.0.1:3425",
+      "protocol": "anthropic",
+      "tier": "local"
+    },
+    {
+      "id": "agent2api-local",
+      "baseUrl": "http://127.0.0.1:3065/v1",
+      "protocol": "openai",
+      "tier": "relay"
+    },
+    {
+      "id": "opencsg-local",
+      "baseUrl": "http://127.0.0.1:7871/v1",
+      "protocol": "openai",
+      "tier": "relay"
+    },
+    {
+      "id": "orcaterm-local",
+      "baseUrl": "http://127.0.0.1:8010/v1",
+      "protocol": "openai",
+      "tier": "relay"
+    }
+  ],
+  "startedAt": "2026-11-05T14:56:06.768Z"
+}

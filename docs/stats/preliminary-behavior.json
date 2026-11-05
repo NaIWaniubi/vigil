@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-11-05T18:54:58.135Z",
+  "run": "./docs/preliminary-run",
+  "cells": 24,
+  "scoreable": 12,
+  "definition": {
+    "waste": "(noops + illegalMoves) / turns — paid turns that produced nothing",
+    "efficiency": "legalMoves / optimalDepth — 1.0 means it solved in the shortest path",
+    "note": "computed from the action log, NOT from the `neglected` attribution label"
+  },
+  "models": [
+    {
+      "model": "agent2api/auto",
+      "all": {
+        "n": 10,
+        "turnsMean": 17.1,
+        "turnsMedian": 12.5,
+        "legalMean": 8.7,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1.1180555555555556,
+        "efficiencyMax": 1.25
+      },
+      "wins": {
+        "n": 8,
+        "turnsMean": 13.375,
+        "turnsMedian": 11,
+        "legalMean": 9.625,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1.125,
+        "efficiencyMax": 1.25
+      },
+      "losses": {
+        "n": 2,
+        "turnsMean": 32,
+        "turnsMedian": 32,
+        "legalMean": 5,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 0.5125,
+        "efficiencyMax": 0.9
+      }
+    },
+    {
+      "model": "glm-5.3-flash",
+      "all": {
+        "n": 2,
+        "turnsMean": 13.5,
+        "turnsMedian": 13.5,
+        "legalMean": 11,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1.2,
+        "efficiencyMax": 1.4
+      },
+      "wins": {
+        "n": 2,
+        "turnsMean": 13.5,
+        "turnsMedian": 13.5,
+        "legalMean": 11,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1.2,
+        "efficiencyMax": 1.4
+      },
+      "losses": {
+        "n": 0,
+        "turnsMean": null,
+        "turnsMedian": null,
+        "legalMean": null,
+        "illegalMean": null,
+        "noopMean": null,
+        "wasteMean": null,
+        "efficiencyMedian": null,
+        "efficiencyMax": null
+      }
+    }
+  ]
+}

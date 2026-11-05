@@ -1,0 +1,306 @@
+{
+  "run": "E:\\myzcode\\vigil\\docs\\preliminary-run",
+  "generatedAt": "2026-11-05T18:54:57.702Z",
+  "protocol": {
+    "promptVersion": "vigil-agent-v2",
+    "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
+    "engineVersion": "0.2.0",
+    "runner": "cluster",
+    "concurrency": 6,
+    "paceMs": 300,
+    "historyWindow": 3,
+    "maxTurns": 32,
+    "temperature": 0,
+    "maxTokens": 4096,
+    "reps": 1,
+    "family": "rush",
+    "targets": [
+      {
+        "channel": "agent2api-local",
+        "model": "glm-5.3-flash",
+        "tier": "relay"
+      },
+      {
+        "channel": "magpie-local",
+        "model": "agent2api/auto",
+        "tier": "local"
+      }
+    ],
+    "channels": [
+      {
+        "id": "deepseek",
+        "baseUrl": "https://api.deepseek.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "deepseek-anthropic",
+        "baseUrl": "https://api.deepseek.com/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova-kimi",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "stepfun",
+        "baseUrl": "https://api.stepfun.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "bigmodel",
+        "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "bitdeer",
+        "baseUrl": "https://api-inference.bitdeer.ai/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "gmi",
+        "baseUrl": "https://api.gmi-serving.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "magpie-local",
+        "baseUrl": "http://127.0.0.1:3425",
+        "protocol": "anthropic",
+        "tier": "local"
+      },
+      {
+        "id": "agent2api-local",
+        "baseUrl": "http://127.0.0.1:3065/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "opencsg-local",
+        "baseUrl": "http://127.0.0.1:7871/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "orcaterm-local",
+        "baseUrl": "http://127.0.0.1:8010/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      }
+    ],
+    "startedAt": "2026-11-05T14:56:06.768Z"
+  },
+  "cells": 24,
+  "scoreable": 12,
+  "infraErrors": 12,
+  "spendUsd": 1.210959,
+  "apiCalls": 314,
+  "profiles": [
+    {
+      "model": "agent2api/auto",
+      "track": "compliant",
+      "cells": 10,
+      "wins": 8,
+      "winRate": 0.8,
+      "winRateCI95": [
+        0.49015684672072335,
+        0.9433190520193067
+      ],
+      "reachedMean": 1,
+      "passedMean": 0.8,
+      "violationsByClass": {
+        "neglected": 73,
+        "regressed": 6
+      },
+      "oldestViolatedConstraintAge": 10,
+      "obligationDeaths": 0,
+      "turnsMean": 17.1,
+      "turnsStd": 9.666091936937768,
+      "ticksMean": 8.7,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    },
+    {
+      "model": "agent2api/auto",
+      "track": "raw",
+      "cells": 10,
+      "wins": 8,
+      "winRate": 0.8,
+      "winRateCI95": [
+        0.49015684672072335,
+        0.9433190520193067
+      ],
+      "reachedMean": 1,
+      "passedMean": 0.8,
+      "violationsByClass": {
+        "neglected": 73,
+        "regressed": 6
+      },
+      "oldestViolatedConstraintAge": 10,
+      "obligationDeaths": 0,
+      "turnsMean": 17.1,
+      "turnsStd": 9.666091936937768,
+      "ticksMean": 8.7,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    },
+    {
+      "model": "glm-5.3-flash",
+      "track": "compliant",
+      "cells": 2,
+      "wins": 2,
+      "winRate": 1,
+      "winRateCI95": [
+        0.34237195288961925,
+        1
+      ],
+      "reachedMean": 1,
+      "passedMean": 1,
+      "violationsByClass": {
+        "neglected": 19,
+        "regressed": 1
+      },
+      "oldestViolatedConstraintAge": 12,
+      "obligationDeaths": 0,
+      "turnsMean": 13.5,
+      "turnsStd": 7.7781745930520225,
+      "ticksMean": 11,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 12
+    },
+    {
+      "model": "glm-5.3-flash",
+      "track": "raw",
+      "cells": 2,
+      "wins": 2,
+      "winRate": 1,
+      "winRateCI95": [
+        0.34237195288961925,
+        1
+      ],
+      "reachedMean": 1,
+      "passedMean": 1,
+      "violationsByClass": {
+        "neglected": 19,
+        "regressed": 1
+      },
+      "oldestViolatedConstraintAge": 12,
+      "obligationDeaths": 0,
+      "turnsMean": 13.5,
+      "turnsStd": 7.7781745930520225,
+      "ticksMean": 11,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 12
+    }
+  ],
+  "stability": {
+    "cellsWithRepeats": 0,
+    "meanConsistency": null,
+    "fullyStable": 0,
+    "coinFlip": 0,
+    "perCell": []
+  },
+  "costCurves": [
+    {
+      "model": "agent2api/auto",
+      "points": [
+        {
+          "depth": 8,
+          "cost": 0.05681166666666667
+        },
+        {
+          "depth": 9,
+          "cost": 0.023123499999999998
+        },
+        {
+          "depth": 10,
+          "cost": 0.1230935
+        }
+      ],
+      "fit": {
+        "multiplier": 1.4719694451937928,
+        "slope": 0.38660126275007456,
+        "r2": 0.21342609633052056,
+        "n": 3
+      }
+    },
+    {
+      "model": "glm-5.3-flash",
+      "points": [
+        {
+          "depth": 8,
+          "cost": 0.006775
+        },
+        {
+          "depth": 10,
+          "cost": 0.041967
+        }
+      ],
+      "fit": {
+        "multiplier": 2.488853379351913,
+        "slope": 0.9118221141983192,
+        "r2": 1,
+        "n": 2
+      }
+    }
+  ],
+  "hypotheses": {
+    "H1_conflict": {
+      "table": [
+        {
+          "model": "agent2api/auto",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
+        },
+        {
+          "model": "glm-5.3-flash",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
+        }
+      ],
+      "rankNone": [],
+      "rankCoupled": [],
+      "rankCorrelation": null,
+      "reordered": false,
+      "depthCurve": [
+        {
+          "bucket": "8-9",
+          "n": 9,
+          "winRate": 0.8888888888888888
+        },
+        {
+          "bucket": "10-12",
+          "n": 3,
+          "winRate": 0.6666666666666666
+        }
+      ]
+    },
+    "H2_neglect": {
+      "n": 0,
+      "pearsonPassedVsDeaths": null,
+      "spearmanPassedVsDeaths": null,
+      "pearsonPassedVsSurvival": null,
+      "maxProgressButDied": 0
+    }
+  }
+}

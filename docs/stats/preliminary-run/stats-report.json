@@ -1,0 +1,111 @@
+{
+  "run": "E:\\myzcode\\vigil\\docs\\preliminary-run",
+  "generatedAt": "2026-11-05T18:54:57.958Z",
+  "bootstrap": {
+    "iterations": 10000,
+    "alpha": 0.05,
+    "seed": "FNV-1a(model | pair), fixed per group — same run reproduces the same bounds"
+  },
+  "protocol": {
+    "promptVersion": "vigil-agent-v2",
+    "engineVersion": "0.2.0",
+    "temperature": 0,
+    "reps": 1,
+    "family": "rush",
+    "targets": [
+      "glm-5.3-flash",
+      "agent2api/auto"
+    ]
+  },
+  "dataQuality": {
+    "rows": 24,
+    "scoreable": 12,
+    "infraErrors": 12,
+    "modelsInRun": 2,
+    "modelsScoreable": 2,
+    "modelsWithNoScoreable": [],
+    "cellsWithRepeats": 0,
+    "families": [
+      "rush"
+    ]
+  },
+  "models": [
+    {
+      "model": "glm-5.3-flash",
+      "n": 2,
+      "wins": 2,
+      "winRate": 1,
+      "wilsonCI95": [
+        0.34237195288961925,
+        1
+      ],
+      "bootstrapCI95": [
+        1,
+        1
+      ],
+      "excludedInfraErrors": 12
+    },
+    {
+      "model": "agent2api/auto",
+      "n": 10,
+      "wins": 8,
+      "winRate": 0.8,
+      "wilsonCI95": [
+        0.49015684672072335,
+        0.9433190520193067
+      ],
+      "bootstrapCI95": [
+        0.5,
+        1
+      ],
+      "excludedInfraErrors": 0
+    }
+  ],
+  "pairwise": [
+    {
+      "a": "glm-5.3-flash",
+      "b": "agent2api/auto",
+      "nA": 2,
+      "nB": 10,
+      "winRateA": 1,
+      "winRateB": 0.8,
+      "delta": 0.19999999999999996,
+      "bootstrapCI95": [
+        0,
+        0.5
+      ],
+      "pValue": 0.48842217969428847,
+      "holmAdjusted": 0.48842217969428847,
+      "significant": false
+    }
+  ],
+  "power": {
+    "effect": {
+      "p1": 0.3,
+      "p2": 0.6,
+      "absoluteDifference": 0.3
+    },
+    "alpha": 0.05,
+    "targetPower": 0.8,
+    "requiredNPerGroup": 42,
+    "achievedN": 2,
+    "bestSampledN": 10,
+    "powerAtAchievedN": 0.08093641744732671,
+    "verdict": "underpowered",
+    "explanation": "n=2 < required 42 per group for a 30pp difference at 80% power"
+  },
+  "verdict": "underpowered",
+  "notes": [
+    "12 of 24 rows were infrastructure failures; they are excluded from win rates, not scored as losses.",
+    "Detecting a 30pp effect at 80% power needs 42 cells per group; this run has 2. It cannot support a claim at that effect size.",
+    "Wilson 95% CI for glm-5.3-flash spans [34.2%, 100.0%] (width 65.8%); the point estimate is weakly identified.",
+    "Bootstrap CI for glm-5.3-flash collapsed to a point ([100.0%, 100.0%]) because every resample was identical. At n=2 this is a boundary artifact, not certainty; use the Wilson interval.",
+    "Wilson 95% CI for agent2api/auto spans [49.0%, 94.3%] (width 45.3%); the point estimate is weakly identified.",
+    "No pairwise difference survives Holm correction at alpha=0.05.",
+    "This run is a sealed bundle (MANIFEST.sha256); stats-report.json/md were written outside it to E:\\myzcode\\vigil\\docs\\stats\\preliminary-run so scripts/verify.mjs stays valid."
+  ],
+  "reportJson": {
+    "found": true,
+    "publishedMismatches": []
+  }
+}

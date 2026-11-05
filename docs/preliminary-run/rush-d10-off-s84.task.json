@@ -1,0 +1,376 @@
+{
+  "task": {
+    "id": "rush-d10-off-s84",
+    "family": "vigil-rush",
+    "maxSteps": 70,
+    "initialState": {
+      "pos": {
+        "X": {
+          "row": 2,
+          "col": 2
+        },
+        "A": {
+          "row": 5,
+          "col": 4
+        },
+        "B": {
+          "row": 4,
+          "col": 0
+        },
+        "C": {
+          "row": 0,
+          "col": 0
+        },
+        "D": {
+          "row": 2,
+          "col": 1
+        },
+        "E": {
+          "row": 3,
+          "col": 2
+        },
+        "F": {
+          "row": 4,
+          "col": 3
+        },
+        "G": {
+          "row": 1,
+          "col": 0
+        },
+        "H": {
+          "row": 0,
+          "col": 4
+        },
+        "I": {
+          "row": 2,
+          "col": 5
+        }
+      },
+      "moves": 0
+    },
+    "constraints": [
+      {
+        "id": "exit",
+        "revealAt": 0,
+        "text": "Move vehicle X to the right edge of row 2 (the exit). X is horizontal, length 2.",
+        "predicate": {
+          "t": "op",
+          "name": "and",
+          "args": [
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "ref",
+                  "path": "pos.X.row"
+                },
+                {
+                  "t": "num",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "op",
+                  "name": "add",
+                  "args": [
+                    {
+                      "t": "ref",
+                      "path": "pos.X.col"
+                    },
+                    {
+                      "t": "num",
+                      "v": 2
+                    }
+                  ]
+                },
+                {
+                  "t": "num",
+                  "v": 6
+                }
+              ]
+            }
+          ]
+        },
+        "kind": "goal"
+      }
+    ],
+    "obligations": [],
+    "actions": [
+      {
+        "name": "move",
+        "args": [
+          "id",
+          "delta"
+        ],
+        "cost": 1,
+        "external": true,
+        "doc": "Slide vehicle id by delta cells along its orientation (negative = left/up). Only legal slides are accepted."
+      }
+    ],
+    "goals": [
+      {
+        "id": "exit",
+        "text": "X reaches the exit.",
+        "predicate": {
+          "t": "op",
+          "name": "and",
+          "args": [
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "ref",
+                  "path": "pos.X.row"
+                },
+                {
+                  "t": "num",
+                  "v": 2
+                }
+              ]
+            },
+            {
+              "t": "op",
+              "name": "eq",
+              "args": [
+                {
+                  "t": "op",
+                  "name": "add",
+                  "args": [
+                    {
+                      "t": "ref",
+                      "path": "pos.X.col"
+                    },
+                    {
+                      "t": "num",
+                      "v": 2
+                    }
+                  ]
+                },
+                {
+                  "t": "num",
+                  "v": 6
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "canaries": [
+      {
+        "id": "solution",
+        "token": "VIGIL_RUSH_SOL_84",
+        "path": "_solver"
+      }
+    ],
+    "noopCost": 1,
+    "tendCost": 1,
+    "meta": {
+      "seed": 84,
+      "obligation": "off",
+      "vehicles": 10,
+      "optimalDepth": 10,
+      "solverStates": 29841,
+      "greedySolved": false,
+      "greedySteps": 4,
+      "greedyReason": "loop",
+      "milestones": 4
+    },
+    "rush": {
+      "board": [
+        {
+          "id": "X",
+          "row": 2,
+          "col": 2,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "A",
+          "row": 5,
+          "col": 4,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "B",
+          "row": 4,
+          "col": 0,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "C",
+          "row": 0,
+          "col": 0,
+          "len": 2,
+          "orient": "H"
+        },
+        {
+          "id": "D",
+          "row": 2,
+          "col": 1,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "E",
+          "row": 3,
+          "col": 2,
+          "len": 3,
+          "orient": "V"
+        },
+        {
+          "id": "F",
+          "row": 4,
+          "col": 3,
+          "len": 2,
+          "orient": "V"
+        },
+        {
+          "id": "G",
+          "row": 1,
+          "col": 0,
+          "len": 3,
+          "orient": "H"
+        },
+        {
+          "id": "H",
+          "row": 0,
+          "col": 4,
+          "len": 3,
+          "orient": "V"
+        },
+        {
+          "id": "I",
+          "row": 2,
+          "col": 5,
+          "len": 2,
+          "orient": "V"
+        }
+      ],
+      "solution": [
+        {
+          "id": "B",
+          "delta": -1
+        },
+        {
+          "id": "D",
+          "delta": 1
+        },
+        {
+          "id": "X",
+          "delta": -2
+        },
+        {
+          "id": "E",
+          "delta": -1
+        },
+        {
+          "id": "F",
+          "delta": -1
+        },
+        {
+          "id": "A",
+          "delta": -4
+        },
+        {
+          "id": "E",
+          "delta": 1
+        },
+        {
+          "id": "H",
+          "delta": 3
+        },
+        {
+          "id": "I",
+          "delta": -2
+        },
+        {
+          "id": "X",
+          "delta": 4
+        }
+      ]
+    }
+  },
+  "oracle": [
+    {
+      "type": "move",
+      "args": {
+        "id": "B",
+        "delta": -1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "D",
+        "delta": 1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "X",
+        "delta": -2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "E",
+        "delta": -1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "F",
+        "delta": -1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "A",
+        "delta": -4
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "E",
+        "delta": 1
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "H",
+        "delta": 3
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "I",
+        "delta": -2
+      }
+    },
+    {
+      "type": "move",
+      "args": {
+        "id": "X",
+        "delta": 4
+      }
+    }
+  ],
+  "fingerprint": "6571642e0259e1aeb879c6b89aa31c4aacc94ce70bf2b9631bf04d90602d040c"
+}
