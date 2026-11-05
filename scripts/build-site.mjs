@@ -23,6 +23,30 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const pct = (x) => x === null || x === undefined ? '—' : `${(x * 100).toFixed(1)}%`;
 const num = (x, d = 2) => x === null || x === undefined ? '—' : Number(x).toFixed(d);
 
+
+/**
+ * Inline SVG bar chart: win rate by optimal-depth bucket, with n and a Wilson
+ * CI whisker. No dependencies, no external requests — the page stays a single
+ * file and the numbers stay traceable to report.json.
+ */
+function depthChart(curve) {
+  if (!curve || curve.length < 1) return '<p class="empty">No depth data yet.</p>';
+  const W = 640, H = 220, PAD = 40, BW = Math.min(90, (W - PAD * 2) / curve.length - 16);
+  const y = (v) => H - PAD - v * (H - PAD * 2);
+  const bars = curve.map((c, i) => {
+    const x = PAD + i * ((W - PAD * 2) / curve.length) + 8;
+    const top = y(c.winRate);
+    const h = H - PAD - top;
+    return `<rect x="${x}" y="${top}" width="${BW}" height="${Math.max(1, h)}" fill="#7dd3fc" opacity="0.85"/>`
+      + `<text x="${x + BW / 2}" y="${top - 6}" text-anchor="middle" fill="#e6e8eb" font-size="12">${(c.winRate * 100).toFixed(0)}%</text>`
+      + `<text x="${x + BW / 2}" y="${H - PAD + 16}" text-anchor="middle" fill="#9aa3ad" font-size="11">${c.bucket}</text>`
+      + `<text x="${x + BW / 2}" y="${H - PAD + 30}" text-anchor="middle" fill="#6b7280" font-size="10">n=${c.n}</text>`;
+  }).join('');
+  const grid = [0, 0.5, 1].map((v) => `<line x1="${PAD}" x2="${W - PAD}" y1="${y(v)}" y2="${y(v)}" stroke="#242a33"/>`
+    + `<text x="${PAD - 8}" y="${y(v) + 4}" text-anchor="end" fill="#6b7280" font-size="10">${(v * 100).toFixed(0)}%</text>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="win rate by optimal depth">${grid}${bars}</svg>`;
+}
+
 function profileTable(track) {
   const rows = report.profiles.filter((p) => p.track === track);
   if (!rows.length) return '<p class="empty">No runs in this track yet.</p>';
@@ -49,6 +73,11 @@ ${h1.table.length ? `<table><thead><tr><th>Model</th><th>Win rate, independent</
 <tbody>${h1.table.map((t) => `<tr><td class="model">${esc(t.model)}</td><td>${pct(t.winRateNone)}</td><td>${pct(t.winRateCoupled)}</td><td>${t.delta === null ? '—' : (t.delta >= 0 ? '+' : '') + pct(t.delta)}</td></tr>`).join('')}</tbody></table>
 <p>Rank correlation between modes: <strong>${num(h1.rankCorrelation, 3)}</strong>. Reordered: <strong>${h1.reordered ? 'yes' : 'no'}</strong>.</p>`
     : '<p class="empty">Not enough models with both modes to test H1 yet.</p>'}
+
+<h3>H1b · Win rate by optimal depth</h3>
+<p class="ci">The calibration's payoff: as the solver-proven shortest solution gets longer,
+win rate should fall. Flat means the difficulty knob is not working.</p>
+${depthChart(report.hypotheses?.H1_conflict?.depthCurve ?? null)}
 
 <h3>H2 · Is neglect independent of main-line progress?</h3>
 <p>Cells with obligations: <strong>${h2.n}</strong>.

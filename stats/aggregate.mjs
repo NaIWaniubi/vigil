@@ -183,6 +183,21 @@ export function conflictEffect(rows) {
   };
 }
 
+/** Win rate by optimal-depth bucket (rush family only). */
+export function depthCurve(rows) {
+  const order = ['8-9', '10-12', '13-15', '16+'];
+  const b = {};
+  for (const r of rows.filter(isScoreable)) {
+    const d = r.config?.depth;
+    if (!d) continue;
+    const k = d <= 9 ? '8-9' : d <= 12 ? '10-12' : d <= 15 ? '13-15' : '16+';
+    b[k] = b[k] ?? { n: 0, win: 0 };
+    b[k].n++;
+    if (r.terminal?.reason === 'goal_met') b[k].win++;
+  }
+  return order.filter((k) => b[k]).map((k) => ({ bucket: k, n: b[k].n, winRate: b[k].win / b[k].n }));
+}
+
 export function aggregate(dir) {
   const { rows, protocol, ledger } = loadRun(dir);
   const settled = ledger.filter((e) => e.type === 'settle');
@@ -199,7 +214,7 @@ export function aggregate(dir) {
     stability: stability(rows),
     costCurves: costCurves(rows, ledger),
     hypotheses: {
-      H1_conflict: conflictEffect(rows),
+      H1_conflict: { ...conflictEffect(rows), depthCurve: depthCurve(rows) },
       H2_neglect: neglectIndependence(rows),
     },
   };

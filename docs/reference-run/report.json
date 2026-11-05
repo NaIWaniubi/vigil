@@ -1,6 +1,6 @@
 {
   "run": "E:\\myzcode\\vigil\\docs\\reference-run",
-  "generatedAt": "2026-11-04T18:38:19.913Z",
+  "generatedAt": "2026-11-05T14:52:54.521Z",
   "protocol": {
     "promptVersion": "vigil-agent-v2",
     "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
@@ -223,7 +223,19 @@
       "rankNone": [],
       "rankCoupled": [],
       "rankCorrelation": null,
-      "reordered": false
+      "reordered": false,
+      "depthCurve": [
+        {
+          "bucket": "8-9",
+          "n": 12,
+          "winRate": 0.3333333333333333
+        },
+        {
+          "bucket": "16+",
+          "n": 1,
+          "winRate": 0
+        }
+      ]
     },
     "H2_neglect": {
       "n": 8,
