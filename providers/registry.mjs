@@ -35,7 +35,15 @@ export const CHANNELS = [
     models: ['apigoto-api-apigoto-com/deepseek-flash',
              'auto/qwen3.8-flash', 'auto/glm-5.1', 'auto/minimax-m3',
              'agent2api/auto', 'agent2api/deepseek-v4-flash', 'agent2api/MiniMax-M3.1-Flash'],
-    keyEnv: 'MAGPIE_API_KEY', timeoutMs: 300000 },
+    // `deepseek-flash` here is a REASONING model behind an Anthropic-protocol
+    // relay. Measured 2026-11-06 on rush-d10-off-s57: it emits a `thinking`
+    // block and NO text until the thought finishes; the thought is 4k-22k
+    // tokens with high variance for the SAME prompt. At the default 4096 it
+    // returns text='' and stop_reason=max_tokens on essentially every call.
+    // 16384 is the smallest cap observed to yield an action (7929 tokens, 53s).
+    // `thinking.budget_tokens` is accepted but IGNORED by this relay: asking for
+    // 1024 produced 17897. Evidence: docs/CHANNELS.md §6.
+    keyEnv: 'MAGPIE_API_KEY', maxTokens: 16384, timeoutMs: 300000 },
   // Local multi-model gateways used for the exploratory leaderboard. Tagged
   // `relay` so they never enter the official main track, but they expose distinct
   // model families (Gemini / Qwen / GLM) for discrimination analysis.

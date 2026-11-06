@@ -13,7 +13,7 @@ import { createHash } from 'node:crypto';
 import { World } from './engine/index.mjs';
 import { generate, grid, taskFingerprint } from './tasks/index.mjs';
 import { resolveChannel, officialChannels, CHANNELS } from './providers/registry.mjs';
-import { call } from './providers/protocols.mjs';
+import { call, isTruncated } from './providers/protocols.mjs';
 import { Ledger, estimateCost } from './providers/ledger.mjs';
 import { SYSTEM_PROMPT, PROMPT_VERSION, renderObservation, parseAction } from './providers/prompt.mjs';
 
@@ -80,6 +80,17 @@ function loadDone(path) {
 }
 
 /** One full trajectory against a live model. */
+/**
+ * A reply is only an answer if it was not cut off at the output cap AND it
+ * actually contains text. Exported so the rule is testable without a network
+ * call: both failure modes used to be scored as ordinary turns.
+ */
+export function classifyReply(reply) {
+  if (isTruncated(reply.finish)) return 'truncated';
+  if (!reply.text || !reply.text.trim()) return 'empty';
+  return 'ok';
+}
+
 export async function runCell({ task, seed, channel, model, ledger, maxTurns, paceMs = 0, historyWindow = 0 }) {
   const isSwe = task.family === 'vigil-swe';
   const isRush = task.family === 'vigil-rush';
@@ -98,8 +109,12 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
   const messages = [{ role: 'system', content: SYSTEM_PROMPT }];
   const turns = [];
   const cap = maxTurns ?? task.maxSteps;
+  // The reservation must match what we actually ask for, or the budget gate
+  // under-counts a channel whose output ceiling is above the default.
+  const maxOut = channel.maxTokens ?? 4096;
   let status = 'completed';
   let error = null;
+  let emptyReplies = 0;
 
   while (!world.done && turns.length < cap) {
     const obs = world.observe();
@@ -119,9 +134,9 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
     const callId = `${task.id}:${model}:${seed}:t${turns.length}`;
     let reply;
     try {
-      ledger.reserve({ id: callId, model, maxInputTokens: 32_000, maxOutputTokens: 4096 });
+      ledger.reserve({ id: callId, model, maxInputTokens: 32_000, maxOutputTokens: maxOut });
       reply = await call(channel, messages, {
-        model, temperature: channel.temperature ?? 0, maxTokens: channel.maxTokens ?? 4096,
+        model, temperature: channel.temperature ?? 0, maxTokens: maxOut,
       });
       ledger.settle({ id: callId, model, ...reply.usage });
     } catch (e) {
@@ -132,16 +147,44 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
     }
     if (paceMs > 0) await new Promise((r) => setTimeout(r, paceMs));
     messages.push({ role: 'assistant', content: reply.text });
+
+    // Truncation is checked BEFORE parsing. A reply cut off at the output cap
+    // is not an answer, even when the fragment happens to parse. And an empty
+    // reply must not fall through to the parse-error path: that path `continue`s,
+    // so a reasoning-only model would burn one full output budget per turn until
+    // the cap, and the cell would be scored as a legitimate `turn_cap` loss.
+    const verdict = classifyReply(reply);
+    if (verdict === 'truncated') {
+      turns.push({
+        turn: turns.length, ok: false, error: 'truncated',
+        finish: reply.finish, usage: reply.usage, reasoningChars: reply.reasoning?.length ?? 0,
+      });
+      status = 'truncated';
+      error = { message: `reply hit the output cap (finish=${reply.finish}); text was ${reply.text.length} chars`, atTurn: turns.length };
+      break;
+    }
+    if (verdict === 'empty') {
+      emptyReplies += 1;
+      turns.push({
+        turn: turns.length, ok: false, error: 'empty reply',
+        finish: reply.finish, usage: reply.usage, reasoningChars: reply.reasoning?.length ?? 0,
+      });
+      if (emptyReplies >= 2) {
+        status = 'protocol_error';
+        error = {
+          message: 'channel returned no text twice — reasoning-only reply; raise maxTokens or use a non-reasoning model',
+          atTurn: turns.length,
+        };
+        break;
+      }
+      continue;
+    }
+
     const parsed = parseAction(reply.text);
     if (!parsed.ok) {
       turns.push({ turn: turns.length, ok: false, error: parsed.error, finish: reply.finish, usage: reply.usage });
       messages.push({ role: 'user', content: `Your reply was not a valid action: ${parsed.error}. Respond with exactly one JSON object.` });
       continue;
-    }
-    if (reply.finish === 'length') {
-      turns.push({ turn: turns.length, ok: false, error: 'truncated', finish: reply.finish, usage: reply.usage });
-      status = 'truncated';
-      break;
     }
     const result = await step(parsed.action);
     turns.push({
@@ -151,7 +194,10 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
   }
 
   const profile = world.profile();
-  if (turns.length >= cap && !world.done) status = 'turn_cap';
+  // Only a run that actually used its whole budget is `turn_cap`. A run that
+  // stopped early because the channel returned nothing is `protocol_error`, and
+  // must not be relabelled into the scoreable bucket here.
+  if (status === 'completed' && turns.length >= cap && !world.done) status = 'turn_cap';
   return {
     status, error, profile,
     terminal: profile.terminal,

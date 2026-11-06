@@ -7,6 +7,22 @@
 const DEFAULT_TIMEOUT = 120_000;
 const MAX_RETRIES = 4;
 
+/**
+ * One truncation vocabulary for both wire formats.
+ *
+ * OpenAI says `length`; Anthropic says `max_tokens`. The runner keys its
+ * "never score a truncated reply" rule on the string `length`, so before this
+ * normaliser an Anthropic-protocol relay that filled its output budget looked
+ * like a completed answer. Probe evidence (2026-11-06): magpie-local reported
+ * `max_tokens` on 25/29 calls while the runner counted them as ordinary turns.
+ */
+export function normaliseFinish(finish) {
+  if (finish === 'max_tokens') return 'length';
+  return finish ?? 'unknown';
+}
+
+export const isTruncated = (finish) => finish === 'length';
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /**
@@ -68,7 +84,7 @@ export async function callOpenAI(channel, messages, opts = {}) {
       outputTokens: json.usage?.completion_tokens ?? 0,
       cachedTokens: json.usage?.prompt_tokens_details?.cached_tokens ?? 0,
     },
-    finish: choice?.finish_reason ?? 'unknown',
+    finish: normaliseFinish(choice?.finish_reason),
     model: json.model ?? model,
     requestId: json.id ?? null,
   };
@@ -95,7 +111,7 @@ export async function callAnthropic(channel, messages, opts = {}) {
       outputTokens: json.usage?.output_tokens ?? 0,
       cachedTokens: json.usage?.cache_read_input_tokens ?? 0,
     },
-    finish: json.stop_reason ?? 'unknown',
+    finish: normaliseFinish(json.stop_reason),
     model: json.model ?? model,
     requestId: json.id ?? null,
   };

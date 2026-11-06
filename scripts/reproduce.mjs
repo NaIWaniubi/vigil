@@ -542,19 +542,16 @@ function checkRushSamples(datasetPath, count = SAMPLES) {
 const started = Date.now();
 // Cross-model table must match the bundles it claims to summarise.
 function checkCrossModel() {
+  // `--check` compares in memory and exits nonzero on drift. It must never
+  // write: a verification step that mutates a tracked file makes the tree
+  // dirty and turns every subsequent publish check into a false alarm.
   const path = join(ROOT, 'docs', 'cross-model.json');
   if (!existsSync(path)) return { ok: false, problems: ['docs/cross-model.json missing — run: node scripts/cross-model.mjs'] };
-  const published = JSON.parse(readFileSync(path, 'utf8'));
-  const before = new Map(published.arms.map((a) => [a.label, JSON.stringify(a.summary)]));
-  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'cross-model.mjs')], { encoding: 'utf8', cwd: ROOT });
-  if (res.status !== 0) return { ok: false, problems: [`cross-model.mjs exited ${res.status}: ${res.stderr.slice(-200)}`] };
-  const fresh = JSON.parse(readFileSync(path, 'utf8'));
-  const problems = [];
-  for (const a of fresh.arms) {
-    if (!before.has(a.label)) { problems.push(`new arm ${a.label}`); continue; }
-    if (before.get(a.label) !== JSON.stringify(a.summary)) problems.push(`arm ${a.label}: numbers changed`);
+  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'cross-model.mjs'), '--check'], { encoding: 'utf8', cwd: ROOT });
+  if (res.status !== 0) {
+    return { ok: false, problems: [`cross-model check failed (exit ${res.status}): ${(res.stderr || res.stdout).trim().slice(-240)}`] };
   }
-  return { ok: problems.length === 0, problems };
+  return { ok: true, problems: [] };
 }
 
 const crossModel = checkCrossModel();

@@ -138,6 +138,30 @@ lines.push(
 
 const outJson = join(ROOT, 'docs', 'cross-model.json');
 const outMd = join(ROOT, 'docs', 'CROSS-MODEL.md');
+
+// `--check` recomputes in memory and compares, WITHOUT writing. A check that
+// rewrites its own input is not a check: reproduce used to leave this tracked
+// file dirty on every run, and `publish-check` rightly called that a failure.
+if (process.argv.includes('--check')) {
+  const fail = (msg) => {
+    console.error(`${msg}; run: node scripts/cross-model.mjs`);
+    process.exit(1);
+  };
+  if (!existsSync(outJson)) fail('docs/cross-model.json is missing');
+  if (!existsSync(outMd)) fail('docs/CROSS-MODEL.md is missing');
+
+  const published = JSON.parse(readFileSync(outJson, 'utf8'));
+  // `generatedAt` is a timestamp, not a measurement -> excluded on purpose.
+  const shape = (x) => JSON.stringify(x.arms.map((a) => [a.label, a.summary]));
+  if (shape(published) !== shape({ arms })) fail('cross-model.json does not match the bundles');
+
+  const mdPublished = readFileSync(outMd, 'utf8').trimEnd();
+  if (mdPublished !== lines.join('\n').trimEnd()) fail('CROSS-MODEL.md does not match the bundles');
+
+  console.log('cross-model: table matches the committed bundles');
+  process.exit(0);
+}
+
 mkdirSync(join(ROOT, 'docs'), { recursive: true });
 writeFileSync(outJson, `${JSON.stringify({ generatedAt: new Date().toISOString(), arms }, null, 2)}\n`);
 writeFileSync(outMd, `${lines.join('\n')}\n`);

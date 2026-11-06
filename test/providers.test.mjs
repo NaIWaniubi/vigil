@@ -6,6 +6,8 @@ import { join } from 'node:path';
 import { Ledger, estimateCost, priceOf, UnknownPriceError, BudgetExceededError } from '../providers/ledger.mjs';
 import { parseAction, renderObservation, SYSTEM_PROMPT, PROMPT_VERSION } from '../providers/prompt.mjs';
 import { CHANNELS, available, officialChannels, resolveChannel } from '../providers/registry.mjs';
+import { normaliseFinish, isTruncated } from '../providers/protocols.mjs';
+import { classifyReply } from '../runner.mjs';
 import { World, num, ref, op } from '../engine/index.mjs';
 
 test('cost is integer micro-USD and unknown prices block spending', () => {
@@ -115,4 +117,35 @@ test('official channels exclude local gateways', () => {
   const off = officialChannels(env);
   assert.ok(off.some((c) => c.id === 'deepseek'));
   assert.ok(!off.some((c) => c.tier === 'local'));
+});
+// ---------------------------------------------------------------------------
+// Truncation and empty replies are protocol failures, not answers.
+//
+// Found on 2026-11-06 with scripts/probe-finish.mjs: the magpie relay returned
+// stop_reason=max_tokens with output_tokens=4096 on 25 of 29 calls, a thinking
+// block and ZERO text. Two separate bugs hid it:
+//   1. Anthropic's `max_tokens` never matched the runner's `length` check.
+//   2. An empty reply fell into the parse-error path, which `continue`s, so the
+//      cell burned a full output budget per turn and ended as `turn_cap` —
+//      a scoreable bucket.
+// ---------------------------------------------------------------------------
+
+test('finish reasons are normalised across protocols', () => {
+  assert.equal(normaliseFinish('max_tokens'), 'length');
+  assert.equal(normaliseFinish('length'), 'length');
+  assert.equal(normaliseFinish('stop'), 'stop');
+  assert.equal(normaliseFinish('end_turn'), 'end_turn');
+  assert.equal(normaliseFinish(null), 'unknown');
+  assert.equal(isTruncated(normaliseFinish('max_tokens')), true);
+});
+
+test('a truncated reply is never an answer, even if it parses', () => {
+  const reply = { text: '{"action":{"type":"move","args":{"id":"X","delta":1}}}', finish: 'length' };
+  assert.equal(classifyReply(reply), 'truncated');
+  assert.equal(classifyReply({ text: '{}', finish: 'stop' }), 'ok');
+});
+
+test('a reasoning-only reply is classified empty, not parsed', () => {
+  assert.equal(classifyReply({ text: '', finish: 'stop' }), 'empty');
+  assert.equal(classifyReply({ text: '   \n ', finish: 'end_turn' }), 'empty');
 });
