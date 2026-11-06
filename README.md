@@ -5,7 +5,7 @@
 Every `vigil-rush` task ships a BFS-proven shortest solution, and every task in that family is admitted only after a greedy baseline is proven to fail it. (`vigil-core` and `vigil-swe` ship correct oracles, not shortest-path ones — stated so the word 'shortest' is not doing work it hasn't earned.) Every failure is attributed to the exact action and the rule it broke. The evaluator audits itself before it scores anything.
 
 > Status: three task families, 586 self-audited task configurations, 150+ tests.
-> Two verified run bundles are committed (`docs/BUNDLES.md` explains what each
+> Four verified run bundles are committed (`docs/BUNDLES.md` explains what each
 > one can and cannot support). The cross-model comparison is **underpowered**:
 > 13 scoreable cells where detecting a 30pp effect needs 42 per arm, and the two
 > models' CIs overlap. Every report says so; see `docs/stats/`.

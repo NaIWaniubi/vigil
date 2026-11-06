@@ -132,7 +132,7 @@ node scripts/verify.mjs <run-dir>           # MANIFEST + 提示词指纹 + 数�
 
 任何数字都能从 `results.jsonl` 重算出来。篡改一个字节，`verify` 直接 exit 1——我实测过。
 
-仓库：`<待发布后填 GitHub URL>`
+仓库：https://github.com/NaIWaniubi/vigil
 
 ---
 

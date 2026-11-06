@@ -59,7 +59,7 @@ Agent 能否持续维护全部历史约束与背景义务」，以及「评测�
 
    开发中自审抓到的两类真问题：模型用 `set pos.X.col` 伪造胜利（已封堵并加回归测试）；
    并发过高导致检查超时被误报成任务不确定（已改为有界并发）。
-   仓库：`<待发布后填 GitHub URL>`
+   仓库：https://github.com/NaIWaniubi/vigil
 
 2. **moon-slice** — MoonBit 程序切片与依赖图工作台，已发布到 mooncakes.io
    （NaIWaniubi/moon-slice，v0.7.8）。338 测试、库覆盖 89.7%；
@@ -119,7 +119,7 @@ Agent 能否持续维护全部历史约束与背景义务」，以及「评测�
 
 ## 提交前检查
 
-- [ ] VIGIL 仓库已公开发布，URL 填入第 11 题
+- [x] VIGIL 仓库已公开发布，URL 填入第 11 题（https://github.com/NaIWaniubi/vigil）
 - [ ] 知乎账号已注册，主页 URL 填入第 8 题
 - [ ] 两篇技术文章已发布（建身份）
 - [ ] 微信/城市/邮箱填实
