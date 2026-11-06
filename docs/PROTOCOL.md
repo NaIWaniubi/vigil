@@ -155,9 +155,17 @@ NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
 
 ### 基础设施失败不算答错
 
-`status=error`（HTTP 失败、超时）与 `status=truncated`（finish_reason=length）
-**排除**出能力剖面，单独计数。429/5xx 自动退避重试最多 4 次；402（配额耗尽）不重试。
+`status=error`（HTTP 失败、超时）、`status=truncated`（输出顶到上限）与
+`status=protocol_error`（连续两次空文本）**排除**出能力剖面，单独计数。
+429/5xx 自动退避重试最多 4 次；402（配额耗尽）不重试。
 回应 SoTALab rst-hle 的判分容错纪律。
+
+两个协议把截断叫不同名字（OpenAI `length` / Anthropic `max_tokens`），
+`providers/protocols.mjs` 统一成 `length`，否则推理型回复会被当成正常回答。
+
+顶到上限时，runner 在**同一轮内**把预算翻倍重试（默认 16k → 32k，上限
+`hardMaxTokens`），不把截断的思考写回历史；到上限仍截断才记 `truncated`。
+这条规则只影响能否拿到答案，不影响答案对不对。
 
 ---
 
@@ -167,7 +175,7 @@ NP-hard、状态空间有限，因此可以**用最优 BFS solver 校准**：
 | --- | --- |
 | 引擎 | Node.js >= 22（实测 v24.22.1） |
 | 温度 | 0（kimi-k3 官方要求 1，已在 registry 中钉死并标注） |
-| max_tokens | 4096（按通道可覆盖；`providers/registry.mjs` 给推理型通道 16384） |
+| max_tokens | 默认 4096；按通道覆盖。推理型通道 16384，单轮截断时升到 32768（见 `docs/CHANNELS.md` §7） |
 | 重复次数 | 每格 3 次（默认） |
 | 通道分级 | `official` / `relay` / `local`；主榜只收 official |
 | 密钥 | 仅从环境变量读取，永不落盘、永不打印 |

@@ -198,7 +198,10 @@ async function main() {
     historyWindow: args.historyWindow,
     maxTurns: args.maxTurns,
     temperature: 0,
-    maxTokens: 4096,
+    // The ceiling is per channel, and for reasoning models it must be high
+    // enough to finish a thought. Recording a flat 4096 here would claim a
+    // setting the run never used.
+    maxTokens: Object.fromEntries(targets.map((t) => [t.channel?.id ?? 'dry', t.channel?.maxTokens ?? 4096])),
     reps: args.reps,
     family: args.family,
     targets: targets.map((t) => ({ channel: t.channel?.id ?? 'dry', model: t.model, tier: t.channel?.tier ?? 'reference' })),

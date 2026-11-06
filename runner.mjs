@@ -85,6 +85,15 @@ function loadDone(path) {
  * actually contains text. Exported so the rule is testable without a network
  * call: both failure modes used to be scored as ordinary turns.
  */
+/**
+ * Next output budget after a truncated turn, or null when there is no room to
+ * escalate. Pure so the policy can be tested without spending a token.
+ */
+export function escalatedCap(capUsed, hardCeiling) {
+  if (!(capUsed > 0) || !(hardCeiling > capUsed)) return null;
+  return Math.min(hardCeiling, capUsed * 2);
+}
+
 export function classifyReply(reply) {
   if (isTruncated(reply.finish)) return 'truncated';
   if (!reply.text || !reply.text.trim()) return 'empty';
@@ -112,6 +121,10 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
   // The reservation must match what we actually ask for, or the budget gate
   // under-counts a channel whose output ceiling is above the default.
   const maxOut = channel.maxTokens ?? 4096;
+  // Retry ceiling for a thinking model that filled its budget. Defaults to the
+  // larger of 32k and twice the starting cap; a channel can pin it.
+  const hardCeiling = channel.hardMaxTokens ?? Math.max(32768, maxOut * 2);
+  const escalationLog = [];
   let status = 'completed';
   let error = null;
   let emptyReplies = 0;
@@ -133,19 +146,42 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
     messages.push({ role: 'user', content: userText });
     const callId = `${task.id}:${model}:${seed}:t${turns.length}`;
     let reply;
-    try {
-      ledger.reserve({ id: callId, model, maxInputTokens: 32_000, maxOutputTokens: maxOut });
-      reply = await call(channel, messages, {
-        model, temperature: channel.temperature ?? 0, maxTokens: maxOut,
+    let capUsed = maxOut;
+    let attempt = 0;
+    let callFailed = false;
+    for (;;) {
+      const attemptId = attempt === 0 ? callId : `${callId}:retry${attempt}`;
+      try {
+        ledger.reserve({ id: attemptId, model, maxInputTokens: 32_000, maxOutputTokens: capUsed });
+        reply = await call(channel, messages, {
+          model, temperature: channel.temperature ?? 0, maxTokens: capUsed,
+        });
+        ledger.settle({ id: attemptId, model, ...reply.usage });
+      } catch (e) {
+        ledger.release(attemptId, e.message);
+        status = 'error';
+        error = { message: e.message, status: e.status ?? null, atTurn: turns.length };
+        callFailed = true;
+        break;
+      }
+      // A reasoning model can spend the whole budget thinking. Escalating the
+      // cap and retrying the SAME turn is honest (no answer was produced) and
+      // keeps a cell alive that would otherwise be discarded on one long
+      // thought. Bounded by the channel's hard ceiling and by 2 escalations.
+      const next = isTruncated(reply.finish) ? escalatedCap(capUsed, hardCeiling) : null;
+      if (next === null) break;
+      attempt += 1;
+      escalationLog.push({
+        turn: turns.length, from: capUsed, to: next,
+        reasoningChars: reply.reasoning?.length ?? 0,
       });
-      ledger.settle({ id: callId, model, ...reply.usage });
-    } catch (e) {
-      ledger.release(callId, e.message);
-      status = 'error';
-      error = { message: e.message, status: e.status ?? null, atTurn: turns.length };
-      break;
+      capUsed = next;
     }
+    if (callFailed) break;
     if (paceMs > 0) await new Promise((r) => setTimeout(r, paceMs));
+    // The truncated text is NOT committed to the transcript: it is an unfinished
+    // thought, and re-feeding it would make the retry cheaper in a way that
+    // silently changes the prompt.
     messages.push({ role: 'assistant', content: reply.text });
 
     // Truncation is checked BEFORE parsing. A reply cut off at the output cap
@@ -205,6 +241,7 @@ export async function runCell({ task, seed, channel, model, ledger, maxTurns, pa
     actionLog: world.actionLog,
     turns,
     promptVersion: PROMPT_VERSION,
+    ...(escalationLog.length ? { escalations: escalationLog } : {}),
     ...(isSwe ? { sweChecks: world.sweChecks } : {}),
   };
 }

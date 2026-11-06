@@ -7,7 +7,7 @@ import { Ledger, estimateCost, priceOf, UnknownPriceError, BudgetExceededError }
 import { parseAction, renderObservation, SYSTEM_PROMPT, PROMPT_VERSION } from '../providers/prompt.mjs';
 import { CHANNELS, available, officialChannels, resolveChannel } from '../providers/registry.mjs';
 import { normaliseFinish, isTruncated } from '../providers/protocols.mjs';
-import { classifyReply } from '../runner.mjs';
+import { classifyReply, escalatedCap } from '../runner.mjs';
 import { World, num, ref, op } from '../engine/index.mjs';
 
 test('cost is integer micro-USD and unknown prices block spending', () => {
@@ -148,4 +148,11 @@ test('a truncated reply is never an answer, even if it parses', () => {
 test('a reasoning-only reply is classified empty, not parsed', () => {
   assert.equal(classifyReply({ text: '', finish: 'stop' }), 'empty');
   assert.equal(classifyReply({ text: '   \n ', finish: 'end_turn' }), 'empty');
+});
+
+test('output budget escalates on truncation and stops at the ceiling', () => {
+  assert.equal(escalatedCap(16384, 32768), 32768);
+  assert.equal(escalatedCap(16384, 65536), 32768);
+  assert.equal(escalatedCap(32768, 32768), null, 'no room above the ceiling');
+  assert.equal(escalatedCap(0, 32768), null, 'a zero cap is a config error, not a retry');
 });

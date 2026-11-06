@@ -50,7 +50,13 @@ export const CHANNELS = [
   { id: 'agent2api-local', baseUrl: 'http://127.0.0.1:3065/v1', protocol: 'openai', tier: 'relay',
     models: ['glm-5.3-flash', 'gpt-6-luna', 'gemini-3-flash-preview',
              'minimax-code/MiniMax-M3.1-Flash', 'deepseek-v4.1-flash'],
-    keyEnv: 'AGENT2API_API_KEY', timeoutMs: 240000 },
+    // Backend swap, measured 2026-11-06: `deepseek-v4.1-flash` was the 1.00x,
+    // 84-output-token arm in docs/powered-run on 11-05. It now returns a
+    // thinking block and no text at 512, and a valid action at 16384
+    // (2380 output, 19s). `glm-5.3-flash` OVERRUNS the cap (asked 512, got 1536)
+    // and timed out at 8192. Same model id, different model behind it — the
+    // instability docs/CHANNELS.md §6 records, one day later.
+    keyEnv: 'AGENT2API_API_KEY', maxTokens: 16384, timeoutMs: 240000 },
   { id: 'opencsg-local', baseUrl: 'http://127.0.0.1:7871/v1', protocol: 'openai', tier: 'relay',
     models: ['qwen3.8-max', 'deepseek-v4-pro', 'glm-5.3-flash'], keyEnv: 'OPENCSG_API_KEY', maxTokens: 16384, timeoutMs: 240000 },
   { id: 'orcaterm-local', baseUrl: 'http://127.0.0.1:8010/v1', protocol: 'openai', tier: 'relay',
