@@ -1,5 +1,8 @@
 # VIGIL
 
+[![ci](https://github.com/NaIWaniubi/vigil/actions/workflows/ci.yml/badge.svg)](https://github.com/NaIWaniubi/vigil/actions/workflows/ci.yml)
+[![leaderboard](https://img.shields.io/badge/leaderboard-live-7dd3fc)](https://naiwaniubi.github.io/vigil/)
+
 **A solver-calibrated long-horizon agent benchmark.**
 
 Every `vigil-rush` task ships a BFS-proven shortest solution, and every task in that family is admitted only after a greedy baseline is proven to fail it. (`vigil-core` and `vigil-swe` ship correct oracles, not shortest-path ones — stated so the word 'shortest' is not doing work it hasn't earned.) Every failure is attributed to the exact action and the rule it broke. The evaluator audits itself before it scores anything.
