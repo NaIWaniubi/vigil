@@ -31,7 +31,7 @@ node scripts/verify.mjs docs/deep-run               # depth-8 试点（8 文件�
 node scripts/verify.mjs docs/preliminary-run
 node scripts/stats-report.mjs docs/reference-run    # 功效判定：underpowered
 node scripts/behavior-report.mjs docs/reference-run # 浪费率 / 效率
-node scripts/reproduce.mjs                          # 一键离线自洽（4 项）
+node scripts/reproduce.mjs                          # 一键离线自洽（6 项）
 ```
 
 ## 结论的强度
