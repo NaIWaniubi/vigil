@@ -101,6 +101,8 @@ node scripts/cluster.mjs --dry-run --family rush --limit 4 --reps 1
 node scripts/verify.mjs <run-dir> --write   # MANIFEST + prompt fingerprint + numbers
 node scripts/verify.mjs <run-dir>            # exit 1 on any tamper
 node scripts/discrimination.mjs <run-dir>    # greedy vs oracle vs model win rates
+node scripts/behavior-report.mjs <run-dir>   # waste and move-efficiency profile
+node scripts/cross-model.mjs                 # recompute docs/CROSS-MODEL.md from all bundles
 ```
 
 ## Design rules

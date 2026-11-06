@@ -540,9 +540,28 @@ function checkRushSamples(datasetPath, count = SAMPLES) {
 // Table.
 
 const started = Date.now();
+// Cross-model table must match the bundles it claims to summarise.
+function checkCrossModel() {
+  const path = join(ROOT, 'docs', 'cross-model.json');
+  if (!existsSync(path)) return { ok: false, problems: ['docs/cross-model.json missing — run: node scripts/cross-model.mjs'] };
+  const published = JSON.parse(readFileSync(path, 'utf8'));
+  const before = new Map(published.arms.map((a) => [a.label, JSON.stringify(a.summary)]));
+  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'cross-model.mjs')], { encoding: 'utf8', cwd: ROOT });
+  if (res.status !== 0) return { ok: false, problems: [`cross-model.mjs exited ${res.status}: ${res.stderr.slice(-200)}`] };
+  const fresh = JSON.parse(readFileSync(path, 'utf8'));
+  const problems = [];
+  for (const a of fresh.arms) {
+    if (!before.has(a.label)) { problems.push(`new arm ${a.label}`); continue; }
+    if (before.get(a.label) !== JSON.stringify(a.summary)) problems.push(`arm ${a.label}: numbers changed`);
+  }
+  return { ok: problems.length === 0, problems };
+}
+
+const crossModel = checkCrossModel();
 const checks = [
   { name: 'reference-run', ...checkReferenceRun(REFERENCE_RUN) },
   { name: 'discrimination', ...checkDiscrimination(REFERENCE_RUN, DISCRIMINATION) },
+  { name: 'cross-model', ok: crossModel.ok, detail: crossModel.ok ? 'table matches the committed bundles' : crossModel.problems.join('; ') },
   { name: 'rush-calibration', ...checkRushCalibration(DATASET) },
   { name: 'rush-samples', ...checkRushSamples(DATASET) },
 ];

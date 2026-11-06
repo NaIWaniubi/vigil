@@ -7,6 +7,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `docs/reference-run/` | v0.2 末期 | `rush-v1`：单条 `exit` 约束 | gemini-3-flash-preview | 13 / 55 | 30.8% [12.7, 57.6] | 主参考；证明管线可用，并暴露 42/55 是基础设施失败 |
 | `docs/preliminary-run/` | v0.3 早期 | `rush-v1` | glm-5.3-flash / agent2api-auto | 2 + 10 / 24 | 100% / 80% | 第一份跨模型数据；两个 CI 重叠，`stats-report` 判 `underpowered` |
+| `docs/powered-run/` | v0.3 | `rush-v2`（4 条约束） | deepseek-v4.1-flash-1017 | 11 / 53 | 100% [74,100]，效率 **1.00×**，浪费 **0%** | 第一份**新格式** bundle；通道 403 中断，只到 depth 12 |
 
 ## 为什么不能直接比较
 

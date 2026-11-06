@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-11-06T03:18:58.007Z",
+  "run": "./docs/powered-run",
+  "cells": 53,
+  "scoreable": 11,
+  "definition": {
+    "waste": "(noops + illegalMoves) / turns — paid turns that produced nothing",
+    "efficiency": "legalMoves / optimalDepth — 1.0 means it solved in the shortest path",
+    "note": "computed from the action log, NOT from the `neglected` attribution label"
+  },
+  "models": [
+    {
+      "model": "apigoto-api-apigoto-com/deepseek-flash",
+      "all": {
+        "n": 11,
+        "turnsMean": 15.909090909090908,
+        "turnsMedian": 12,
+        "legalMean": 8.818181818181818,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1,
+        "efficiencyMax": 1.25
+      },
+      "wins": {
+        "n": 11,
+        "turnsMean": 15.909090909090908,
+        "turnsMedian": 12,
+        "legalMean": 8.818181818181818,
+        "illegalMean": 0,
+        "noopMean": 0,
+        "wasteMean": 0,
+        "efficiencyMedian": 1,
+        "efficiencyMax": 1.25
+      },
+      "losses": {
+        "n": 0,
+        "turnsMean": null,
+        "turnsMedian": null,
+        "legalMean": null,
+        "illegalMean": null,
+        "noopMean": null,
+        "wasteMean": null,
+        "efficiencyMedian": null,
+        "efficiencyMax": null
+      }
+    }
+  ]
+}

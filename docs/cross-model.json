@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-11-06T03:18:50.612Z",
+  "arms": [
+    {
+      "dir": "docs/reference-run",
+      "label": "reference",
+      "summary": {
+        "dir": "docs/reference-run",
+        "maxTurns": null,
+        "historyWindow": 0,
+        "taskFormat": "rush-v1",
+        "cells": 55,
+        "models": [
+          {
+            "model": "gemini-3-flash-preview",
+            "n": 13,
+            "wins": 4,
+            "winRate": 0.3076923076923077,
+            "winRateCI95": [
+              0.12680497161618087,
+              0.5763111218666236
+            ],
+            "turnsMean": 53.76923076923077,
+            "legalMean": 27.23076923076923,
+            "efficiencyMedian": 2.2222222222222223,
+            "wasteMean": 0.30850814924376435
+          }
+        ]
+      }
+    },
+    {
+      "dir": "docs/preliminary-run",
+      "label": "preliminary",
+      "summary": {
+        "dir": "docs/preliminary-run",
+        "maxTurns": 32,
+        "historyWindow": 3,
+        "taskFormat": "rush-v1",
+        "cells": 24,
+        "models": [
+          {
+            "model": "agent2api/auto",
+            "n": 10,
+            "wins": 8,
+            "winRate": 0.8,
+            "winRateCI95": [
+              0.49015684672072335,
+              0.9433190520193067
+            ],
+            "turnsMean": 17.1,
+            "legalMean": 8.7,
+            "efficiencyMedian": 1.1180555555555556,
+            "wasteMean": 0
+          },
+          {
+            "model": "glm-5.3-flash",
+            "n": 2,
+            "wins": 2,
+            "winRate": 1,
+            "winRateCI95": [
+              0.34237195288961925,
+              1
+            ],
+            "turnsMean": 13.5,
+            "legalMean": 11,
+            "efficiencyMedian": 1.2,
+            "wasteMean": 0
+          }
+        ]
+      }
+    },
+    {
+      "dir": "docs/powered-run",
+      "label": "powered",
+      "summary": {
+        "dir": "docs/powered-run",
+        "maxTurns": null,
+        "historyWindow": 3,
+        "taskFormat": "rush-v2 (exit + 3 pinned-vehicle milestones; binding obligations)",
+        "cells": 53,
+        "models": [
+          {
+            "model": "apigoto-api-apigoto-com/deepseek-flash",
+            "n": 11,
+            "wins": 11,
+            "winRate": 1,
+            "winRateCI95": [
+              0.7411599827511859,
+              1
+            ],
+            "turnsMean": 15.909090909090908,
+            "legalMean": 8.818181818181818,
+            "efficiencyMedian": 1,
+            "wasteMean": 0
+          }
+        ]
+      }
+    }
+  ]
+}

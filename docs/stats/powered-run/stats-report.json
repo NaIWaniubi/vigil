@@ -1,0 +1,75 @@
+{
+  "run": "E:\\myzcode\\vigil\\docs\\powered-run",
+  "generatedAt": "2026-11-06T03:18:57.788Z",
+  "bootstrap": {
+    "iterations": 10000,
+    "alpha": 0.05,
+    "seed": "FNV-1a(model | pair), fixed per group — same run reproduces the same bounds"
+  },
+  "protocol": {
+    "promptVersion": "vigil-agent-v2",
+    "engineVersion": "0.2.0",
+    "temperature": 0,
+    "reps": 1,
+    "family": "rush",
+    "targets": [
+      "apigoto-api-apigoto-com/deepseek-flash"
+    ]
+  },
+  "dataQuality": {
+    "rows": 53,
+    "scoreable": 11,
+    "infraErrors": 42,
+    "modelsInRun": 1,
+    "modelsScoreable": 1,
+    "modelsWithNoScoreable": [],
+    "cellsWithRepeats": 0,
+    "families": [
+      "rush"
+    ]
+  },
+  "models": [
+    {
+      "model": "apigoto-api-apigoto-com/deepseek-flash",
+      "n": 11,
+      "wins": 11,
+      "winRate": 1,
+      "wilsonCI95": [
+        0.7411599827511859,
+        1
+      ],
+      "bootstrapCI95": [
+        1,
+        1
+      ],
+      "excludedInfraErrors": 42
+    }
+  ],
+  "pairwise": [],
+  "power": {
+    "effect": {
+      "p1": 0.3,
+      "p2": 0.6,
+      "absoluteDifference": 0.3
+    },
+    "alpha": 0.05,
+    "targetPower": 0.8,
+    "requiredNPerGroup": 42,
+    "achievedN": 11,
+    "bestSampledN": 11,
+    "powerAtAchievedN": 0.2837305430424063,
+    "verdict": "underpowered",
+    "explanation": "n=11 < required 42 per group for a 30pp difference at 80% power"
+  },
+  "verdict": "underpowered",
+  "notes": [
+    "42 of 53 rows were infrastructure failures; they are excluded from win rates, not scored as losses.",
+    "Detecting a 30pp effect at 80% power needs 42 cells per group; this run has 11. It cannot support a claim at that effect size.",
+    "Bootstrap CI for apigoto-api-apigoto-com/deepseek-flash collapsed to a point ([100.0%, 100.0%]) because every resample was identical. At n=11 this is a boundary artifact, not certainty; use the Wilson interval.",
+    "This run is a sealed bundle (MANIFEST.sha256); stats-report.json/md were written outside it to E:\\myzcode\\vigil\\docs\\stats\\powered-run so scripts/verify.mjs stays valid."
+  ],
+  "reportJson": {
+    "found": true,
+    "publishedMismatches": []
+  }
+}
