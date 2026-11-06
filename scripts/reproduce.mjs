@@ -559,6 +559,9 @@ const checks = [
   { name: 'reference-run', ...checkReferenceRun(REFERENCE_RUN) },
   { name: 'discrimination', ...checkDiscrimination(REFERENCE_RUN, DISCRIMINATION) },
   { name: 'cross-model', ok: crossModel.ok, detail: crossModel.ok ? 'table matches the committed bundles' : crossModel.problems.join('; ') },
+  // The depth-8 pilot is cited in docs/CHANNELS.md §7. Bundling it without
+  // checking it would be the same mistake the bundles exist to prevent.
+  { name: 'deep-run', ...checkReferenceRun(join(ROOT, 'docs', 'deep-run')) },
   { name: 'rush-calibration', ...checkRushCalibration(DATASET) },
   { name: 'rush-samples', ...checkRushSamples(DATASET) },
 ];

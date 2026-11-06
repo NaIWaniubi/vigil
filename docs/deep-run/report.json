@@ -1,0 +1,219 @@
+{
+  "run": "E:\\myzcode\\vigil\\docs\\deep-run",
+  "generatedAt": "2026-11-06T04:22:11.548Z",
+  "protocol": {
+    "promptVersion": "vigil-agent-v2",
+    "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
+    "taskFormat": "rush-v2 (exit + 3 pinned-vehicle milestones; binding obligations)",
+    "engineVersion": "0.2.0",
+    "runner": "cluster",
+    "concurrency": 1,
+    "paceMs": 1200,
+    "historyWindow": 3,
+    "maxTurns": 16,
+    "temperature": 0,
+    "maxTokens": {
+      "magpie-local": 16384
+    },
+    "reps": 1,
+    "family": "rush",
+    "targets": [
+      {
+        "channel": "magpie-local",
+        "model": "apigoto-api-apigoto-com/deepseek-flash",
+        "tier": "local"
+      }
+    ],
+    "channels": [
+      {
+        "id": "deepseek",
+        "baseUrl": "https://api.deepseek.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "deepseek-anthropic",
+        "baseUrl": "https://api.deepseek.com/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "sensenova-kimi",
+        "baseUrl": "https://token.sensenova.cn/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "stepfun",
+        "baseUrl": "https://api.stepfun.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "bigmodel",
+        "baseUrl": "https://open.bigmodel.cn/api/anthropic",
+        "protocol": "anthropic",
+        "tier": "official"
+      },
+      {
+        "id": "bitdeer",
+        "baseUrl": "https://api-inference.bitdeer.ai/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "gmi",
+        "baseUrl": "https://api.gmi-serving.com/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "openrouter",
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "protocol": "openai",
+        "tier": "official"
+      },
+      {
+        "id": "magpie-local",
+        "baseUrl": "http://127.0.0.1:3425",
+        "protocol": "anthropic",
+        "tier": "local"
+      },
+      {
+        "id": "agent2api-local",
+        "baseUrl": "http://127.0.0.1:3065/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "opencsg-local",
+        "baseUrl": "http://127.0.0.1:7871/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      },
+      {
+        "id": "orcaterm-local",
+        "baseUrl": "http://127.0.0.1:8010/v1",
+        "protocol": "openai",
+        "tier": "relay"
+      }
+    ],
+    "startedAt": "2026-11-06T04:06:16.587Z"
+  },
+  "cells": 3,
+  "scoreable": 3,
+  "infraErrors": 0,
+  "spendUsd": 0.043406,
+  "apiCalls": 24,
+  "profiles": [
+    {
+      "model": "apigoto-api-apigoto-com/deepseek-flash",
+      "track": "compliant",
+      "cells": 3,
+      "wins": 3,
+      "winRate": 1,
+      "winRateCI95": [
+        0.43849391955098227,
+        1
+      ],
+      "reachedMean": 4,
+      "passedMean": 4,
+      "violationsByClass": {
+        "regressed": 1,
+        "neglected": 20,
+        "revealed": 3
+      },
+      "oldestViolatedConstraintAge": 6,
+      "obligationDeaths": 0,
+      "turnsMean": 8,
+      "turnsStd": 0,
+      "ticksMean": 8,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    },
+    {
+      "model": "apigoto-api-apigoto-com/deepseek-flash",
+      "track": "raw",
+      "cells": 3,
+      "wins": 3,
+      "winRate": 1,
+      "winRateCI95": [
+        0.43849391955098227,
+        1
+      ],
+      "reachedMean": 4,
+      "passedMean": 4,
+      "violationsByClass": {
+        "regressed": 1,
+        "neglected": 20,
+        "revealed": 3
+      },
+      "oldestViolatedConstraintAge": 6,
+      "obligationDeaths": 0,
+      "turnsMean": 8,
+      "turnsStd": 0,
+      "ticksMean": 8,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 0
+    }
+  ],
+  "stability": {
+    "cellsWithRepeats": 0,
+    "meanConsistency": null,
+    "fullyStable": 0,
+    "coinFlip": 0,
+    "perCell": []
+  },
+  "costCurves": [
+    {
+      "model": "apigoto-api-apigoto-com/deepseek-flash",
+      "points": [
+        {
+          "depth": 8,
+          "cost": 0.014468666666666666
+        }
+      ],
+      "fit": {
+        "multiplier": null,
+        "r2": null,
+        "n": 1
+      }
+    }
+  ],
+  "hypotheses": {
+    "H1_conflict": {
+      "table": [
+        {
+          "model": "apigoto-api-apigoto-com/deepseek-flash",
+          "winRateNone": null,
+          "winRateCoupled": null,
+          "delta": null
+        }
+      ],
+      "rankNone": [],
+      "rankCoupled": [],
+      "rankCorrelation": null,
+      "reordered": false,
+      "depthCurve": [
+        {
+          "bucket": "8-9",
+          "n": 3,
+          "winRate": 1
+        }
+      ]
+    },
+    "H2_neglect": {
+      "n": 0,
+      "pearsonPassedVsDeaths": null,
+      "spearmanPassedVsDeaths": null,
+      "pearsonPassedVsSurvival": null,
+      "maxProgressButDied": 0
+    }
+  }
+}
