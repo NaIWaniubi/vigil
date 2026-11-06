@@ -554,6 +554,12 @@ function checkCrossModel() {
   return { ok: true, problems: [] };
 }
 
+function checkSite() {
+  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'build-site.mjs'), 'docs/reference-run', '--check'], { encoding: 'utf8', cwd: ROOT });
+  if (res.status !== 0) return { ok: false, detail: (res.stderr || res.stdout).trim().slice(-240) };
+  return { ok: true, detail: 'web/index.html matches docs/reference-run' };
+}
+
 const crossModel = checkCrossModel();
 const checks = [
   { name: 'reference-run', ...checkReferenceRun(REFERENCE_RUN) },
@@ -562,6 +568,9 @@ const checks = [
   // The depth-8 pilot is cited in docs/CHANNELS.md §7. Bundling it without
   // checking it would be the same mistake the bundles exist to prevent.
   { name: 'deep-run', ...checkReferenceRun(join(ROOT, 'docs', 'deep-run')) },
+  // The public page is generated from reference-run; a stale page would publish
+  // numbers that no longer match the bundle. CI builds it, so check it here too.
+  { name: 'site', ...checkSite() },
   { name: 'rush-calibration', ...checkRushCalibration(DATASET) },
   { name: 'rush-samples', ...checkRushSamples(DATASET) },
 ];

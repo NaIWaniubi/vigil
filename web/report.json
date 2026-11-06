@@ -1,6 +1,6 @@
 {
   "run": "E:\\myzcode\\vigil\\docs\\reference-run",
-  "generatedAt": "2026-11-05T14:52:54.521Z",
+  "generatedAt": "2026-11-05T19:16:21.565Z",
   "protocol": {
     "promptVersion": "vigil-agent-v2",
     "promptSha256": "0800da8ce6b389503c03d46381eb72dd339c86248ec7f32303defa51afea4706",
@@ -118,6 +118,26 @@
   "apiCalls": 974,
   "profiles": [
     {
+      "model": "deepseek-v4-flash",
+      "track": "raw",
+      "cells": 0,
+      "wins": 0,
+      "winRate": null,
+      "winRateCI95": null,
+      "reachedMean": null,
+      "passedMean": null,
+      "violationsByClass": {},
+      "oldestViolatedConstraintAge": 0,
+      "obligationDeaths": 0,
+      "turnsMean": null,
+      "turnsStd": null,
+      "ticksMean": null,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 19,
+      "attempted": 19,
+      "note": "no scoreable cells (all attempts were infrastructure failures)"
+    },
+    {
       "model": "gemini-3-flash-preview",
       "track": "compliant",
       "cells": 13,
@@ -164,6 +184,26 @@
       "ticksMean": 53.76923076923077,
       "nonCompliant": 0,
       "excludedInfraErrors": 3
+    },
+    {
+      "model": "qwen3.8-max",
+      "track": "raw",
+      "cells": 0,
+      "wins": 0,
+      "winRate": null,
+      "winRateCI95": null,
+      "reachedMean": null,
+      "passedMean": null,
+      "violationsByClass": {},
+      "oldestViolatedConstraintAge": 0,
+      "obligationDeaths": 0,
+      "turnsMean": null,
+      "turnsStd": null,
+      "ticksMean": null,
+      "nonCompliant": 0,
+      "excludedInfraErrors": 20,
+      "attempted": 20,
+      "note": "no scoreable cells (all attempts were infrastructure failures)"
     }
   ],
   "stability": {

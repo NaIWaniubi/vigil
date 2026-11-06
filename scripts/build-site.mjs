@@ -34,11 +34,15 @@ function depthChart(curve) {
   const W = 640, H = 220, PAD = 40, BW = Math.min(90, (W - PAD * 2) / curve.length - 16);
   const y = (v) => H - PAD - v * (H - PAD * 2);
   const bars = curve.map((c, i) => {
+    // A bucket can be present with n=0 (or winRate null) once the profile
+    // counts a model with no scoreable cells. Rendering null here used to
+    // crash the whole Pages job.
+    const winRate = c.winRate ?? 0;
     const x = PAD + i * ((W - PAD * 2) / curve.length) + 8;
-    const top = y(c.winRate);
+    const top = y(winRate);
     const h = H - PAD - top;
     return `<rect x="${x}" y="${top}" width="${BW}" height="${Math.max(1, h)}" fill="#7dd3fc" opacity="0.85"/>`
-      + `<text x="${x + BW / 2}" y="${top - 6}" text-anchor="middle" fill="#e6e8eb" font-size="12">${(c.winRate * 100).toFixed(0)}%</text>`
+      + `<text x="${x + BW / 2}" y="${top - 6}" text-anchor="middle" fill="#e6e8eb" font-size="12">${(winRate * 100).toFixed(0)}%</text>`
       + `<text x="${x + BW / 2}" y="${H - PAD + 16}" text-anchor="middle" fill="#9aa3ad" font-size="11">${c.bucket}</text>`
       + `<text x="${x + BW / 2}" y="${H - PAD + 30}" text-anchor="middle" fill="#6b7280" font-size="10">n=${c.n}</text>`;
   }).join('');
@@ -55,7 +59,7 @@ function profileTable(track) {
 <th>broke</th><th>regressed</th><th>neglected</th><th>obligation deaths</th><th>oldest violated rule age</th><th>turns</th></tr></thead>
 <tbody>${rows.map((p) => `<tr>
 <td class="model">${esc(p.model)}</td><td>${p.cells}</td>
-<td>${pct(p.winRate)} <span class="ci">[${pct(p.winRateCI95[0])}, ${pct(p.winRateCI95[1])}]</span></td>
+<td>${pct(p.winRate)} <span class="ci">${p.winRateCI95 ? `[${pct(p.winRateCI95[0])}, ${pct(p.winRateCI95[1])}]` : '—'}</span>${p.cells === 0 && p.note ? `<div class="ci">${esc(p.note)}</div>` : ''}</td>
 <td>${num(p.reachedMean, 1)}</td><td>${num(p.passedMean, 1)}</td>
 <td>${p.violationsByClass.broke ?? 0}</td><td>${p.violationsByClass.regressed ?? 0}</td>
 <td>${p.violationsByClass.neglected ?? 0}</td><td>${p.obligationDeaths}</td>
@@ -173,6 +177,19 @@ Every number here reproduces from <code>results.jsonl</code> via <code>scripts/v
 </footer>
 </div></body></html>
 `;
+
+// `--check` compares the committed page without writing it, so a verification
+// run cannot leave the tree dirty and CI/local agree on what is published.
+if (process.argv.includes('--check')) {
+  const outPath = join(ROOT, 'web', 'index.html');
+  const current = existsSync(outPath) ? readFileSync(outPath, 'utf8').trimEnd() : '';
+  if (current !== html.trimEnd()) {
+    console.error(`web/index.html is stale relative to ${dir}; run: node scripts/build-site.mjs ${process.argv[2] ?? 'runs/latest'}`);
+    process.exit(1);
+  }
+  console.log('site: leaderboard matches the bundle');
+  process.exit(0);
+}
 
 const outDir = join(ROOT, 'web');
 mkdirSync(outDir, { recursive: true });
