@@ -150,6 +150,14 @@ truncations and empty replies are infrastructure failures and are excluded from
 the capability profile rather than counted as wrong answers. The leaderboard
 reports a capability profile, never a single headline score.
 
+## What external review found
+
+Three reviewers (a newcomer, a positioning skeptic, a hostile verifier) ran
+against this repo and falsified six claims. All six are fixed with regression
+tests; `docs/REVIEW-U13.md` records the finding, the evidence command, and the
+disposition — including the one that mattered most: a losing model could make
+its own cells disappear from the denominator by crashing on purpose.
+
 ## Citation
 
 `docs/REPORT.en.md` §Citation carries a BibTeX entry; the citable artifacts are
