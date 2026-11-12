@@ -33,11 +33,21 @@ function walk(dir, base = dir, out = []) {
 function checkManifest(dir) {
   const path = join(dir, 'MANIFEST.sha256');
   if (!existsSync(path)) return { ok: false, problems: ['MANIFEST.sha256 missing — run with --write first'] };
+  // A reviewer falsified the "tamper ANY byte" claim by reformatting this file:
+  // `^hash\s+name$` accepted one space where --write emits two (the sha256sum
+  // format), so the bytes changed while every listed hash still matched. The
+  // format is strict now (exactly the two spaces --write emits, no surrounding
+  // whitespace, no duplicates), which makes a cosmetic edit to the manifest
+  // itself a failure too.
   const listed = new Map();
-  for (const line of readFileSync(path, 'utf8').split('\n')) {
-    if (!line.trim()) continue;
-    const m = line.match(/^([0-9a-f]{64})\s+(.+)$/);
-    if (!m) return { ok: false, problems: [`malformed manifest line: ${line.slice(0, 60)}`] };
+  const lines = readFileSync(path, 'utf8').split('\n');
+  if (lines[lines.length - 1] === '') lines.pop();
+  for (const line of lines) {
+    const m = line.match(/^([0-9a-f]{64}) {2}(\S.*)$/);
+    if (!m || line !== line.trim()) {
+      return { ok: false, problems: [`malformed manifest line: ${JSON.stringify(line.slice(0, 60))}`] };
+    }
+    if (listed.has(m[2])) return { ok: false, problems: [`duplicate manifest entry: ${m[2]}`] };
     listed.set(m[2], m[1]);
   }
   const problems = [];

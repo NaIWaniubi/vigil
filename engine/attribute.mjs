@@ -83,7 +83,10 @@ export function attribute({
     tick,
     constraintId: constraint.id,
     introducedAtStep: constraint.revealAt,
-    ageInSteps: stepIndex - constraint.revealAt,
+    // A constraint revealed for the step we are ENTERING has age 0; `stepIndex`
+    // can be one behind its revealAt, which used to yield age -1. Clamp: "how
+    // many steps has this rule been in force and failing" is never negative.
+    ageInSteps: Math.max(0, stepIndex - constraint.revealAt),
     class: cls,
     actionType: action?.type ?? null,
     blamedPaths: blamed.length ? blamed : changed.slice(0, 8),
@@ -124,7 +127,7 @@ export function attributeObligationDeath({ stepIndex, death, spec, live }) {
     tick: death.atTick,
     obligationId: death.obligationId,
     introducedAtStep: spec.revealAt,
-    ageInSteps: stepIndex - spec.revealAt,
+    ageInSteps: Math.max(0, stepIndex - spec.revealAt),
     class: 'obligation_lapsed',
     kind: death.kind,
     cause: death.cause,

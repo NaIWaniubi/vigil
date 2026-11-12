@@ -59,14 +59,40 @@ export class BudgetExceededError extends Error {
 
 const micros = (usdPerMillion) => usdPerMillion; // USD/1e6 tokens == microUSD/token
 
-export function priceOf(model) {
-  const p = PRICES[model];
-  if (!p) throw new UnknownPriceError(model);
-  return { inMicros: micros(p.in), outMicros: micros(p.out) };
+/**
+ * A price supplied by the operator, so a brand-new model does not hard-block
+ * the run. Two forms, both in USD per 1M tokens:
+ *   VIGIL_PRICE_IN / VIGIL_PRICE_OUT            — one pair for this run
+ *   VIGIL_PRICE_<MODEL>_IN / _OUT               — per model
+ * (a model name is upper-cased and non-alphanumerics become `_`.)
+ * An explicit price is recorded as operator-supplied; the ledger tags it so a
+ * cost comparison cannot silently mix list rates with guesses.
+ */
+function envPrice(model, env) {
+  const slug = String(model).toUpperCase().replace(/[^A-Z0-9]/g, '_');
+  const num = (v) => (v === undefined || v === '' ? undefined : Number(v));
+  const inUsd = num(env[`VIGIL_PRICE_${slug}_IN`]) ?? num(env.VIGIL_PRICE_IN);
+  const outUsd = num(env[`VIGIL_PRICE_${slug}_OUT`]) ?? num(env.VIGIL_PRICE_OUT);
+  if (inUsd === undefined && outUsd === undefined) return null;
+  if (!Number.isFinite(inUsd ?? 0) || !Number.isFinite(outUsd ?? 0)) {
+    throw new Error(`bad price env for ${model}: VIGIL_PRICE_* must be numbers (USD per 1M tokens)`);
+  }
+  return { in: inUsd ?? 0, out: outUsd ?? 0, source: 'operator' };
 }
 
-export function estimateCost(model, inputTokens, outputTokens) {
-  const p = priceOf(model);
+export function priceOf(model, env = process.env) {
+  const override = envPrice(model, env);
+  const p = override ?? PRICES[model];
+  if (!p) {
+    throw new UnknownPriceError(
+      `${model} — add it to PRICES or set VIGIL_PRICE_IN/VIGIL_PRICE_OUT (USD per 1M tokens)`,
+    );
+  }
+  return { inMicros: micros(p.in), outMicros: micros(p.out), source: p.source ?? 'list' };
+}
+
+export function estimateCost(model, inputTokens, outputTokens, env = process.env) {
+  const p = priceOf(model, env);
   return Math.ceil(inputTokens * p.inMicros + outputTokens * p.outMicros);
 }
 

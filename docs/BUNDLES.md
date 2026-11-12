@@ -7,7 +7,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `docs/reference-run/` | v0.2 末期 | `rush-v1`：单条 `exit` 约束 | gemini-3-flash-preview | 13 / 55 | 30.8% [12.7, 57.6] | 主参考；证明管线可用，并暴露 42/55 是基础设施失败 |
 | `docs/preliminary-run/` | v0.3 早期 | `rush-v1` | glm-5.3-flash / agent2api-auto | 2 + 10 / 24 | 100% / 80% | 第一份跨模型数据；两个 CI 重叠，`stats-report` 判 `underpowered` |
-| `docs/powered-run/` | v0.3 | `rush-v2`（4 条约束） | deepseek-v4.1-flash-1017 | 11 / 53 | 100% [74,100]，效率 **1.00×**，浪费 **0%** | 第一份**新格式** bundle；通道 403 中断，只到 depth 12 |
+| `docs/powered-run/` | v0.3 | `rush-v2`（4 条约束） | apigoto-api-apigoto-com/deepseek-flash | 11 / 53 | 100% [74,100]，效率 **1.00×**，浪费 **0%** | 第一份**新格式** bundle；通道 403 中断，只到 depth 12 |
 | `docs/deep-run/` | v0.3.1 | `rush-v2` | `deepseek-flash`（经 magpie 中继，**推理型**） | 3 / 3 | 100%（n=3，只覆盖 depth 8），效率 **1.00×**，浪费 **0%** | 试点：证明该通道在 depth 8 上会下棋且最优；**不进 CROSS-MODEL 表**（深度带不同，混进去就是造假） |
 
 ## 为什么不能直接比较
@@ -31,7 +31,7 @@ node scripts/verify.mjs docs/deep-run               # depth-8 试点（8 文件�
 node scripts/verify.mjs docs/preliminary-run
 node scripts/stats-report.mjs docs/reference-run    # 功效判定：underpowered
 node scripts/behavior-report.mjs docs/reference-run # 浪费率 / 效率
-node scripts/reproduce.mjs                          # 一键离线自洽（6 项）
+node scripts/reproduce.mjs                          # 一键离线自洽（8 项）
 ```
 
 ## 结论的强度

@@ -152,7 +152,12 @@ if (process.argv.includes('--check')) {
 
   const published = JSON.parse(readFileSync(outJson, 'utf8'));
   // `generatedAt` is a timestamp, not a measurement -> excluded on purpose.
-  const shape = (x) => JSON.stringify(x.arms.map((a) => [a.label, a.summary]));
+  // Compare the WHOLE document except the timestamp. An earlier version compared
+  // only `.arms`, so an added or edited top-level field passed the check.
+  const shape = (x) => {
+    const { generatedAt, ...rest } = x;
+    return JSON.stringify(rest);
+  };
   if (shape(published) !== shape({ arms })) fail('cross-model.json does not match the bundles');
 
   const mdPublished = readFileSync(outMd, 'utf8').trimEnd();

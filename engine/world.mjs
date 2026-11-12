@@ -19,7 +19,7 @@
 //   6. "每一次失败都要能被定位"
 //      → every violation carries (stepIndex, constraintId, introducedAtStep).
 
-import { assertSafePath, canonical, evaluate, holds, reads, validate as validateExpr } from './expr.mjs';
+import { assertSafePath, canonical, evaluate, holds, reads, validate as validateExpr, ExprError } from './expr.mjs';
 import {
   advance, observe, prng, rearm, repair, spawn,
   validateObligation,
@@ -355,7 +355,19 @@ export class World {
     }
     const before = clone(this.state);
     const wasHolding = new Map(this.holding);
-    const applied = this.#apply(action);
+    // Malformed agent input is a LOGGED FAILURE, never a crash. An external
+    // reviewer found the exploit: a `set` whose path passes the genericWrites
+    // prefix gate but holds an empty segment (or `__proto__`) reached setPath,
+    // threw out of step(), and the cluster recorded status=error — which the
+    // aggregator EXCLUDES from scoring. A losing model could therefore drop its
+    // hard cells from the denominator by crashing on purpose.
+    let applied;
+    try {
+      applied = this.#apply(action);
+    } catch (e) {
+      if (e instanceof ExprError) applied = { ok: false, error: e.message };
+      else throw e;
+    }
     const cost = this.#costOf(action);
     const prevTick = this.tick;
     this.tick += cost;

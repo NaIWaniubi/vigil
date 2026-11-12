@@ -63,17 +63,64 @@ export const CHANNELS = [
     models: ['glm-5.3', 'kimi-k3', 'deepseek-v4-pro'], keyEnv: 'ORCATERM_API_KEY' },
 ];
 
+export const CUSTOM_CHANNEL_ID = 'custom';
+
+/**
+ * A channel defined entirely by environment variables, so pointing the harness
+ * at your own endpoint needs no source edit. Before this existed, an external
+ * tester found that adoption required editing CHANNELS *and* the price table.
+ *
+ *   VIGIL_BASE_URL=https://my.endpoint/v1
+ *   VIGIL_MODELS=my-model            (comma-separated; VIGIL_MODEL also works)
+ *   VIGIL_API_KEY=sk-...             (omit with VIGIL_ALLOW_NO_KEY=1 for local)
+ *   VIGIL_PROTOCOL=openai|anthropic  (default openai)
+ *   VIGIL_MAX_TOKENS=16384           (optional; reasoning models need this)
+ *   VIGIL_PRICE_IN=0.3 VIGIL_PRICE_OUT=0.5   (USD per 1M tokens; see ledger.mjs)
+ */
+export function customChannel(env = process.env) {
+  const baseUrl = env.VIGIL_BASE_URL;
+  if (!baseUrl) return null;
+  const models = String(env.VIGIL_MODELS ?? env.VIGIL_MODEL ?? '')
+    .split(',').map((s) => s.trim()).filter(Boolean);
+  if (!models.length) {
+    throw new Error('VIGIL_BASE_URL is set but VIGIL_MODELS/VIGIL_MODEL names no model');
+  }
+  return {
+    id: env.VIGIL_CHANNEL_ID ?? CUSTOM_CHANNEL_ID,
+    baseUrl,
+    protocol: env.VIGIL_PROTOCOL ?? 'openai',
+    tier: env.VIGIL_TIER ?? 'custom',
+    models,
+    keyEnv: 'VIGIL_API_KEY',
+    ...(env.VIGIL_MAX_TOKENS ? { maxTokens: Number(env.VIGIL_MAX_TOKENS) } : {}),
+    ...(env.VIGIL_HARD_MAX_TOKENS ? { hardMaxTokens: Number(env.VIGIL_HARD_MAX_TOKENS) } : {}),
+    timeoutMs: env.VIGIL_TIMEOUT_MS ? Number(env.VIGIL_TIMEOUT_MS) : 300000,
+  };
+}
+
+/** Built-in channels plus the env-defined one, if any. */
+export function allChannels(env = process.env) {
+  const custom = customChannel(env);
+  return custom ? [...CHANNELS, custom] : CHANNELS;
+}
+
 export function resolveChannel(id, env = process.env) {
-  const ch = CHANNELS.find((c) => c.id === id);
-  if (!ch) throw new Error(`unknown channel: ${id}`);
+  const list = allChannels(env);
+  const ch = list.find((c) => c.id === id);
+  if (!ch) {
+    const hint = env.VIGIL_BASE_URL ? '' : ' (set VIGIL_BASE_URL to define a custom channel)';
+    throw new Error(`unknown channel: ${id}${hint}`);
+  }
   const key = env[ch.keyEnv];
-  if (!key) throw new Error(`channel ${id} needs env ${ch.keyEnv}`);
-  return { ...ch, key };
+  if (!key && !(ch.tier === 'custom' && env.VIGIL_ALLOW_NO_KEY)) {
+    throw new Error(`channel ${id} needs env ${ch.keyEnv}`);
+  }
+  return { ...ch, key: key ?? '' };
 }
 
 /** Which channels are actually usable right now (key present). */
 export function available(env = process.env) {
-  return CHANNELS.filter((c) => !!env[c.keyEnv]).map((c) => ({
+  return allChannels(env).filter((c) => !!env[c.keyEnv] || (c.tier === 'custom' && env.VIGIL_ALLOW_NO_KEY)).map((c) => ({
     id: c.id, protocol: c.protocol, tier: c.tier, models: c.models,
   }));
 }

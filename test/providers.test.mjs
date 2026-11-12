@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Ledger, estimateCost, priceOf, UnknownPriceError, BudgetExceededError } from '../providers/ledger.mjs';
 import { parseAction, renderObservation, SYSTEM_PROMPT, PROMPT_VERSION } from '../providers/prompt.mjs';
-import { CHANNELS, available, officialChannels, resolveChannel } from '../providers/registry.mjs';
+import { CHANNELS, available, officialChannels, resolveChannel, customChannel, allChannels } from '../providers/registry.mjs';
 import { normaliseFinish, isTruncated } from '../providers/protocols.mjs';
 import { classifyReply, escalatedCap } from '../runner.mjs';
 import { World, num, ref, op } from '../engine/index.mjs';
@@ -155,4 +155,46 @@ test('output budget escalates on truncation and stops at the ceiling', () => {
   assert.equal(escalatedCap(16384, 65536), 32768);
   assert.equal(escalatedCap(32768, 32768), null, 'no room above the ceiling');
   assert.equal(escalatedCap(0, 32768), null, 'a zero cap is a config error, not a retry');
+});
+
+// ---------------------------------------------------------------------------
+// Bring-your-own-model must not require editing source.
+// External reviewer (2026-11-13): pointing the harness at a custom endpoint
+// needed edits in providers/registry.mjs AND providers/ledger.mjs, and the
+// price gate rejected a new model name outright.
+// ---------------------------------------------------------------------------
+
+test('a custom channel is defined entirely by environment variables', () => {
+  const env = {
+    VIGIL_BASE_URL: 'https://my.endpoint/v1',
+    VIGIL_MODELS: 'alpha,beta',
+    VIGIL_API_KEY: 'sk-test',
+    VIGIL_PROTOCOL: 'anthropic',
+    VIGIL_MAX_TOKENS: '16384',
+  };
+  const ch = customChannel(env);
+  assert.equal(ch.id, 'custom');
+  assert.equal(ch.baseUrl, 'https://my.endpoint/v1');
+  assert.deepEqual(ch.models, ['alpha', 'beta']);
+  assert.equal(ch.protocol, 'anthropic');
+  assert.equal(ch.maxTokens, 16384);
+  const resolved = resolveChannel('custom', env);
+  assert.equal(resolved.key, 'sk-test');
+  assert.ok(allChannels(env).some((c) => c.id === 'custom'));
+  assert.equal(customChannel({}), null, 'no base url means no custom channel');
+});
+
+test('a local endpoint may run without a key, but only when allowed', () => {
+  const base = { VIGIL_BASE_URL: 'http://127.0.0.1:9/v1', VIGIL_MODELS: 'm' };
+  assert.throws(() => resolveChannel('custom', base), /needs env VIGIL_API_KEY/);
+  assert.equal(resolveChannel('custom', { ...base, VIGIL_ALLOW_NO_KEY: '1' }).key, '');
+});
+
+test('operators can price a model the table does not know', () => {
+  assert.throws(() => priceOf('brand-new-model', {}), UnknownPriceError);
+  assert.equal(estimateCost('brand-new-model', 1_000_000, 0, { VIGIL_PRICE_IN: 2 }), 2_000_000);
+  const perModel = { VIGIL_PRICE_BRAND_NEW_MODEL_IN: 1, VIGIL_PRICE_BRAND_NEW_MODEL_OUT: 4 };
+  assert.equal(estimateCost('brand-new-model', 0, 1_000_000, perModel), 4_000_000);
+  assert.equal(priceOf('brand-new-model', perModel).source, 'operator');
+  assert.equal(priceOf('deepseek-chat', {}).source, 'list');
 });

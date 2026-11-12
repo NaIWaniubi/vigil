@@ -48,7 +48,10 @@ Current dataset: **130 tasks from 150 seeds (87% yield)**, optimal depth 8–20
 regenerated per run.
 
 This replaced an earlier synthetic family whose slots were independent: an 80%
-win-rate benchmark that everything passed. Independence was the bug.
+win-rate benchmark that everything passed. Independence was the bug. That run
+predates the write-policy fix and **cannot be reproduced from this repository**
+(`docs/REPORT.en.md` §2.1); it is quoted only to show what an all-pass
+benchmark looks like, never as a published result.
 
 ### `vigil-swe` — regression-coupled repositories
 
@@ -95,18 +98,63 @@ The audit found real bugs, not hypothetical ones (see `docs/SELF-AUDIT.md`):
 seven in the core generator, an invisible objective, an invisible board, a
 **reward-hacking exploit**, and a **nondeterministic verification path**.
 
-## Reproduce
+## Quickstart
+
+Node 22+ (tested on 24), zero dependencies, nothing to install.
 
 ```bash
-node scripts/gate.mjs                 # tests + task self-audit + repo hygiene
-node runner.mjs --dry-run --family both --tasks quick --reps 1 --limit 4
-node scripts/cluster.mjs --dry-run --family rush --limit 4 --reps 1
-node scripts/verify.mjs <run-dir> --write   # MANIFEST + prompt fingerprint + numbers
-node scripts/verify.mjs <run-dir>            # exit 1 on any tamper
-node scripts/discrimination.mjs <run-dir>    # greedy vs oracle vs model win rates
-node scripts/behavior-report.mjs <run-dir>   # waste and move-efficiency profile
-node scripts/cross-model.mjs                 # recompute docs/CROSS-MODEL.md from all bundles
+git clone https://github.com/NaIWaniubi/vigil && cd vigil
 ```
+
+**1. Prove the repo is self-consistent — offline, ~2 seconds, no API key.**
+
+```bash
+node scripts/reproduce.mjs          # 8 checks; expects: RESULT: PASS (8 checks)
+```
+
+**2. See a verified number.** This is the only citable win rate in the repo:
+
+```bash
+node scripts/verify.mjs docs/reference-run && node scripts/stats-report.mjs docs/reference-run
+# gemini-3-flash-preview: 4/13 = 30.8% Wilson [12.7%, 57.6%]  verdict: underpowered
+```
+
+**3. Run a task with no API spend** (the greedy reference policy):
+
+```bash
+node runner.mjs --dry-run --family rush --limit 1 --reps 1
+```
+
+**4. Score your own model** — no source edit required; see
+[`docs/BRING-YOUR-OWN-MODEL.md`](docs/BRING-YOUR-OWN-MODEL.md):
+
+```bash
+export VIGIL_BASE_URL=https://my.endpoint/v1 VIGIL_MODELS=my-model        VIGIL_API_KEY=sk-... VIGIL_PRICE_IN=0.3 VIGIL_PRICE_OUT=0.5
+node runner.mjs --family rush --models custom:my-model --limit 1 --reps 1 --budget-usd 1
+```
+
+**5. Everything else.**
+
+```bash
+node scripts/gate.mjs                       # tests + task self-audit (sampled) + hygiene, ~2.5 min
+npm run audit:full                          # all 586 task configurations
+node scripts/verify.mjs <run-dir>           # MANIFEST + prompt fingerprint + numbers; exit 1 on tamper
+node scripts/discrimination.mjs <run-dir>   # greedy vs oracle vs model win rates
+node scripts/behavior-report.mjs <run-dir>  # waste and move-efficiency profile
+node scripts/cross-model.mjs                # recompute docs/CROSS-MODEL.md from all bundles
+```
+
+**Vocabulary.** A **cell** is one `(task, model, repetition)`. A cell is
+**scoreable** only if it ended `completed` or `turn_cap`; HTTP failures,
+truncations and empty replies are infrastructure failures and are excluded from
+the capability profile rather than counted as wrong answers. The leaderboard
+reports a capability profile, never a single headline score.
+
+## Citation
+
+`docs/REPORT.en.md` §Citation carries a BibTeX entry; the citable artifacts are
+the calibrated dataset (`tasks/rush/dataset.json`) and the negative power
+statement (13 scoreable cells where a 30pp effect needs 42 per arm).
 
 ## Design rules
 

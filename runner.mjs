@@ -59,9 +59,17 @@ Options
   --max-turns <n>           override per-task turn cap
   --limit <n>               only the first n task configs (smoke tests)
   --pace-ms <n>             wait n ms between API calls (rate-limit courtesy)
-  --family core|swe|both    task family (default core)
+  --family core|swe|rush|both   task family (default core)
   --history-window <n>      keep only the last n turns (lossless for fully
                             observable worlds; cuts input cost ~5-10x)
+
+Bring your own model (no source edit):
+  VIGIL_BASE_URL=https://my.endpoint/v1
+  VIGIL_MODELS=my-model VIGIL_API_KEY=sk-...
+  VIGIL_PRICE_IN=0.3 VIGIL_PRICE_OUT=0.5     # USD per 1M tokens
+  then:  node runner.mjs --family rush --models custom:my-model --limit 1 --reps 1
+  Optional: VIGIL_PROTOCOL=openai|anthropic, VIGIL_MAX_TOKENS=16384,
+            VIGIL_ALLOW_NO_KEY=1 (local endpoint with no auth)
 `;
 
 function cellKey(taskId, model, rep) { return `${taskId}|${model}|${rep}`; }

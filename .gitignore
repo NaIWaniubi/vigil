@@ -8,4 +8,5 @@ runs/
 *.log
 .DS_Store
 coverage/
-tmp/.submission.local.md
+*.local.md
+.submission.local.md

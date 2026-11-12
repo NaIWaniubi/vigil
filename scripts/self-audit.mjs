@@ -6,11 +6,16 @@
 // verifiers). A benchmark that cannot distinguish "hard" from "broken" is
 // measuring its own bugs.
 //
-// Four checks per task:
-//   1. oracle    — the shipped solution must reach goal_met
-//   2. lazy      — doing nothing must NOT reach goal_met (task is non-trivial)
-//   3. neglect   — ignoring obligations must fail when obligations exist
-//   4. determinism — replaying the oracle gives byte-identical records
+// Six checks per task, applied conditionally (the docs used to disagree about
+// the count, which is sloppy in the one section that sells carefulness):
+//   1. oracle        — the shipped solution must reach goal_met
+//   2. lazy          — doing nothing must NOT reach goal_met (non-trivial task)
+//   3. discrimination— greedy must NOT solve a task admitted as calibrated-hard
+//                      (rush: every task carries a solver-proven optimum)
+//   4. shortcut      — a generic write must NOT reach the goal cell
+//                      (families that expose generic writes at all)
+//   5. neglect       — ignoring obligations must fail, when the task has them
+//   6. determinism   — replaying the oracle gives byte-identical records
 //
 // A task failing any check is QUARANTINED and reported, never silently dropped.
 

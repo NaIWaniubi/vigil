@@ -261,7 +261,7 @@ exactly. Tampering with one byte exits 1 — verified.
 
 - Reference run `docs/reference-run` (v8): 55 cells, 13 scoreable, 42 infrastructure
   errors. gemini-3-flash-preview: 30.8% win rate [13%, 58%] over 13 cells.
-- Depth gradient: depth 8–9 → **4/12 (33%)**, depth 13–16 → **0/1 (0%)**.
+- Depth gradient: depth 8–9 → **4/12 (33%)**, depth 16+ → **0/1 (0%)**.
   Direction is right; the deep bin is too small to claim a curve.
 - Baselines for the same dataset: greedy **0%**, oracle **100%**.
 

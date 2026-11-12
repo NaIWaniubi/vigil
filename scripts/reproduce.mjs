@@ -29,7 +29,7 @@
 //   node scripts/reproduce.mjs
 //   node scripts/reproduce.mjs --reference-run <dir> --discrimination <file> --dataset <file>
 //
-// Exit code 0 only when all four checks pass.
+// Exit code 0 only when all eight checks pass.
 
 import { readFileSync, existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -554,6 +554,12 @@ function checkCrossModel() {
   return { ok: true, problems: [] };
 }
 
+function checkAttributionExhibit() {
+  const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'attribution-exhibit.mjs'), '--check'], { encoding: 'utf8', cwd: ROOT });
+  if (res.status !== 0) return { ok: false, detail: (res.stderr || res.stdout).trim().slice(-240) };
+  return { ok: true, detail: 'six violation classes reproduce from the engine' };
+}
+
 function checkSite() {
   const res = spawnSync(process.execPath, [join(ROOT, 'scripts', 'build-site.mjs'), 'docs/reference-run', '--check'], { encoding: 'utf8', cwd: ROOT });
   if (res.status !== 0) return { ok: false, detail: (res.stderr || res.stdout).trim().slice(-240) };
@@ -571,6 +577,9 @@ const checks = [
   // The public page is generated from reference-run; a stale page would publish
   // numbers that no longer match the bundle. CI builds it, so check it here too.
   { name: 'site', ...checkSite() },
+  // The README claims six attribution classes. Until this exhibit existed, no
+  // committed artifact showed more than two of them firing.
+  { name: 'attribution-exhibit', ...checkAttributionExhibit() },
   { name: 'rush-calibration', ...checkRushCalibration(DATASET) },
   { name: 'rush-samples', ...checkRushSamples(DATASET) },
 ];

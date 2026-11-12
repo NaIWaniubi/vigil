@@ -51,6 +51,27 @@ function depthChart(curve) {
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="win rate by optimal depth">${grid}${bars}</svg>`;
 }
 
+/**
+ * Which channel tiers produced this snapshot.
+ *
+ * `providers/registry.mjs` says the official main track admits `official`
+ * channels only, and the bundle protocols record a tier per target. The page
+ * published a relay/local run with no tier label at all, which is exactly the
+ * comparability failure the project criticises in others. Say it on the page.
+ */
+function tierBanner() {
+  const tiers = [...new Set((report.protocol?.targets ?? []).map((t) => t.tier ?? 'unknown'))].sort();
+  if (!tiers.length) return '';
+  const official = tiers.length === 1 && tiers[0] === 'official';
+  const cls = official ? 'note' : 'note warn';
+  const text = official
+    ? 'Channel tier: <strong>official</strong> — eligible for the main track.'
+    : `Channel tier: <strong>${esc(tiers.join(', '))}</strong> — <strong>not</strong> the official main track. `
+      + 'These numbers are a snapshot from relay/local endpoints; they are comparable to each other only, '
+      + 'and the win rates carry the same caveats as <code>docs/CROSS-MODEL.md</code>.';
+  return `<div class="${cls}">${text}</div>`;
+}
+
 function profileTable(track) {
   const rows = report.profiles.filter((p) => p.track === track);
   if (!rows.length) return '<p class="empty">No runs in this track yet.</p>';
@@ -144,6 +165,7 @@ pre{background:#161a21;border:1px solid var(--line);border-radius:6px;padding:12
 .note{background:#161a21;border-left:3px solid var(--accent);padding:12px 16px;margin:18px 0;font-size:14px}
 footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px}
 a{color:var(--accent)}
+.note.warn{border-color:#7c5c1e;background:#2a2113;color:#f0d9a8}
 </style></head><body><div class="wrap">
 <h1>VIGIL</h1>
 <p class="sub">An executable long-horizon agent benchmark: accumulating conflicting constraints,
@@ -158,6 +180,7 @@ background obligations on an environment clock, deterministic failure attributio
 <div class="note">No headline score. Capability profiles are reported per dimension, with
 raw and compliance-filtered tracks kept separate, because a single total hides the structure
 that matters. Infrastructure failures are excluded rather than counted as wrong answers.</div>
+${tierBanner()}
 
 <h2>Compliance-filtered track</h2>
 <p class="ci">Runs in which no boundary canary was tripped. This is the comparable track.</p>

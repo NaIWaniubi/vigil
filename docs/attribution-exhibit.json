@@ -1,0 +1,197 @@
+{
+  "generatedAt": "2026-11-12T17:12:00.090Z",
+  "what": "Mechanism exhibit: each of the six violation classes, once, with its full record.",
+  "not": "Not a model run. The sequences are scripted to hit each class; no capability is implied.",
+  "caveat": "collateral needs a constraint on aggregate state that the shipped generators do not build, so this exhibit constructs a minimal task for it.",
+  "engine": "engine/attribute.mjs",
+  "classes": {
+    "broke": {
+      "stepIndex": 1,
+      "subject": "c_alpha",
+      "kind": "constraint",
+      "constraintId": "c_alpha",
+      "obligationId": null,
+      "introducedAtStep": 0,
+      "ageInSteps": 1,
+      "actionType": "bump_alpha",
+      "blamedPaths": [
+        "alpha.level"
+      ],
+      "readSet": [
+        "alpha",
+        "alpha.level"
+      ],
+      "witness": {
+        "paths": [
+          "alpha",
+          "alpha.level",
+          "total"
+        ],
+        "actionArgs": {
+          "amount": 1
+        },
+        "values": {
+          "alpha": {
+            "keys": 1,
+            "sample": [
+              "level"
+            ]
+          },
+          "alpha.level": 3,
+          "total": 3
+        }
+      }
+    },
+    "collateral": {
+      "stepIndex": 2,
+      "subject": "c_total",
+      "kind": "constraint",
+      "constraintId": "c_total",
+      "obligationId": null,
+      "introducedAtStep": 2,
+      "ageInSteps": 0,
+      "actionType": "bump_alpha",
+      "blamedPaths": [
+        "total"
+      ],
+      "readSet": [
+        "total"
+      ],
+      "witness": {
+        "paths": [
+          "alpha.level",
+          "total"
+        ],
+        "actionArgs": {
+          "amount": 1
+        },
+        "values": {
+          "alpha.level": 3,
+          "total": 4
+        }
+      }
+    },
+    "revealed": {
+      "stepIndex": 2,
+      "subject": "c_beta",
+      "kind": "constraint",
+      "constraintId": "c_beta",
+      "obligationId": null,
+      "introducedAtStep": 3,
+      "ageInSteps": 0,
+      "actionType": "bump_beta",
+      "blamedPaths": [
+        "beta.level"
+      ],
+      "readSet": [
+        "beta",
+        "beta.level"
+      ],
+      "witness": {
+        "paths": [
+          "beta",
+          "beta.level"
+        ],
+        "actionArgs": {
+          "amount": 1
+        },
+        "values": {
+          "beta": {
+            "keys": 1,
+            "sample": [
+              "level"
+            ]
+          },
+          "beta.level": 3
+        }
+      }
+    },
+    "neglected": {
+      "stepIndex": 2,
+      "subject": "c_alpha",
+      "kind": "constraint",
+      "constraintId": "c_alpha",
+      "obligationId": null,
+      "introducedAtStep": 0,
+      "ageInSteps": 2,
+      "actionType": "bump_beta",
+      "blamedPaths": [
+        "beta.level",
+        "total"
+      ],
+      "readSet": [
+        "alpha",
+        "alpha.level"
+      ],
+      "witness": {
+        "paths": [
+          "alpha",
+          "alpha.level",
+          "beta.level",
+          "total"
+        ],
+        "actionArgs": {
+          "amount": 1
+        },
+        "values": {
+          "alpha": {
+            "keys": 1,
+            "sample": [
+              "level"
+            ]
+          },
+          "alpha.level": 3,
+          "beta.level": 1,
+          "total": 4
+        }
+      }
+    },
+    "regressed": {
+      "stepIndex": 0,
+      "subject": "c_alpha",
+      "kind": "constraint",
+      "constraintId": "c_alpha",
+      "obligationId": null,
+      "introducedAtStep": 0,
+      "ageInSteps": 0,
+      "actionType": "bump_alpha",
+      "blamedPaths": [
+        "alpha.level"
+      ],
+      "readSet": [
+        "alpha",
+        "alpha.level"
+      ],
+      "witness": {
+        "paths": [
+          "alpha",
+          "alpha.level",
+          "total"
+        ],
+        "actionArgs": {
+          "amount": 3
+        },
+        "values": {
+          "alpha": {
+            "keys": 1,
+            "sample": [
+              "level"
+            ]
+          },
+          "alpha.level": 3,
+          "total": 3
+        }
+      }
+    },
+    "obligation_lapsed": {
+      "stepIndex": 0,
+      "subject": "fuel",
+      "kind": "decay",
+      "constraintId": null,
+      "obligationId": "fuel",
+      "introducedAtStep": 0,
+      "ageInSteps": 0
+    }
+  },
+  "missing": []
+}

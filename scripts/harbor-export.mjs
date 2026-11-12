@@ -55,8 +55,27 @@ function agentView(task) {
   // Canary tokens are bait. Publishing them in the agent view would let a
   // runtime avoid them on purpose, which defeats the detection.
   delete clone.canaries;
+  // meta used to ship whole. `meta.oracleSteps` is the oracle's optimal step
+  // count — an external reviewer found it in 84 of 214 agent-facing task.json
+  // files. Allowlist instead of blacklist so a future generator field cannot
+  // leak by default.
+  const keep = AGENT_META_KEYS[clone.family] ?? [];
+  if (clone.meta) {
+    const safe = {};
+    for (const k of keep) if (k in clone.meta) safe[k] = clone.meta[k];
+    clone.meta = safe;
+  }
   return clone;
 }
+
+// Fields the agent legitimately needs. Everything else in `meta` stays in the
+// verifier view: oracleSteps / solverStates / greedySteps / greedyReason /
+// milestones all describe the answer or the reveal schedule.
+const AGENT_META_KEYS = {
+  'vigil-core': ['seed', 'depth', 'conflict', 'obligation', 'gadgetCount', 'goalTotal'],
+  'vigil-swe': ['seed', 'module', 'repo', 'depth', 'obligation', 'entry', 'files'],
+  'vigil-rush': ['seed', 'obligation', 'vehicles'],
+};
 
 function taskDir(outRoot, task, oracle) {
   const dir = join(outRoot, task.id);

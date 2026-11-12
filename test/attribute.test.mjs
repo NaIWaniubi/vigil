@@ -54,3 +54,21 @@ test('summariseAttribution separates constraint failures from obligation deaths'
   assert.equal(s.oldestViolatedConstraintAge, 12);
   assert.equal(s.meanViolationAge, (3 + 8 + 0) / 3);
 });
+test('age is never negative, even for a constraint revealed into the next step', async () => {
+  const { World } = await import('../engine/index.mjs');
+  const task = {
+    id: 'age-clamp', family: 'vigil-core', version: 1, maxSteps: 10,
+    initialState: { v: 0 },
+    constraints: [{ id: 'c', revealAt: 3, text: 'v >= 5',
+      predicate: { t: 'op', name: 'ge', args: [{ t: 'ref', path: 'v' }, { t: 'num', v: 5 }] } }],
+    obligations: [], genericWrites: 'none',
+    actions: [{ name: 'bump', args: [], cost: 1,
+      effects: [{ path: 'v', value: { t: 'op', name: 'add', args: [{ t: 'ref', path: 'v' }, { t: 'num', v: 1 }] } }] }],
+  };
+  const w = new World(task, { seed: 1 });
+  for (let i = 0; i < 4 && !w.done; i++) w.step({ type: 'bump', args: {} });
+  const revealed = w.records.find((r) => r.class === 'revealed');
+  assert.ok(revealed, 'the constraint is revealed and already failing');
+  assert.equal(revealed.ageInSteps, 0, 'a rule that just arrived has age 0, not -1');
+  for (const r of w.records) assert.ok(r.ageInSteps >= 0, `${r.class} age ${r.ageInSteps}`);
+});
